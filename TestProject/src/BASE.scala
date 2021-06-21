@@ -19,6 +19,9 @@ object BASE {
     if(a==1)println("a=1")else println("a!=1")
     var finalans={
       println("计算途中还能输出")
+
+      println("git 测试")
+
       2+3
     }
     println(finalans)
