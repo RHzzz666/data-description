@@ -1,10 +1,48 @@
 package com.example.test;
 
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.SerializerFeature;
+import org.apache.spark.sql.Dataset;
+import org.apache.spark.sql.Row;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import gala2.read;
 import gala2.calculate;
+
+import java.io.IOException;
+import java.util.HashMap;
+import scala.Long;
+import scala.util.parsing.json.JSONArray;
+import java.util.HashMap;
+import java.util.Map;
+import org.apache.commons.collections.map.HashedMap;
+import com.alibaba.fastjson.JSON;
+
+import java.util.List;
+
 @RestController
 public class testj {
+
+    @CrossOrigin
+    @RequestMapping(value = "/gender",method = RequestMethod.GET)
+    public HashMap<String, Object> gender()
+    {
+        HashMap<String, Object> hashMap=JSON.parseObject(read.getgender(), HashMap.class);
+        return hashMap;
+    }
+
+    @CrossOrigin
+    @RequestMapping(value = "/job",method = RequestMethod.GET)
+    public HashMap<String, Object> job()
+    {
+        HashMap<String, Object> hashMap=JSON.parseObject(read.getjob(), HashMap.class);
+        return hashMap;
+    }
+
+
+
+
+//------------------------------------------------------------------------------------
     @RequestMapping("/hello")
     public String index() {
         return "Hello World";
@@ -31,22 +69,39 @@ public class testj {
         return 3;
     }
 
-
+/*
     @RequestMapping("/getgender")
+    public HashMap<String, String> getgender()
+    {
+        String a = read.getgender();
+        System.out.println(a);
+        HashMap<String, String> hashmap = new HashMap<String, String>();
+        hashmap.put("data", a);
+        return hashmap;
+    }*/
+
+    @RequestMapping("/getgender_test")
     public String getgender()
     {
-          String gender = read.getgender();
-           return gender;
+        String a = read.getgender();
+        return a;
     }
 
-    @RequestMapping("/getjob")
+    @RequestMapping("/getgendermap")
+    public HashMap<String, Object> getgendermap()
+    {
+        HashMap<String, Object> hashMap=JSON.parseObject(read.getgender(), HashMap.class);
+        return hashMap;
+    }
+
+    @RequestMapping("/getjob_test")
     public String getjob()
     {
         String job = read.getjob();
         return job;
     }
 
-    @RequestMapping("/getbirth")
+    @RequestMapping("/getbirth_test")
     public String getbirth()
     {
         String birth = read.getbirth();
