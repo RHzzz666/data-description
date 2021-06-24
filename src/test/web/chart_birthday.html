@@ -31,7 +31,7 @@
 
     function test(){
         var ajax=new XMLHttpRequest();
-        var url='http://192.168.101.176:8080/gender';
+        var url='http://192.168.101.176:8080/job';
         ajax.open('get',url,true);
         ajax.send();
         ajax.onreadystatechange=function (){
@@ -66,9 +66,9 @@
             legend: {
                 orient: 'vertical',
                 left: 'left',
-                data: ['男生', '女生']
+                data: ['70后', '90后', '80后', '00后']
             },
-            roseType: 'angle',
+            //roseType: 'angle',
             series : [
                 {
                     name: '访问来源',
@@ -76,8 +76,11 @@
                     radius : '55%',
                     center: ['50%', '60%'],
                     data:[
-                        {value:dat.男, name:'男生',},
-                        {value:dat.女, name:'女生'},
+                        {value:dat.70后, name:'70后',},
+                        {value:dat.90后, name:'90后'},
+                        {value:dat.80后, name:'80后'},
+                        {value:dat.00后, name:'00后'},
+
                     ],
                     itemStyle: {
                         emphasis: {
