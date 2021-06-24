@@ -31,7 +31,7 @@
 
     function test(){
         var ajax=new XMLHttpRequest();
-        var url='http://192.168.101.176:8080/job';
+        var url='http://192.168.101.176:8080/birth';
         ajax.open('get',url,true);
         ajax.send();
         ajax.onreadystatechange=function (){
@@ -55,7 +55,7 @@
 
         var option = {
             title : {
-                text: '男女数目比例',
+                text: '用户出生日期',
                 subtext: 'from dataset',
                 x:'center'
             },
@@ -66,7 +66,7 @@
             legend: {
                 orient: 'vertical',
                 left: 'left',
-                data: ['70后', '90后', '80后', '00后']
+                data: ['70后', '80后', '90后', '00后']
             },
             //roseType: 'angle',
             series : [
@@ -76,10 +76,10 @@
                     radius : '55%',
                     center: ['50%', '60%'],
                     data:[
-                        {value:dat.70后, name:'70后',},
-                        {value:dat.90后, name:'90后'},
-                        {value:dat.80后, name:'80后'},
-                        {value:dat.00后, name:'00后'},
+                        {value:dat.七零后, name:'70后',},
+                        {value:dat.八零后, name:'80后'},
+                        {value:dat.九零后, name:'90后'},
+                        {value:dat.零零后, name:'00后'},
 
                     ],
                     itemStyle: {
