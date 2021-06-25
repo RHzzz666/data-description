@@ -22,30 +22,40 @@ object read {
   }
 
   def getperson(a:String,b:String):String={
-    def catalog =
+    def catalog: String = {
       s"""{
-         |"table":{"namespace":"default", "name":"tbl_users"},
+         |"table":{"namespace":"default","name":"tbl_users"},
          |"rowkey":"id",
          |"columns":{
-         |"id":{"cf":"rowkey", "col":"id", "type":"long"},
-         |"avatarImageFileId":{"cf":"cf", "col":"avatarImageFileId", "type":"string"},
-         |"email":{"cf":"cf", "col":"email", "type":"string"},
-         |"username":{"cf":"cf", "col":"username", "type":"string"},
-         |"password":{"cf":"cf", "col":"password", "type":"string"},
-         |"salt":{"cf":"cf", "col":"salt", "type":"string"},
-         |"registerTime":{"cf":"cf", "col":"registerTime", "type":"long"},
-         |"lastLoginTime":{"cf":"cf", "col":"lastLoginTime", "type":"long"}
+         |"id":{"cf":"rowkey","col":"id","type":"long"},
+         |"e_mail":{"cf":"cf","col":"email","type":"string"},
+         |"user_name":{"cf":"cf","col":"username","type":"string"},
+         |"register_time":{"cf":"cf","col":"registerTime","type":"string"},
+         |"password":{"cf":"cf","col":"password","type":"string"},
+         |"last_login_time":{"cf":"cf","col":"lastLoginTime","type":"string"},
+         |"qq":{"cf":"cf","col":"qq","type":"string"},
+         |"job":{"cf":"cf","col":"job","type":"string"},
+         |"mobile":{"cf":"cf","col":"mobile","type":"string"},
+         |"political_face":{"cf":"cf","col":"politicalFace","type":"string"},
+         |"birthday":{"cf":"cf","col":"birthday","type":"string"},
+         |"nationality":{"cf":"cf","col":"nationality","type":"string"},
+         |"marriage":{"cf":"cf","col":"marriage","type":"string"},
+         |"money":{"cf":"cf","col":"money","type":"string"},
+         |"money_pwd":{"cf":"cf","col":"moneyPwd","type":"string"},
+         |"nick_name":{"cf":"cf","col":"nick_name","type":"string"},
+         |"is_blackList":{"cf":"cf","col":"is_blackList","type":"string"}
          |}
-         |}""".stripMargin
+         |}
+       """.stripMargin
+    }
     val df= spark.read
       .option(HBaseTableCatalog.tableCatalog, catalog)
       .format("org.apache.spark.sql.execution.datasources.hbase")
       .load().toDF()
-
-    val df2=df.where(col("username") === a and (col("password") === b))
+    val df2=df.where(col("user_name") === a and (col("password") === b))
 //    df2.show()
     if(df2.isEmpty) {
-      return "err"
+      return "error"
     }else{
       df2.toJSON.collectAsList().toString
     }

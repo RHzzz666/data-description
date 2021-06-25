@@ -24,7 +24,7 @@ $(function() {
 // 登录
 function login() {
 	$.ajax({
-		url: 'http://192.168.101.199:8080/login',
+		url: 'http://localhost:8080/login',
 		type: 'POST',
 		dataType : 'json',
 		contentType : 'application/json',

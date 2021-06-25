@@ -27,13 +27,16 @@ public class testj {
     @ResponseBody
 
     @CrossOrigin
-    @RequestMapping(value = "/json", method = RequestMethod.POST)
-    public int getByJSON(@RequestBody JSONObject jsonParam) {
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    public HashMap<String, Object> getByJSON(@RequestBody JSONObject jsonParam) {
         // 直接将json信息打印出来
 
         String a=jsonParam.getString("userName");
-        System.out.println(a);
-        return 200;
+        String b=jsonParam.getString("passWord");
+        String res=read.getperson(a,b);
+        res=res.substring(1,res.length()-1);
+        HashMap<String, Object> hashMap=JSON.parseObject(res, HashMap.class);
+        return hashMap;
     }
 
 
@@ -42,6 +45,7 @@ public class testj {
     @RequestMapping(value = "/gender",method = RequestMethod.GET)
     public HashMap<String, Object> gender()
     {
+        System.out.println(read.getgender());
         HashMap<String, Object> hashMap=JSON.parseObject(read.getgender(), HashMap.class);
         return hashMap;
     }
