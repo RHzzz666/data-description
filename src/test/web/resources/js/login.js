@@ -24,13 +24,13 @@ $(function() {
 // 登录
 function login() {
 	$.ajax({
-		url: 'http://192.168.101.199:8080/json',
+		url: 'http://192.168.101.199:8080/login',
 		type: 'POST',
 		dataType : 'json',
 		contentType : 'application/json',
 		data: JSON.stringify({
-			username: $('#username').val(),
-			password: $('#password').val(),
+			userName: $('#username').val(),
+			passWord: $('#password').val(),
 			rememberMe: $('#rememberMe').is(':checked'),
 			backurl: 'index.html'
 		}),
@@ -39,7 +39,8 @@ function login() {
 
 		},
 		success: function(json){
-			console.log(json)
+			console.log(json.data)
+
 			if (json.code === 1) {
 				location.href = "index.html";
 			} else {
