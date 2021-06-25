@@ -18,10 +18,10 @@
 <div id="main" style="width: 600px;height:400px;"></div>
 <script type="text/javascript">
 
-    window.onload(test())
+    window.onload(test());
 
     function jsonx(data){
-        var temp = JSON.parse(data)
+        var temp = JSON.parse(data);
         return temp
     }
 
@@ -31,7 +31,7 @@
 
     function test(){
         var ajax=new XMLHttpRequest();
-        var url='http://192.168.101.176:8080/gender';
+        var url='http://192.168.101.199:8080/gender';
         ajax.open('get',url,true);
         ajax.send();
         ajax.onreadystatechange=function (){
