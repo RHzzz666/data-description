@@ -41,7 +41,7 @@ function login() {
 		success: function(json){
 			console.log(json)
 			if (json.code === 1) {
-				location.href = json.data;
+				location.href = "index.html";
 			} else {
 				alert(json.data);
 				if (10101 === json.code) {
