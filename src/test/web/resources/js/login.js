@@ -39,22 +39,24 @@ function login() {
 
 		},
 		success: function(json){
-			console.log(json.data)
+			console.log(json.id)
+			location.href = "index.html";
 
-			if (json.code === 1) {
-				location.href = "index.html";
-			} else {
-				alert(json.data);
-				if (10101 === json.code) {
-					$('#username').focus();
-				}
-				if (10102 === json.code) {
-					$('#password').focus();
-				}
-			}
+			//
+			// if (json.code === 1) {
+			// 	location.href = "index.html";
+			// } else {
+			// 	alert(json.data);
+			// 	if (10101 === json.code) {
+			// 		$('#username').focus();
+			// 	}
+			// 	if (10102 === json.code) {
+			// 		$('#password').focus();
+			// 	}
+			// }
 		},
 		error: function(error){
-			console.log(error);
+			alert("账户或者错误，请重新输入")
 		}
 	});
 }
