@@ -4,6 +4,7 @@ import org.apache.spark.sql.{DataFrame, SparkSession}
 import org.apache.spark.sql.catalyst.dsl.expressions.DslSymbol
 import org.apache.spark.sql.execution.datasources.hbase.HBaseTableCatalog
 import org.apache.spark.sql.functions.{col, to_timestamp, when, year}
+import org.apache.spark.sql.types.{IntegerType, StringType, StructField, StructType}
 object calculate {
   def gender_cal(): Unit = {
     def catalog =
@@ -126,14 +127,14 @@ object calculate {
       .load()
     val s3=rdf.select(year($"birthday").as("year"))
     val births=s3.select('year,
-      when('year >= 1950 && 'year < 1960, "50后")
-        .when('year >= 1960 && 'year < 1970, "60后")
-        .when('year >= 1970 && 'year < 1980, "70后")
-        .when('year >= 1980 && 'year < 1990, "80后")
-        .when('year >= 1990 && 'year < 2000, "90后")
-        .when('year >= 2000 && 'year < 2010, "00后")
-        .when('year >= 2010 && 'year < 2020, "10后")
-        .when('year >= 2020 && 'year < 2030, "20后")
+      when('year >= 1950 && 'year < 1960, "五零后")
+        .when('year >= 1960 && 'year < 1970, "六零后")
+        .when('year >= 1970 && 'year < 1980, "七零后")
+        .when('year >= 1980 && 'year < 1990, "八零后")
+        .when('year >= 1990 && 'year < 2000, "九零后")
+        .when('year >= 2000 && 'year < 2010, "零零后")
+        .when('year >= 2010 && 'year < 2020, "一零后")
+        .when('year >= 2020 && 'year < 2030, "二零后")
         .otherwise("未知")
         .as("birth")
     )

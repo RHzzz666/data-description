@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="resources/js/jquery.min.js"></script>
+
+</head>
+<body>
+<button onclick="test()">atest</button>
+</body>
+
+<script>
+    function test() {
+        var username = "aaa";
+        var password = "bbb";
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: 'http://192.168.56.1:8080/json',
+            contentType: "application/json",
+            data:JSON.stringify({
+                "userName": username,
+                "passWord": password
+            }),
+            success: function (result) {
+                console.log("data is :" + result)
+                if (result.code == 200) {
+                    alert("登陆成功");
+                }else {
+                    alert(result.message)
+                }
+            }
+        });
+    }
+
+
+</script>
+
+</html>

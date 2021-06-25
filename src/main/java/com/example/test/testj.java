@@ -21,7 +21,22 @@ import com.alibaba.fastjson.JSON;
 import java.util.List;
 
 @RestController
+
 public class testj {
+
+    @ResponseBody
+
+    @CrossOrigin
+    @RequestMapping(value = "/json", method = RequestMethod.POST)
+    public int getByJSON(@RequestBody JSONObject jsonParam) {
+        // 直接将json信息打印出来
+
+        String a=jsonParam.getString("userName");
+        System.out.println(a);
+        return 200;
+    }
+
+
 
     @CrossOrigin
     @RequestMapping(value = "/gender",method = RequestMethod.GET)
@@ -39,6 +54,13 @@ public class testj {
         return hashMap;
     }
 
+    @CrossOrigin
+    @RequestMapping(value = "/birth",method = RequestMethod.GET)
+    public HashMap<String, Object> birth()
+    {
+        HashMap<String, Object> hashMap=JSON.parseObject(read.getbirth(), HashMap.class);
+        return hashMap;
+    }
 
 
 
