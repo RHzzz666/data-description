@@ -18,10 +18,10 @@
 <div id="main" style="width: 600px;height:400px;"></div>
 <script type="text/javascript">
 
-    window.onload(test());
+    window.onload(test())
 
     function jsonx(data){
-        var temp = JSON.parse(data);
+        var temp = JSON.parse(data)
         return temp
     }
 
@@ -31,7 +31,7 @@
 
     function test(){
         var ajax=new XMLHttpRequest();
-        var url='http://192.168.101.199:8080/gender';
+        var url='http://192.168.101.199:8080/birth';
         ajax.open('get',url,true);
         ajax.send();
         ajax.onreadystatechange=function (){
@@ -55,7 +55,7 @@
 
         var option = {
             title : {
-                text: '男女数目比例',
+                text: '用户出生日期',
                 subtext: 'from dataset',
                 x:'center'
             },
@@ -66,9 +66,9 @@
             legend: {
                 orient: 'vertical',
                 left: 'left',
-                data: ['男生', '女生']
+                data: ['70后', '80后', '90后', '00后']
             },
-            roseType: 'angle',
+            //roseType: 'angle',
             series : [
                 {
                     name: '访问来源',
@@ -76,8 +76,11 @@
                     radius : '55%',
                     center: ['50%', '60%'],
                     data:[
-                        {value:dat.男, name:'男生',},
-                        {value:dat.女, name:'女生'},
+                        {value:dat.七零后, name:'70后',},
+                        {value:dat.八零后, name:'80后'},
+                        {value:dat.九零后, name:'90后'},
+                        {value:dat.零零后, name:'00后'},
+
                     ],
                     itemStyle: {
                         emphasis: {

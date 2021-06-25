@@ -18,10 +18,10 @@
 <div id="main" style="width: 600px;height:400px;"></div>
 <script type="text/javascript">
 
-    window.onload(test());
+    window.onload(test())
 
     function jsonx(data){
-        var temp = JSON.parse(data);
+        var temp = JSON.parse(data)
         return temp
     }
 
@@ -31,7 +31,7 @@
 
     function test(){
         var ajax=new XMLHttpRequest();
-        var url='http://192.168.101.199:8080/gender';
+        var url='http://192.168.101.199:8080/job';
         ajax.open('get',url,true);
         ajax.send();
         ajax.onreadystatechange=function (){
@@ -55,7 +55,7 @@
 
         var option = {
             title : {
-                text: '男女数目比例',
+                text: '消费者职业组成',
                 subtext: 'from dataset',
                 x:'center'
             },
@@ -66,9 +66,9 @@
             legend: {
                 orient: 'vertical',
                 left: 'left',
-                data: ['男生', '女生']
+                data: ['学生', '教师', '军人', '白领', '公务员', '警察']
             },
-            roseType: 'angle',
+            //roseType: 'angle',
             series : [
                 {
                     name: '访问来源',
@@ -76,8 +76,12 @@
                     radius : '55%',
                     center: ['50%', '60%'],
                     data:[
-                        {value:dat.男, name:'男生',},
-                        {value:dat.女, name:'女生'},
+                        {value:dat.学生, name:'学生',},
+                        {value:dat.教师, name:'教师'},
+                        {value:dat.军人, name:'军人'},
+                        {value:dat.白领, name:'白领'},
+                        {value:dat.公务员, name:'公务员'},
+                        {value:dat.警察, name:'警察'},
                     ],
                     itemStyle: {
                         emphasis: {

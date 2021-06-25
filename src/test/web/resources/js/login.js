@@ -16,7 +16,7 @@ $(function() {
 	});
 	// 回车事件
 	$('#username, #password').keypress(function (event) {
-		if (13 == event.keyCode) {
+		if (13 === event.keyCode) {
 			login();
 		}
 	});
@@ -24,26 +24,30 @@ $(function() {
 // 登录
 function login() {
 	$.ajax({
-		url: BASE_PATH + '/sso/login',
+		url: 'http://192.168.101.199:8080/json',
 		type: 'POST',
-		data: {
+		dataType : 'json',
+		contentType : 'application/json',
+		data: JSON.stringify({
 			username: $('#username').val(),
 			password: $('#password').val(),
 			rememberMe: $('#rememberMe').is(':checked'),
-			backurl: BACK_URL
-		},
+			backurl: 'index.html'
+		}),
+
 		beforeSend: function() {
 
 		},
 		success: function(json){
-			if (json.code == 1) {
-				location.href = json.data;
+			console.log(json)
+			if (json.code === 1) {
+				location.href = "index.html";
 			} else {
 				alert(json.data);
-				if (10101 == json.code) {
+				if (10101 === json.code) {
 					$('#username').focus();
 				}
-				if (10102 == json.code) {
+				if (10102 === json.code) {
 					$('#password').focus();
 				}
 			}
