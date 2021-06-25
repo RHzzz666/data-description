@@ -17,7 +17,7 @@
 
     function test(){
         var ajax=new XMLHttpRequest();
-        var url='http://192.168.101.176:8080/gender';
+        var url='http://localhost:8080/gender';
         ajax.open('get',url,true);
         ajax.send();
         ajax.onreadystatechange=function (){

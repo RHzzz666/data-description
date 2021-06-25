@@ -24,13 +24,13 @@ $(function() {
 // 登录
 function login() {
 	$.ajax({
-		url: 'http://192.168.101.199:8080/json',
+		url: 'http://localhost:8080/login',
 		type: 'POST',
 		dataType : 'json',
 		contentType : 'application/json',
 		data: JSON.stringify({
-			username: $('#username').val(),
-			password: $('#password').val(),
+			userName: $('#username').val(),
+			passWord: $('#password').val(),
 			rememberMe: $('#rememberMe').is(':checked'),
 			backurl: 'index.html'
 		}),
@@ -39,21 +39,24 @@ function login() {
 
 		},
 		success: function(json){
-			console.log(json)
-			if (json.code === 1) {
-				location.href = "index.html";
-			} else {
-				alert(json.data);
-				if (10101 === json.code) {
-					$('#username').focus();
-				}
-				if (10102 === json.code) {
-					$('#password').focus();
-				}
-			}
+			console.log(json.id)
+			location.href = "index.html";
+
+			//
+			// if (json.code === 1) {
+			// 	location.href = "index.html";
+			// } else {
+			// 	alert(json.data);
+			// 	if (10101 === json.code) {
+			// 		$('#username').focus();
+			// 	}
+			// 	if (10102 === json.code) {
+			// 		$('#password').focus();
+			// 	}
+			// }
 		},
 		error: function(error){
-			console.log(error);
+			alert("账户或者错误，请重新输入")
 		}
 	});
 }
