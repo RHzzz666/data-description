@@ -18,6 +18,23 @@
     <link href="resources/plugins/waves-0.7.5/waves.min.css" rel="stylesheet"/>
     <link href="resources/plugins/jquery-confirm/jquery-confirm.min.css" rel="stylesheet"/>
     <link href="resources/plugins/select2/css/select2.min.css" rel="stylesheet"/>
+    <style>
+
+
+        .shortselect{
+            background:#fafdfe;
+            height:28px;
+            width:180px;
+            line-height:28px;
+            border:1px solid #9bc0dd;
+            -moz-border-radius:2px;
+            -webkit-border-radius:2px;
+            border-radius:2px;
+        }
+
+    </style>
+
+
 </head>
 <body>
 
@@ -46,8 +63,12 @@
     }
 </script>
 
-<form method="post">
-    <select id = "pid" class="用户信息" onchange="GetVal(this)">
+<div>
+
+</div>
+
+<form method="post" class="" style="margin: 20px">
+    <select id = "pid" class="shortselect" onchange="GetVal(this)">
         <optgroup label="用户自身信息">
             <option value="0" selected>请选择标签</option>
             <option value="1">生日</option>
@@ -63,7 +84,12 @@
     </select>
 </form>
 
-<div id="main" style="width: 600px;height:400px;"><iframe id = "diagram" src='' width="600px" height="400px" style="float:left;" frameborder="0" scrolling="no" align="top" ></iframe></div>
+
+
+
+<div id="main" style="width: 1000px;height:600px;margin-left: 200px;margin-top: 100px"><iframe id = "diagram" src='' width="1000px" height="600px" style="float:left;" frameborder="0" scrolling="no" align="top" ></iframe></div>
+
+
 
 </body>
 </html>
