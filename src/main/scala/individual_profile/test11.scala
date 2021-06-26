@@ -205,78 +205,6 @@ object test11 {
     //|0.0               |0.0                 |691      |低                          |低                        |
     //|0.0               |0.0                 |467      |低                          |低                        |
 
-
-    //    val colRencency = "rencency"
-    //    val colFrequency = "frequency"
-    //    val colMoneyTotal = "money_total"
-    //    val colFeature = "feature"
-    //    val colPredict = "predict"
-    //    val days_range = 660
-    //
-    //    // 统计距离最近一次消费的时间
-    //    val recencyCol = datediff(date_sub(current_timestamp(), days_range), from_unixtime(max('finish_time))) as colRencency
-    //    // 统计订单总数
-    //    val frequencyCol = count('orderSn) as colFrequency
-    //    // 统计订单总金额
-    //    val moneyTotalCol = sum('order_amount) as colMoneyTotal
-    //
-    //    val RFMResult = basic_df.groupBy('member_id)
-    //      .agg(recencyCol, frequencyCol, moneyTotalCol)
-    //2.为RFM打分
-    //R: 1-3天=5分，4-6天=4分，7-9天=3分，10-15天=2分，大于16天=1分
-    //F: ≥200=5分，150-199=4分，100-149=3分，50-99=2分，1-49=1分
-    //M: ≥20w=5分，10-19w=4分，5-9w=3分，1-4w=2分，<1w=1分
-    //    val recencyScore: Column = functions.when((col(colRencency) >= 1) && (col(colRencency) <= 3), 5)
-    //      .when((col(colRencency) >= 4) && (col(colRencency) <= 6), 4)
-    //      .when((col(colRencency) >= 7) && (col(colRencency) <= 9), 3)
-    //      .when((col(colRencency) >= 10) && (col(colRencency) <= 15), 2)
-    //      .when(col(colRencency) >= 16, 1)
-    //      .as(colRencency)
-    //
-    //    val frequencyScore: Column = functions.when(col(colFrequency) >= 200, 5)
-    //      .when((col(colFrequency) >= 150) && (col(colFrequency) <= 199), 4)
-    //      .when((col(colFrequency) >= 100) && (col(colFrequency) <= 149), 3)
-    //      .when((col(colFrequency) >= 50) && (col(colFrequency) <= 99), 2)
-    //      .when((col(colFrequency) >= 1) && (col(colFrequency) <= 49), 1)
-    //      .as(colFrequency)
-    //
-    //    val moneyTotalScore: Column = functions.when(col(colMoneyTotal) >= 200000, 5)
-    //      .when(col(colMoneyTotal).between(100000, 199999), 4)
-    //      .when(col(colMoneyTotal).between(50000, 99999), 3)
-    //      .when(col(colMoneyTotal).between(10000, 49999), 2)
-    //      .when(col(colMoneyTotal) <= 9999, 1)
-    //      .as(colMoneyTotal)
-    //
-    //    val RFMScoreResult = RFMResult.select('member_id, recencyScore, frequencyScore, moneyTotalScore)
-    //
-    //    RFMScoreResult.show(false)
-    //
-    //    //    val vectorDF = new VectorAssembler()
-    //    //      .setInputCols(Array(colRencency, colFrequency, colMoneyTotal))
-    //    //      .setOutputCol(colFeature)
-    //    //      .transform(RFMScoreResult)
-    //    //
-    //    //    val kmeans = new KMeans()
-    //    //      .setK(7)
-    //    //      .setSeed(100)
-    //    //      .setMaxIter(2)
-    //    //      .setFeaturesCol(colFeature)
-    //    //      .setPredictionCol(colPredict)
-    //    //
-    //    //    // train model
-    //    //    val model = kmeans.fit(vectorDF)
-    //    //
-    //    //    val predicted = model.transform(vectorDF)
-    //    //
-    //    //    val result0=predicted.select('memberId,'predict,when('predict==="0","超高")
-    //    //      .when('predict==="1","高")
-    //    //      .when('predict==="2","中上")
-    //    //      .when('predict==="3","中")
-    //    //      .when('predict==="4","中下")
-    //    //      .when('predict==="5","低")
-    //    //      .when('predict==="6","很低")as("用户价值")).drop("rencency","frequency","moneyTotal","feature","predict")
-    //        //消费能力
-    //
     //
     //
     //    //此处是将之前的所有DataFrame 集合在一起
@@ -300,7 +228,7 @@ object test11 {
     //|支付宝     |1635 |467      |7日           |1782.9028767123289|1000-2999      |99.00        |1-999              |1.106060606060606  |66         |73         |低                       |0.0               |0.0                 |低                          |低                        |
     //|支付宝     |2355 |675      |1月           |1797.3695652173913|1000-2999      |998.00       |1-999              |0.9387755102040817 |49         |46         |低                       |0.0               |0.004149377593360996|低                          |低                        |
     //|支付宝     |3990 |691      |2周           |1994.7226785714286|1000-2999      |99.00        |1-999              |0.8115942028985508 |69         |56         |低                       |0.0               |0.0                 |低                          |低                        |
-    def orders_info_write_catalog =
+    def orders_info_write_catalog=
       s"""{
          |"table":{"namespace":"default", "name":"user_orders_info"},
          |"rowkey":"id",
@@ -370,8 +298,12 @@ object test11 {
     //      .save()
   }
 
+
   def string_last_3_char(str: String): String = {
     val len = str.length
-    if (len > 3) str.substring(len - 3, len) else str
+    val sub_str = if (len > 3) str.substring(len - 3, len) else str
+    if (sub_str(0) == '0' && sub_str(1) == '0') sub_str.substring(2)
+    else if (sub_str(0) == '0') sub_str.substring(1, 3)
+    else sub_str
   }
 }

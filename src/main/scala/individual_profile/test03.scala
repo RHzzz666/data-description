@@ -231,7 +231,9 @@ object test03 {
 
   def string_last_3_char(str:String):String = {
     val len = str.length
-    if(len > 3) str.substring(len-3,len)
-    else str
+    val sub_str = if(len > 3) str.substring(len-3,len) else str
+    if(sub_str(0)=='0' && sub_str(1)=='0') sub_str.substring(2)
+    else if(sub_str(0)=='0') sub_str.substring(1,3)
+    else sub_str
   }
 }
