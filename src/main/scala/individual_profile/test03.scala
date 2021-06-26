@@ -78,7 +78,7 @@ object test03 {
     val get_id = functions.udf(string_last_3_char _)
 
     //分别载入多张数据表
-    val readDF0: DataFrame = spark.read
+    val user_info_df: DataFrame = spark.read
       .option(HBaseTableCatalog.tableCatalog, catalog)
       .format("org.apache.spark.sql.execution.datasources.hbase")
       .load()
@@ -181,13 +181,15 @@ object test03 {
         when('count_scan/'浏览总时间 between(1,1.5),"很少").
         when('count_scan/'浏览总时间 between(0,1.5),"偶尔")
         when('count_scan/'浏览总时间===0,"从不"))
+
+
     // .groupBy('global_user_id).agg(collect_set('浏览页面) as("浏览页面"),collect_set('访问频率) as("'访问频率"))
 
 
     val logDF = logDF_pre.groupBy('global_user_id).agg(max('log_time) as "log_time",
       sum(when('浏览页面==="登录页",1).otherwise(0))as("count_log"))
     //合并用户与登录
-    val readDF:DataFrame = readDF0.join(logDF,readDF0.col("id")===logDF.col("global_user_id"))
+    val readDF:DataFrame = user_info_df.join(logDF,user_info_df.col("id")===logDF.col("global_user_id"))
       .drop(logDF.col("global_user_id"))
 
     //尝试连接表
@@ -197,39 +199,41 @@ object test03 {
     //      .withColumnRenamed("购买商品","buy_product")
     //      .withColumnRenamed("最近登录","recent_log")
     //      .withColumnRenamed("登陆频率","F_log")
-    def catalogWrite =
-      s"""{
-         |"table":{"namespace":"default", "name":"user"},
-         |"rowkey":"id",
-         |"columns":{
-         |"id":{"cf":"rowkey", "col":"id", "type":"long"},
-         |"username":{"cf":"cf", "col":"username", "type":"string"},
-         |"gender":{"cf":"cf", "col":"gender", "type":"string"},
-         |"email":{"cf":"cf", "col":"email", "type":"string"},
-         |"mobile":{"cf":"cf", "col":"mobile", "type":"string"},
-         |"province":{"cf":"cf", "col":"province", "type":"string"},
-         |"store":{"cf":"cf", "col":"store", "type":"string"},
-         |"birthday":{"cf":"cf", "col":"birthday", "type":"string"},
-         |"job":{"cf":"cf", "col":"job", "type":"string"},
-         |"politicalFace":{"cf":"cf", "col":"politicalFace", "type":"string"},
-         |"nationality":{"cf":"cf", "col":"nationality", "type":"string"},
-         |"marriage":{"cf":"cf", "col":"marriage", "type":"string"},
-         |"age":{"cf":"cf", "col":"age", "type":"string"},
-         |"Constellation":{"cf":"cf", "col":"Constellation", "type":"string"},
-         |"is_blackList":{"cf":"cf", "col":"is_blackList", "type":"string"}
-         |}
-         |}""".stripMargin
+//    def catalogWrite =
+//      s"""{
+//         |"table":{"namespace":"default", "name":"user"},
+//         |"rowkey":"id",
+//         |"columns":{
+//         |"id":{"cf":"rowkey", "col":"id", "type":"long"},
+//         |"username":{"cf":"cf", "col":"username", "type":"string"},
+//         |"gender":{"cf":"cf", "col":"gender", "type":"string"},
+//         |"email":{"cf":"cf", "col":"email", "type":"string"},
+//         |"mobile":{"cf":"cf", "col":"mobile", "type":"string"},
+//         |"province":{"cf":"cf", "col":"province", "type":"string"},
+//         |"store":{"cf":"cf", "col":"store", "type":"string"},
+//         |"birthday":{"cf":"cf", "col":"birthday", "type":"string"},
+//         |"job":{"cf":"cf", "col":"job", "type":"string"},
+//         |"politicalFace":{"cf":"cf", "col":"politicalFace", "type":"string"},
+//         |"nationality":{"cf":"cf", "col":"nationality", "type":"string"},
+//         |"marriage":{"cf":"cf", "col":"marriage", "type":"string"},
+//         |"age":{"cf":"cf", "col":"age", "type":"string"},
+//         |"Constellation":{"cf":"cf", "col":"Constellation", "type":"string"},
+//         |"is_blackList":{"cf":"cf", "col":"is_blackList", "type":"string"}
+//         |}
+//         |}""".stripMargin
 
-    //    result.write
-    //      .option(HBaseTableCatalog.tableCatalog, catalogWrite)
-    //      .option(HBaseTableCatalog.newTable, "5")
-    //      .format("org.apache.spark.sql.execution.datasources.hbase")
-    //      .save()
+//        result.write
+//          .option(HBaseTableCatalog.tableCatalog, catalogWrite)
+//          .option(HBaseTableCatalog.newTable, "5")
+//          .format("org.apache.spark.sql.execution.datasources.hbase")
+//          .save()
   }
 
   def string_last_3_char(str:String):String = {
     val len = str.length
-    if(len > 3) str.substring(len-3,len)
-    else str
+    val sub_str = if(len > 3) str.substring(len-3,len) else str
+    if(sub_str(0)=='0' && sub_str(1)=='0') sub_str.substring(2)
+    else if(sub_str(0)=='0') sub_str.substring(1,3)
+    else sub_str
   }
 }
