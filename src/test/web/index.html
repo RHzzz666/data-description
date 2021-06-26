@@ -39,6 +39,7 @@
 	#test .s-profile>a{background: url(test) left top no-repeat;}
 	</style>
 
+
 </head>
 <body>
 <header id="header">
@@ -52,7 +53,7 @@
 		</li>
 		<li id="logo" class="hidden-xs">
 			<a href="index.html">
-				<img src="resources/images/logo.png"/>
+				<img src="resources/images/logo_1.png"/>
 			</a>
 			<span id="system_title">大数据管理系统</span>
 		</li>
@@ -139,8 +140,8 @@
 				<div class="sp-pic">
 					<img src="resources/images/avatar.jpg"/>
 				</div>
-				<div class="sp-info">
-					用户，您好！
+				<div class="sp-info" id="username">
+					用户您好！
 					<i class="zmdi zmdi-caret-down"></i>
 				</div>
 			</a>
@@ -155,7 +156,7 @@
 					<a class="waves-effect" href="javascript:;"><i class="zmdi zmdi-settings"></i> 系统设置</a>
 				</li>
 				<li>
-					<a class="waves-effect" href="javascript:;"><i class="zmdi zmdi-run"></i> 退出登录</a>
+					<a class="waves-effect" href="javascript:jump_to_login();"><i class="zmdi zmdi-run"></i> 退出登录</a>
 				</li>
 			</ul>
 		</div>
@@ -176,7 +177,7 @@
 			<a class="waves-effect" href="javascript:;"><i class="zmdi zmdi-accounts"></i> 角色用户管理</a>
 			<ul>
 				<li><a class="waves-effect" href="javascript:Tab.addTab('工作', 'chart_job.html');">工作</a></li>
-				<li><a class="waves-effect" href="javascript:Tab.addTab('用户管理', '/manage/user/index');">用户管理</a></li>
+				<li><a class="waves-effect" href="javascript:Tab.addTab('个人资料', 'profile_1.html');">个人资料</a></li>
 			</ul>
 			</li>
 			<li class="sub-menu system_menus system_1 6">

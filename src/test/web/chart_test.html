@@ -18,10 +18,10 @@
 <div id="main" style="width: 600px;height:400px;"></div>
 <script type="text/javascript">
 
-    window.onload(test())
+    window.onload(test());
 
     function jsonx(data){
-        var temp = JSON.parse(data)
+        var temp = JSON.parse(data);
         return temp
     }
 
@@ -31,7 +31,7 @@
 
     function test(){
         var ajax=new XMLHttpRequest();
-        var url='http://192.168.101.160:8080/birth';
+        var url='http://192.168.101.160:8080/test';
         ajax.open('get',url,true);
         ajax.send();
         ajax.onreadystatechange=function (){
@@ -76,10 +76,10 @@
                     radius : '55%',
                     center: ['50%', '60%'],
                     data:[
-                        {value:dat.七零后, name:'70后',},
-                        {value:dat.八零后, name:'80后'},
-                        {value:dat.九零后, name:'90后'},
-                        {value:dat.零零后, name:'00后'},
+                        {value:dat[0].count, name:'70后',},
+                        {value:dat[1].count, name:'80后'},
+                        {value:dat[2].count, name:'90后'},
+                        {value:dat[3].count, name:'00后'},
 
                     ],
                     itemStyle: {

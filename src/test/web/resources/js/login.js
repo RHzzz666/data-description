@@ -1,3 +1,4 @@
+
 $(function() {
 	// Waves初始化
 	Waves.displayEffect();
@@ -22,9 +23,11 @@ $(function() {
 	});
 });
 // 登录
+
+
 function login() {
 	$.ajax({
-		url: 'http://localhost:8080/login',
+		url: 'http://192.168.101.160:8080/login',
 		type: 'POST',
 		dataType : 'json',
 		contentType : 'application/json',
@@ -39,7 +42,38 @@ function login() {
 
 		},
 		success: function(json){
-			console.log(json.id)
+			//console.log(json.user_name);
+			window.localStorage.setItem("user_name", json.user_name);
+			window.localStorage.setItem("user_id", json.id);
+			window.localStorage.setItem("user_e_mail", json.e_mail);
+			window.localStorage.setItem("user_birthday", json.birthday);
+			window.localStorage.setItem("user_mobile", json.mobile);
+			window.localStorage.setItem("user_money", json.money);
+			window.localStorage.setItem("user_money_pwd", json.money_pwd);
+			window.localStorage.setItem("user_last_login_time", json.last_login_time);
+			window.localStorage.setItem("user_register_time", json.register_time);
+			window.localStorage.setItem("user_qq", json.qq);
+			window.localStorage.setItem("user_job", json.job);
+			window.localStorage.setItem("user_political_face", json.political_face);
+			window.localStorage.setItem("user_age_class", json.age_class);
+			window.localStorage.setItem("user_nationality", json.nationality);
+			window.localStorage.setItem("user_marriage", json.marriage);
+			window.localStorage.setItem("user_is_in_blacklist", json.is_in_blacklist);
+			window.localStorage.setItem("user_constellation", json.constellation);
+			window.localStorage.setItem("user_payment_way", json.payment_way);
+			window.localStorage.setItem("user_ave_price", json.ave_price);
+			window.localStorage.setItem("user_ave_price_range", json.ave_price_range);
+			window.localStorage.setItem("user_order_count", json.order_count);
+			window.localStorage.setItem("user_frequency", json.frequency);
+			window.localStorage.setItem("user_register_time", json.register_time);
+			// window.localStorage.setItem("user_name", json.user_name);
+			// window.localStorage.setItem("user_name", json.user_name);
+			// window.localStorage.setItem("user_name", json.user_name);
+			// window.localStorage.setItem("user_name", json.user_name);
+			// window.localStorage.setItem("user_name", json.user_name);
+			// window.localStorage.setItem("user_name", json.user_name);
+
+
 			location.href = "index.html";
 
 			//
@@ -54,9 +88,14 @@ function login() {
 			// 		$('#password').focus();
 			// 	}
 			// }
+
+
+
 		},
 		error: function(error){
-			alert("账户或者错误，请重新输入")
+			alert("账户或者错误，请重新输入");
+			$('#password').focus();
 		}
 	});
 }
+

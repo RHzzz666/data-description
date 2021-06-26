@@ -260,3 +260,12 @@ function fullPage() {
 function jump_to_login(){
 	location.href = "login.html";
 }
+
+window.onload(user_name());
+
+function user_name() {
+	console.log("hello");
+	//console.log(window.localStorage.getItem("user_data"));
+	document.getElementById("username").innerHTML = window.localStorage.getItem("user_name") + "你好";
+
+}
