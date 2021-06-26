@@ -66,6 +66,8 @@ function login() {
 			window.localStorage.setItem("user_order_count", json.order_count);
 			window.localStorage.setItem("user_frequency", json.frequency);
 			window.localStorage.setItem("user_register_time", json.register_time);
+            window.localStorage.setItem("user_good_bought", json.good_bought);
+
 			// window.localStorage.setItem("user_name", json.user_name);
 			// window.localStorage.setItem("user_name", json.user_name);
 			// window.localStorage.setItem("user_name", json.user_name);
@@ -93,7 +95,7 @@ function login() {
 
 		},
 		error: function(error){
-			alert("账户或者错误，请重新输入");
+			alert("账户或者密码错误，请重新输入");
 			$('#password').focus();
 		}
 	});

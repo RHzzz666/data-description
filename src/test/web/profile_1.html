@@ -17,7 +17,9 @@
 
 	<body>
 		<div class="view-body">
+			<div>
 
+			</div>
 			<div class="view-product background-color">
 				<div class="padding-big background-color">
 					<div class="account-info clearfix">
@@ -31,7 +33,7 @@
 											<!--没有实名认证-->
 											<!-- <a class="button bg-blue-deep icon icon-button-blue fl margin-left" href="#">立即实名认证</a> -->
 											<!--通过实名认证-->
-											<a class="button bg-green-deep icon icon-bu	tton-green fl margin-left" href="#">安全登录</a>
+											<a class="button bg-green-deep icon icon-bu	tton-green fl margin-left" href="#" style="padding: 0px">安全登录</a>
 										</p>
 									</div>
 									<span class="fr icon-head">
@@ -149,7 +151,7 @@
 
 									</span>
 									<div class="fr">
-										<a class="button btn-orange text-white" href="http://jq.qq.com/?_wv=1027&k=28Xajoq" target="_blank">点击修改</a>
+										<a class="button btn-orange text-white" href="" target="_blank">点击修改</a>
 									</div>
 								</dt>
 								<dd class="padding-big">
@@ -229,14 +231,14 @@
 							</div>
 						</div>
 						<div class="text-box-main padding-big fl w25">
-							<h2 class="h6 margin-big-bottom">我的产品</h2>
+							<h2 class="h6 margin-big-bottom">最近好物</h2>
 							<ul class="lists">
-								<li class="lists-list"><a href="#">05-10 云托管服务临时维护公告管服务临时维护公告管服务临时维护公告管服务临时维护公告管服务临时维护公告管服务临时维护公告</a></li>
-								<li class="lists-list"><a href="#">05-10 云托管服务临时维护公告</a></li>
-								<li class="lists-list"><a href="#">05-10 云托管服务临时维护公告</a></li>
-								<li class="lists-list"><a href="#">05-10 云托管服务临时维护公告</a></li>
-								<li class="lists-list"><a href="#">05-10 云托管服务临时维护公告</a></li>
-								<li class="lists-list"><a href="#">05-10 云托管服务临时维护公告</a></li>
+								<li class="lists-list"><a href="#" id="good_bought_0">无</a></li>
+								<li class="lists-list"><a href="#" id="good_bought_1">无</a></li>
+								<li class="lists-list"><a href="#" id="good_bought_2">无</a></li>
+								<li class="lists-list"><a href="#" id="good_bought_3">无</a></li>
+								<li class="lists-list"><a href="#" id="good_bought_4">无</a></li>
+								<li class="lists-list"><a href="#" id="good_bought_5">无</a></li>
 							</ul>
 						</div>
 					</div>
@@ -275,9 +277,24 @@
 				document.getElementById("payment_way").innerHTML=  window.localStorage.getItem("user_payment_way");
 				document.getElementById("register_time").innerHTML=  window.localStorage.getItem("user_register_time");
 				document.getElementById("constellation").innerHTML=  window.localStorage.getItem("user_constellation");
-				// document.getElementById("name").innerHTML=  window.localStorage.getItem("user_name");
-				// document.getElementById("name").innerHTML=  window.localStorage.getItem("user_name");
-				// document.getElementById("name").innerHTML=  window.localStorage.getItem("user_name");
+
+				console.log(window.localStorage.getItem("user_good_bought"));
+				var str_arr = split_string(window.localStorage.getItem("user_good_bought"));
+				console.log(str_arr);
+				document.getElementById("good_bought_0").innerHTML=  str_arr[0];
+				document.getElementById("good_bought_1").innerHTML=  str_arr[1];
+				document.getElementById("good_bought_2").innerHTML=  str_arr[2];
+				document.getElementById("good_bought_3").innerHTML=  str_arr[3];
+				document.getElementById("good_bought_4").innerHTML=  str_arr[4];
+				document.getElementById("good_bought_5").innerHTML=  str_arr[5];
+
+			}
+			
+			function split_string(str) {
+				var str_without_f_l = str.substr(1, str.length - 1);
+				var str_arr = new Array();
+				str_arr=str_without_f_l.split(",");
+				return str_arr;
 			}
 		</script>
 	</body>
