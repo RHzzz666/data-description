@@ -129,7 +129,7 @@ object individual_profile {
          |"rowkey":"id",
          |"columns":{
          |"id":{"cf":"rowkey", "col":"id", "type":"string"},
-         |"usernamoe":{"cf":"cf", "col":"username", "type":"string"},
+         |"username":{"cf":"cf", "col":"username", "type":"string"},
          |"gender":{"cf":"cf", "col":"gender", "type":"string"},
          |"email":{"cf":"cf", "col":"email", "type":"string"},
          |"mobile":{"cf":"cf", "col":"mobile", "type":"string"},

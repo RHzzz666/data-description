@@ -1,4 +1,4 @@
-package individual_profile
+package wcl_user
 
 //记录用户基本信息
 //
@@ -15,7 +15,7 @@ import org.apache.spark.sql.execution.datasources.hbase.HBaseTableCatalog
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.{DataFrame, SparkSession}
 
-object test01 {
+object user_basic_info {
   def main(args: Array[String]): Unit = {
     Logger.getLogger("org.apache.spark").setLevel(Level.WARN)
     val spark = SparkSession.builder()
