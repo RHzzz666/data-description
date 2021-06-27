@@ -60,6 +60,14 @@ public class testj {
         return res;
     }
 
+    @CrossOrigin
+    @RequestMapping(value = "/user_discount", method = RequestMethod.GET)
+    public String discount(@RequestBody JSONObject jsonParam) {
+        String a=jsonParam.getString("username");
+        String res=read.user_discount(a);
+        return res;
+    }
+
 
     @CrossOrigin
     @RequestMapping(value = "/login", method = RequestMethod.POST)

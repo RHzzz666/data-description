@@ -647,6 +647,43 @@ object read {
     }
   }
 
+  def user_discount(id:String):String={
+    def user_discount=
+      s"""{
+         |  "table":{"namespace":"default", "name":"user_discount"},
+         |  "rowkey":"Id",
+         |  "columns":{
+         |    "Id":{"cf":"rowkey", "col":"Id", "type":"long"},
+         |    "predict":{"cf":"cf", "col":"predict", "type":"long"}
+         |  }
+         |}""".stripMargin
+    var df= spark.read
+      .option(HBaseTableCatalog.tableCatalog, user_discount)
+      .format("org.apache.spark.sql.execution.datasources.hbase")
+      .load().toDF()
+    df=df.where(col("id")===id)
+    df.toJSON.collectAsList().toString
+  }
+
+  def user_class_1(username:String):String={
+    def user_discount=
+      s"""{
+         |  "table":{"namespace":"default", "name":"user_class_1"},
+         |  "rowkey":"Id",
+         |  "columns":{
+         |    "Id":{"cf":"rowkey", "col":"Id", "type":"long"},
+         |    "username":{"cf":"rowkey", "col":"username", "type":"string"},
+         |    "predict":{"cf":"cf", "col":"predict", "type":"string"}
+         |  }
+         |}""".stripMargin
+    var df= spark.read
+      .option(HBaseTableCatalog.tableCatalog, user_discount)
+      .format("org.apache.spark.sql.execution.datasources.hbase")
+      .load().toDF()
+    df=df.where(col("username")===username)
+    df.toJSON.collectAsList().toString
+  }
+
 
   def search(a:String):String={
     def catalog =
