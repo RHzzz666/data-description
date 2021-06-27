@@ -3,9 +3,62 @@ package gala2
 import org.apache.spark.sql.{DataFrame, SparkSession}
 import org.apache.spark.sql.catalyst.dsl.expressions.DslSymbol
 import org.apache.spark.sql.execution.datasources.hbase.HBaseTableCatalog
-import org.apache.spark.sql.functions.{col, to_timestamp, when, year}
+import org.apache.spark.sql.functions.{col, count, to_timestamp, when, year}
 import org.apache.spark.sql.types.{IntegerType, StringType, StructField, StructType}
 object calculate {
+
+  def main(args: Array[String]): Unit = {
+   // region_cal()
+  //  marriage_cal()
+   // nationality_cal()
+   // political_face_cal()
+  //  brand_preference_cal()
+  //  consumption_ablity_cal()
+ //   shopping_cycle_cal()
+  //  ave_price_range_cal()
+  //  order_highest_range_cal()
+ //   log_frequency_cal()
+  }
+
+
+  def brand_preference_cal(): Unit = {
+    def catalog =
+      s"""{
+         |"table":{"namespace":"default","name":"user_final_2nd"},
+         |"rowkey":"id",
+         |"columns":{
+         |"id":{"cf":"rowkey","col":"id","type":"string"},
+         |"brand_preference":{"cf":"cf","col":"brand_preference","type":"string"}
+         |}
+         |}""".stripMargin
+    val spark = SparkSession.builder()
+      .appName("shc test")
+      .master("local[10]")
+      .getOrCreate()
+    import spark.implicits._
+    val rdf:DataFrame=spark.read
+      .option(HBaseTableCatalog.tableCatalog, catalog)
+      .format("org.apache.spark.sql.execution.datasources.hbase")
+      .load()
+    val s2=rdf.where(col("brand_preference")=!="其他").groupBy("brand_preference").count()
+    val s3=s2.select("brand_preference","count")
+
+    def catalogWrite =
+      s"""{
+         |"table":{"namespace":"default","name":"cal_brand_preference"},
+         |"rowkey":"brand_preference",
+         |"columns":{
+         |"brand_preference":{"cf":"rowkey", "col":"brand_preference", "type":"string"},
+         |"count":{"cf":"cf", "col":"count", "type":"long"}
+         |}
+         |}""".stripMargin
+    s3.write
+      .option(HBaseTableCatalog.tableCatalog, catalogWrite)
+      .option(HBaseTableCatalog.newTable, "5")
+      .format("org.apache.spark.sql.execution.datasources.hbase")
+      .save()
+  }
+
   def gender_cal(): Unit = {
     def catalog =
       s"""{
@@ -43,6 +96,196 @@ object calculate {
          |"rowkey":"gender",
          |"columns":{
          |"gender":{"cf":"rowkey", "col":"gender", "type":"string"},
+         |"count":{"cf":"cf", "col":"count", "type":"long"}
+         |}
+         |}""".stripMargin
+    s3.write
+      .option(HBaseTableCatalog.tableCatalog, catalogWrite)
+      .option(HBaseTableCatalog.newTable, "5")
+      .format("org.apache.spark.sql.execution.datasources.hbase")
+      .save()
+  }
+
+  def region_cal(): Unit = {
+    def catalog =
+      s"""{
+         |"table":{"namespace":"default","name":"user_final_2nd"},
+         |"rowkey":"id",
+         |"columns":{
+         |"id":{"cf":"rowkey","col":"id","type":"string"},
+         |"region":{"cf":"cf","col":"region","type":"string"}
+         |}
+         |}""".stripMargin
+    val spark = SparkSession.builder()
+      .appName("shc test")
+      .master("local[10]")
+      .getOrCreate()
+    import spark.implicits._
+    val rdf:DataFrame=spark.read
+      .option(HBaseTableCatalog.tableCatalog, catalog)
+      .format("org.apache.spark.sql.execution.datasources.hbase")
+      .load()
+    val s2=rdf.groupBy("region").count()
+    val s3=s2.select("region","count")
+
+    def catalogWrite =
+      s"""{
+         |"table":{"namespace":"default","name":"cal_region"},
+         |"rowkey":"region",
+         |"columns":{
+         |"region":{"cf":"rowkey", "col":"region", "type":"string"},
+         |"count":{"cf":"cf", "col":"count", "type":"long"}
+         |}
+         |}""".stripMargin
+    s3.write
+      .option(HBaseTableCatalog.tableCatalog, catalogWrite)
+      .option(HBaseTableCatalog.newTable, "5")
+      .format("org.apache.spark.sql.execution.datasources.hbase")
+      .save()
+  }
+
+  def marriage_cal(): Unit = {
+    def catalog =
+      s"""{
+         |"table":{"namespace":"default","name":"user_final_2nd"},
+         |"rowkey":"id",
+         |"columns":{
+         |"id":{"cf":"rowkey","col":"id","type":"string"},
+         |"marriage":{"cf":"cf","col":"marriage","type":"string"}
+         |}
+         |}""".stripMargin
+    val spark = SparkSession.builder()
+      .appName("shc test")
+      .master("local[10]")
+      .getOrCreate()
+    import spark.implicits._
+    val rdf:DataFrame=spark.read
+      .option(HBaseTableCatalog.tableCatalog, catalog)
+      .format("org.apache.spark.sql.execution.datasources.hbase")
+      .load()
+    val s2=rdf.groupBy("marriage").count()
+    val s3=s2.select("marriage","count")
+
+    def catalogWrite =
+      s"""{
+         |"table":{"namespace":"default","name":"cal_marriage"},
+         |"rowkey":"marriage",
+         |"columns":{
+         |"marriage":{"cf":"rowkey", "col":"marriage", "type":"string"},
+         |"count":{"cf":"cf", "col":"count", "type":"long"}
+         |}
+         |}""".stripMargin
+    s3.write
+      .option(HBaseTableCatalog.tableCatalog, catalogWrite)
+      .option(HBaseTableCatalog.newTable, "5")
+      .format("org.apache.spark.sql.execution.datasources.hbase")
+      .save()
+  }
+
+  def nationality_cal(): Unit = {
+    def catalog =
+      s"""{
+         |"table":{"namespace":"default","name":"user_final_2nd"},
+         |"rowkey":"id",
+         |"columns":{
+         |"id":{"cf":"rowkey","col":"id","type":"string"},
+         |"nationality":{"cf":"cf","col":"nationality","type":"string"}
+         |}
+         |}""".stripMargin
+    val spark = SparkSession.builder()
+      .appName("shc test")
+      .master("local[10]")
+      .getOrCreate()
+    import spark.implicits._
+    val rdf:DataFrame=spark.read
+      .option(HBaseTableCatalog.tableCatalog, catalog)
+      .format("org.apache.spark.sql.execution.datasources.hbase")
+      .load()
+    val s2=rdf.groupBy("nationality").count()
+    val s3=s2.select("nationality","count")
+
+    def catalogWrite =
+      s"""{
+         |"table":{"namespace":"default","name":"cal_nationality"},
+         |"rowkey":"nationality",
+         |"columns":{
+         |"nationality":{"cf":"rowkey", "col":"nationality", "type":"string"},
+         |"count":{"cf":"cf", "col":"count", "type":"long"}
+         |}
+         |}""".stripMargin
+    s3.write
+      .option(HBaseTableCatalog.tableCatalog, catalogWrite)
+      .option(HBaseTableCatalog.newTable, "5")
+      .format("org.apache.spark.sql.execution.datasources.hbase")
+      .save()
+  }
+
+  def political_face_cal(): Unit = {
+    def catalog =
+      s"""{
+         |"table":{"namespace":"default","name":"user_final_2nd"},
+         |"rowkey":"id",
+         |"columns":{
+         |"id":{"cf":"rowkey","col":"id","type":"string"},
+         |"political_face":{"cf":"cf","col":"political_face","type":"string"}
+         |}
+         |}""".stripMargin
+    val spark = SparkSession.builder()
+      .appName("shc test")
+      .master("local[10]")
+      .getOrCreate()
+    import spark.implicits._
+    val rdf:DataFrame=spark.read
+      .option(HBaseTableCatalog.tableCatalog, catalog)
+      .format("org.apache.spark.sql.execution.datasources.hbase")
+      .load()
+    val s2=rdf.groupBy("political_face").count()
+    val s3=s2.select("political_face","count")
+
+    def catalogWrite =
+      s"""{
+         |"table":{"namespace":"default","name":"cal_political_face"},
+         |"rowkey":"political_face",
+         |"columns":{
+         |"political_face":{"cf":"rowkey", "col":"political_face", "type":"string"},
+         |"count":{"cf":"cf", "col":"count", "type":"long"}
+         |}
+         |}""".stripMargin
+    s3.write
+      .option(HBaseTableCatalog.tableCatalog, catalogWrite)
+      .option(HBaseTableCatalog.newTable, "5")
+      .format("org.apache.spark.sql.execution.datasources.hbase")
+      .save()
+  }
+
+  def consumption_ablity_cal(): Unit = {
+    def catalog =
+      s"""{
+         |"table":{"namespace":"default","name":"user_final_2nd"},
+         |"rowkey":"id",
+         |"columns":{
+         |"id":{"cf":"rowkey","col":"id","type":"string"},
+         |"consumption_ablity":{"cf":"cf","col":"consumption_ablity","type":"string"}
+         |}
+         |}""".stripMargin
+    val spark = SparkSession.builder()
+      .appName("shc test")
+      .master("local[10]")
+      .getOrCreate()
+    import spark.implicits._
+    val rdf:DataFrame=spark.read
+      .option(HBaseTableCatalog.tableCatalog, catalog)
+      .format("org.apache.spark.sql.execution.datasources.hbase")
+      .load()
+    val s2=rdf.groupBy("consumption_ablity").count()
+    val s3=s2.select("consumption_ablity","count")
+
+    def catalogWrite =
+      s"""{
+         |"table":{"namespace":"default","name":"cal_consumption_ablity"},
+         |"rowkey":"consumption_ablity",
+         |"columns":{
+         |"consumption_ablity":{"cf":"rowkey", "col":"consumption_ablity", "type":"string"},
          |"count":{"cf":"cf", "col":"count", "type":"long"}
          |}
          |}""".stripMargin
@@ -104,7 +347,6 @@ object calculate {
       .save()
   }
 
-
   def birth_cal(): Unit = {
     def catalog =
       s"""{
@@ -115,7 +357,6 @@ object calculate {
          |"birthday":{"cf":"cf", "col":"birthday", "type":"string"}
          |}
          |}""".stripMargin
-
     val spark = SparkSession.builder()
       .appName("shc test")
       .master("local[10]")
@@ -145,7 +386,7 @@ object calculate {
          |"table":{"namespace":"default", "name":"cal_birth"},
          |"rowkey":"birth",
          |"columns":{
-         |"birth":{"cf":"rowkey", "col":"birth", "type":"string"},
+         |"birth":{"cf":"cf", "col":"birth", "type":"string"},
          |"count":{"cf":"cf", "col":"count", "type":"long"}
          |}
          |}""".stripMargin
@@ -154,8 +395,159 @@ object calculate {
       .option(HBaseTableCatalog.newTable, "5")
       .format("org.apache.spark.sql.execution.datasources.hbase")
       .save()
-
-
   }
+
+  def shopping_cycle_cal(): Unit = {
+    def catalog =
+      s"""{
+         |"table":{"namespace":"default","name":"user_final_2nd"},
+         |"rowkey":"id",
+         |"columns":{
+         |"id":{"cf":"rowkey","col":"id","type":"string"},
+         |"shopping_cycle":{"cf":"cf","col":"shopping_cycle","type":"string"}
+         |}
+         |}""".stripMargin
+    val spark = SparkSession.builder()
+      .appName("shc test")
+      .master("local[10]")
+      .getOrCreate()
+    import spark.implicits._
+    val rdf:DataFrame=spark.read
+      .option(HBaseTableCatalog.tableCatalog, catalog)
+      .format("org.apache.spark.sql.execution.datasources.hbase")
+      .load()
+    val s2=rdf.where(col("shopping_cycle")=!="其他").groupBy("shopping_cycle").count()
+    val s3=s2.select("shopping_cycle","count")
+
+    def catalogWrite =
+      s"""{
+         |"table":{"namespace":"default","name":"cal_shopping_cycle"},
+         |"rowkey":"shopping_cycle",
+         |"columns":{
+         |"shopping_cycle":{"cf":"rowkey", "col":"shopping_cycle", "type":"string"},
+         |"count":{"cf":"cf", "col":"count", "type":"long"}
+         |}
+         |}""".stripMargin
+    s3.write
+      .option(HBaseTableCatalog.tableCatalog, catalogWrite)
+      .option(HBaseTableCatalog.newTable, "5")
+      .format("org.apache.spark.sql.execution.datasources.hbase")
+      .save()
+  }
+
+  def ave_price_range_cal(): Unit = {
+    def catalog =
+      s"""{
+         |"table":{"namespace":"default","name":"user_final_2nd"},
+         |"rowkey":"id",
+         |"columns":{
+         |"id":{"cf":"rowkey","col":"id","type":"string"},
+         |"ave_price_range":{"cf":"cf","col":"ave_price_range","type":"string"}
+         |}
+         |}""".stripMargin
+    val spark = SparkSession.builder()
+      .appName("shc test")
+      .master("local[10]")
+      .getOrCreate()
+    import spark.implicits._
+    val rdf:DataFrame=spark.read
+      .option(HBaseTableCatalog.tableCatalog, catalog)
+      .format("org.apache.spark.sql.execution.datasources.hbase")
+      .load()
+    val s2=rdf.where(col("ave_price_range")=!="其他").groupBy("ave_price_range").count()
+    val s3=s2.select("ave_price_range","count")
+
+    def catalogWrite =
+      s"""{
+         |"table":{"namespace":"default","name":"cal_ave_price_range"},
+         |"rowkey":"ave_price_range",
+         |"columns":{
+         |"ave_price_range":{"cf":"rowkey", "col":"ave_price_range", "type":"string"},
+         |"count":{"cf":"cf", "col":"count", "type":"long"}
+         |}
+         |}""".stripMargin
+    s3.write
+      .option(HBaseTableCatalog.tableCatalog, catalogWrite)
+      .option(HBaseTableCatalog.newTable, "5")
+      .format("org.apache.spark.sql.execution.datasources.hbase")
+      .save()
+  }
+
+  def order_highest_range_cal(): Unit = {
+    def catalog =
+      s"""{
+         |"table":{"namespace":"default","name":"user_final_2nd"},
+         |"rowkey":"id",
+         |"columns":{
+         |"id":{"cf":"rowkey","col":"id","type":"string"},
+         |"order_highest_range":{"cf":"cf","col":"order_highest_range","type":"string"}
+         |}
+         |}""".stripMargin
+    val spark = SparkSession.builder()
+      .appName("shc test")
+      .master("local[10]")
+      .getOrCreate()
+    import spark.implicits._
+    val rdf:DataFrame=spark.read
+      .option(HBaseTableCatalog.tableCatalog, catalog)
+      .format("org.apache.spark.sql.execution.datasources.hbase")
+      .load()
+    val s2=rdf.where(col("order_highest_range")=!="其他").groupBy("order_highest_range").count()
+    val s3=s2.select("order_highest_range","count")
+
+    def catalogWrite =
+      s"""{
+         |"table":{"namespace":"default","name":"cal_order_highest_range"},
+         |"rowkey":"order_highest_range",
+         |"columns":{
+         |"order_highest_range":{"cf":"rowkey", "col":"order_highest_range", "type":"string"},
+         |"count":{"cf":"cf", "col":"count", "type":"long"}
+         |}
+         |}""".stripMargin
+    s3.write
+      .option(HBaseTableCatalog.tableCatalog, catalogWrite)
+      .option(HBaseTableCatalog.newTable, "5")
+      .format("org.apache.spark.sql.execution.datasources.hbase")
+      .save()
+  }
+
+  def log_frequency_cal(): Unit = {
+    def catalog =
+      s"""{
+         |"table":{"namespace":"default","name":"user_final_2nd"},
+         |"rowkey":"id",
+         |"columns":{
+         |"id":{"cf":"rowkey","col":"id","type":"string"},
+         |"log_frequency":{"cf":"cf","col":"log_frequency","type":"string"}
+         |}
+         |}""".stripMargin
+    val spark = SparkSession.builder()
+      .appName("shc test")
+      .master("local[10]")
+      .getOrCreate()
+    import spark.implicits._
+    val rdf:DataFrame=spark.read
+      .option(HBaseTableCatalog.tableCatalog, catalog)
+      .format("org.apache.spark.sql.execution.datasources.hbase")
+      .load()
+    val s2=rdf.where(col("log_frequency")=!="其他").groupBy("log_frequency").count()
+    val s3=s2.select("log_frequency","count")
+
+    def catalogWrite =
+      s"""{
+         |"table":{"namespace":"default","name":"cal_log_frequency"},
+         |"rowkey":"log_frequency",
+         |"columns":{
+         |"log_frequency":{"cf":"rowkey", "col":"log_frequency", "type":"string"},
+         |"count":{"cf":"cf", "col":"count", "type":"long"}
+         |}
+         |}""".stripMargin
+    s3.write
+      .option(HBaseTableCatalog.tableCatalog, catalogWrite)
+      .option(HBaseTableCatalog.newTable, "5")
+      .format("org.apache.spark.sql.execution.datasources.hbase")
+      .save()
+  }
+
 
 }
