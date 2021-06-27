@@ -61,18 +61,24 @@ public class testj {
     }
 
 
-
-
     @CrossOrigin
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public HashMap<String, Object> getByJSON(@RequestBody JSONObject jsonParam) {
+    public String getByJSON(@RequestBody JSONObject jsonParam) {
         // 直接将json信息打印出来
         String a=jsonParam.getString("userName");
         String b=jsonParam.getString("passWord");
-        String res=read.getperson(a,b);
-        res=res.substring(1,res.length()-1);
-        HashMap<String, Object> hashMap=JSON.parseObject(res, HashMap.class);
-        return hashMap;
+        if(a=="admin"&&b=="admin")
+        {
+            return "admin";
+        }
+        else
+        {
+            String res=read.getperson(a,b);
+            res=res.substring(1,res.length()-1);
+          //  HashMap<String, Object> hashMap=JSON.parseObject(res, HashMap.class);
+            return res;
+        }
+
     }
 
     @CrossOrigin
