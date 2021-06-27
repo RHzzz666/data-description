@@ -5,7 +5,7 @@ import org.apache.spark.sql.expressions.Window
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.{DataFrame, SparkSession, functions}
 
-object test112 {
+object user_behavior_record {
   def main(args: Array[String]): Unit = {
     def user_log_catalog =
       s"""{
@@ -32,40 +32,39 @@ object test112 {
 
     import spark.implicits._
     val get_id = functions.udf(string_last_3_char _)
-    val log_pre_df = log_df.drop('id) 
-      .select('global_user_id,'user_agent,'loc_url,'log_time,
-        when('loc_url like "%login%" ,"登录页")
-          .when('loc_url like "%order%","我的订单页")
-          .when('loc_url like "%product%","商品页")
-          .when('loc_url like "%item%","分类页")
-          .when('loc_url like "%index%","首页")
+    val log_pre_df = log_df.drop('id)
+      .select('global_user_id, 'user_agent, 'loc_url, 'log_time,
+        when('loc_url like "%login%", "登录页")
+          .when('loc_url like "%order%", "我的订单页")
+          .when('loc_url like "%product%", "商品页")
+          .when('loc_url like "%item%", "分类页")
+          .when('loc_url like "%index%", "首页")
           .otherwise("其他页面")
           .as("scanned_page"),
-        when(hour('log_time) between(1,7),"1点-7点")
-          .when(hour('log_time) between(8,12),"8点-12点")
-          .when(hour('log_time) between(13,17),"13点-17点")
-          .when(hour('log_time) between(18,21),"18点-21点")
-          .when(hour('log_time) between(22,24),"22点-24点")
+        when(hour('log_time) between(1, 7), "1点-7点")
+          .when(hour('log_time) between(8, 12), "8点-12点")
+          .when(hour('log_time) between(13, 17), "13点-17点")
+          .when(hour('log_time) between(18, 21), "18点-21点")
+          .when(hour('log_time) between(22, 24), "22点-24点")
           .as("log_time_arrange"),
-        when('user_agent like("%Android%"),"Android")
-          .when('user_agent like("%iPhone%"),"IOS")
-          .when('user_agent like("%WOW%"),"Window")
-          .when('user_agent like("%Linux%"),"Linux")
+        when('user_agent like ("%Android%"), "Android")
+          .when('user_agent like ("%iPhone%"), "IOS")
+          .when('user_agent like ("%WOW%"), "Window")
+          .when('user_agent like ("%Linux%"), "Linux")
           .otherwise("Mac")
           .as("device_type")
 
       )
-      .withColumn("pre_time", lag('log_time,1) over Window.partitionBy('global_user_id).orderBy('log_time.desc))
-      .withColumn("scan_time",when(isnull('pre_time),"0").when((unix_timestamp('pre_time)-unix_timestamp('log_time))<60,"1分钟内")
-        .when((unix_timestamp('pre_time)-unix_timestamp('log_time)) between(60,300),"1-5分钟")
-        .when((unix_timestamp('pre_time)-unix_timestamp('log_time))>300,"5分钟以上"))
-    //访问频率，目前暂无完全合并的需求
-    val log_scan = log_pre_df.groupBy('global_user_id,'scanned_page).agg(datediff(max('log_time),min('log_time)) as "scan_total_time",count('scanned_page) as "count_scan")
-      .withColumn("log_frequency",when('count_scan/'scan_total_time>1,"经常").
-        when('count_scan/'scan_total_time between(1,1.5),"很少").
-        when('count_scan/'scan_total_time between(0,1),"偶尔")
-        when('count_scan/'scan_total_time===0,"从不"))
-    // .groupBy('global_user_id).agg(collect_set('scanned_page) as("scanned_page"),collect_set('访问频率) as("'访问频率"))
+      .withColumn("pre_time", lag('log_time, 1) over Window.partitionBy('global_user_id).orderBy('log_time.desc))
+      .withColumn("scan_time", when(isnull('pre_time), "0").when((unix_timestamp('pre_time) - unix_timestamp('log_time)) < 60, "1分钟内")
+        .when((unix_timestamp('pre_time) - unix_timestamp('log_time)) between(60, 300), "1-5分钟")
+        .when((unix_timestamp('pre_time) - unix_timestamp('log_time)) > 300, "5分钟以上"))
+
+    val log_scan = log_pre_df.groupBy('global_user_id, 'scanned_page).agg(datediff(max('log_time), min('log_time)) as "scan_total_time", count('scanned_page) as "count_scan")
+      .withColumn("log_frequency", when('count_scan / 'scan_total_time > 1, "经常").
+        when('count_scan / 'scan_total_time between(1, 1.5), "很少").
+        when('count_scan / 'scan_total_time between(0, 1), "偶尔")
+        when('count_scan / 'scan_total_time === 0, "从不"))
 
     //
     log_scan.show(false)
@@ -75,18 +74,19 @@ object test112 {
     //|149           |登录页      |22             |10        |偶尔         |
     //|162           |首页        |27             |7         |偶尔         |
     val logDF = log_pre_df.groupBy('global_user_id).agg(max('log_time) as "log_time",
-      sum(when('scanned_page==="登录页",1).otherwise(0)) as "count_log")
+      sum(when('scanned_page === "登录页", 1).otherwise(0)) as "count_log")
 
     logDF.show(false)
-    val res = log_scan.join(logDF,log_scan.col("global_user_id")===logDF.col("global_user_id"))
+    val res = log_scan.join(logDF, log_scan.col("global_user_id") === logDF.col("global_user_id"))
       .drop(logDF.col("global_user_id"))
+
     //
     //+--------------+-------------------+---------+
     //|global_user_id|log_time           |count_log|
     //+--------------+-------------------+---------+
     //|296           |2019-08-17 21:33:05|6        |
     //|467           |2019-08-17 22:40:36|11       |
-    def behavior_record_write=
+    def behavior_record_write =
       s"""{
          |"table":{"namespace":"default", "name":"user_behavior_record"},
          |"rowkey":"global_user_id",
@@ -108,11 +108,12 @@ object test112 {
       .format("org.apache.spark.sql.execution.datasources.hbase")
       .save()
   }
-  def string_last_3_char(str:String):String = {
+
+  def string_last_3_char(str: String): String = {
     val len = str.length
-    val sub_str = if(len > 3) str.substring(len-3,len) else str
-    if(sub_str(0)=='0' && sub_str(1)=='0') sub_str.substring(2)
-    else if(sub_str(0)=='0') sub_str.substring(1,3)
+    val sub_str = if (len > 3) str.substring(len - 3, len) else str
+    if (sub_str(0) == '0' && sub_str(1) == '0') sub_str.substring(2)
+    else if (sub_str(0) == '0') sub_str.substring(1, 3)
     else sub_str
   }
 }

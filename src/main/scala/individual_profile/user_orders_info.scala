@@ -15,7 +15,7 @@ import org.apache.spark.sql.{Column, DataFrame, SparkSession, functions}
 //- 购买频率1
 //- 退货率1
 //- 换货率1
-object test11 {
+object user_orders_info {
   def main(args: Array[String]): Unit = {
     val spark = SparkSession.builder()
       .appName("Orders_info")
@@ -228,6 +228,9 @@ object test11 {
     //|支付宝     |1635 |467      |7日           |1782.9028767123289|1000-2999      |99.00        |1-999              |1.106060606060606  |66         |73         |低                       |0.0               |0.0                 |低                          |低                        |
     //|支付宝     |2355 |675      |1月           |1797.3695652173913|1000-2999      |998.00       |1-999              |0.9387755102040817 |49         |46         |低                       |0.0               |0.004149377593360996|低                          |低                        |
     //|支付宝     |3990 |691      |2周           |1994.7226785714286|1000-2999      |99.00        |1-999              |0.8115942028985508 |69         |56         |低                       |0.0               |0.0                 |低                          |低                        |
+
+    //double数据类型
+    //ave_price , order_highest, frequency ,exchange_item_rate, return_item_rate
     def orders_info_write_catalog=
       s"""{
          |"table":{"namespace":"default", "name":"user_orders_info"},
@@ -237,15 +240,15 @@ object test11 {
          |"member_id":{"cf":"cf", "col":"member_id", "type":"string"},
          |"payment_way":{"cf":"cf", "col":"payment_way", "type":"string"},
          |"shopping_cycle":{"cf":"cf", "col":"shopping_cycle", "type":"string"},
-         |"ave_price":{"cf":"cf", "col":"ave_price", "type":"string"},
+         |"ave_price":{"cf":"cf", "col":"ave_price", "type":"double"},
          |"ave_price_range":{"cf":"cf", "col":"ave_price_range", "type":"string"},
          |"order_count":{"cf":"cf", "col":"order_count","type":"long"},
-         |"order_highest":{"cf":"cf", "col":"order_highest", "type":"string"},
+         |"order_highest":{"cf":"cf", "col":"order_highest", "type":"double"},
          |"order_highest_range":{"cf":"cf", "col":"order_highest_range", "type":"string"},
-         |"frequency":{"cf":"cf", "col":"frequency", "type":"string"},
+         |"frequency":{"cf":"cf", "col":"frequency", "type":"double"},
          |"frequency_range(高,中,低)":{"cf":"cf", "col":"frequency_range(高,中,低)", "type":"string"},
-         |"exchange_item_rate":{"cf":"cf", "col":"exchange_item_rate", "type":"string"},
-         |"return_item_rate":{"cf":"cf", "col":"return_item_rate", "type":"string"},
+         |"exchange_item_rate":{"cf":"cf", "col":"exchange_item_rate", "type":"double"},
+         |"return_item_rate":{"cf":"cf", "col":"return_item_rate", "type":"double"},
          |"exchange_item_rate(高,中,低)":{"cf":"cf", "col":"exchange_item_rate(高,中,低)", "type":"string"},
          |"return_item_rate(高,中,低)":{"cf":"cf", "col":"return_item_rate(高,中,低)", "type":"string"},
          |"consumption":{"cf":"cf", "col":"consumption", "type":"string"}
@@ -258,44 +261,7 @@ object test11 {
       .format("org.apache.spark.sql.execution.datasources.hbase")
       .save()
 
-    //    //    val result7: DataFrame=result.join(result2,result.col("memberId")===result2.col("memberId"))
-    //    //      .drop(result2.col("memberId"))
-    //    //    val result8: DataFrame=result7.join(result3,result7.col("memberId")===result3.col("memberId"))
-    //    //      .drop(result3.col("memberId"))
-    //    //    val result9: DataFrame=result8.join(result4,result8.col("memberId")===result4.col("memberId"))
-    //    //      .drop(result4.col("memberId"))
-    //    //    val result10: DataFrame=result9.join(result5,result9.col("memberId")===result5.col("memberId"))
-    //    //      .drop(result5.col("memberId"))
-    //    //    val result11: DataFrame=result10.join(result6,result10.col("memberId")===result6.col("memberId"))
-    //    //      .drop(result6.col("memberId"))
-    //    //    val result12: DataFrame=result11.join(result0,result11.col("memberId")===result0.col("memberId"))
-    //    //      .drop(result0.col("memberId"))
-    //    //
-    //    //
-    //    //points（积分）100：1,coupondCodeValue(优惠码)、giftCordAmounnt（活动卡，理解为券来分析有券必买）1：1
-    //    def catalogWrite =
-    //      s"""{
-    //         |"table":{"namespace":"default", "name":"consumer"},
-    //         |"rowkey":"id",
-    //         |"columns":{
-    //         |"id":{"cf":"rowkey", "col":"id", "type":"long"},
-    //         |"memberId":{"cf":"cf", "col":"memberId", "type":"string"},
-    //         |"周期":{"cf":"cf", "col":"周期", "type":"string"},
-    //         |"paymentName":{"cf":"cf", "col":"paymentName", "type":"string"},
-    //         |"客户平均每单价格":{"cf":"cf", "col":"客户平均每单价格", "type":"string"},
-    //         |"单笔最高":{"cf":"cf", "col":"单笔最高", "type":"string"},
-    //         |"频率":{"cf":"cf", "col":"频率", "type":"string"},
-    //         |"换货率（高、中、低）":{"cf":"cf", "col":"换货率（高、中、低）", "type":"string"},
-    //         |"退货率（高、中、低）":{"cf":"cf", "col":"退货率（高、中、低）", "type":"string"},
-    //         |"用户价值":{"cf":"cf", "col":"用户价值", "type":"string"}
-    //         |}
-    //         |}""".stripMargin
 
-    //    result12.write
-    //      .option(HBaseTableCatalog.tableCatalog, catalogWrite)
-    //      .option(HBaseTableCatalog.newTable, "5")
-    //      .format("org.apache.spark.sql.execution.datasources.hbase")
-    //      .save()
   }
 
 
