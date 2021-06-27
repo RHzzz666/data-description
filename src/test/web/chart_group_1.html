@@ -5,6 +5,7 @@
     <title>ECharts</title>
     <!-- 引入 echarts.js -->
     <script src="resources/js/echarts.min.js"></script>
+    <script src="resources/js/walden.js"></script>
 </head>
 <body>
 <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
@@ -31,7 +32,7 @@
 
     function test(){
         var ajax=new XMLHttpRequest();
-        var url='http://192.168.101.173:8080/test';
+        var url='http://192.168.101.173:8080/birth_brand_preference';
         ajax.open('get',url,true);
         ajax.send();
         ajax.onreadystatechange=function (){
@@ -46,7 +47,7 @@
 
     function chart(dat) {
         // 基于准备好的dom，初始化echarts实例
-        var myChart = echarts.init(document.getElementById('main'));
+        var myChart = echarts.init(document.getElementById('main'), 'walden');
 
 
         var app = {};
@@ -176,7 +177,7 @@
                     emphasis: {
                         focus: 'series'
                     },
-                    data: [dat[4].brand_preference_count, dat[7].brand_preference_count, dat[10].brand_preference_count, 0]
+                    data: [dat[5].brand_preference_count, dat[6].brand_preference_count, dat[7].brand_preference_count, 0]
                 },
                 {
                     name: '统帅',
@@ -185,7 +186,7 @@
                     emphasis: {
                         focus: 'series'
                     },
-                    data: [dat[3].brand_preference_count, dat[6].brand_preference_count, dat[11].brand_preference_count, dat[1].brand_preference_count]
+                    data: [dat[9].brand_preference_count, dat[10].brand_preference_count, dat[11].brand_preference_count, dat[8].brand_preference_count]
                 },
                 {
                     name: '小超人',
@@ -194,7 +195,7 @@
                     emphasis: {
                         focus: 'series'
                     },
-                    data: [dat[2].brand_preference_count, dat[5].brand_preference_count, dat[9].brand_preference_count, 0]
+                    data: [dat[0].brand_preference_count, dat[1].brand_preference_count, dat[2].brand_preference_count, 0]
                 },
                 {
                     name: '摩卡',
@@ -203,7 +204,7 @@
                     emphasis: {
                         focus: 'series'
                     },
-                    data: [0, dat[8].brand_preference_count, 0, 0, 0]
+                    data: [0, dat[3].brand_preference_count, 0, 0, 0]
                 }
             ]
         };
