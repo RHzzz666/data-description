@@ -29,7 +29,7 @@ object user_basic_info {
          |"table":{"namespace":"default","name":"tbl_users"},
          |"rowkey":"id",
          |"columns":{
-         |"id":{"cf":"rowkey","col":"id","type":"long"},
+         |"id":{"cf":"rowkey","col":"id","type":"string"},
          |"e_mail":{"cf":"cf","col":"email","type":"string"},
          |"user_name":{"cf":"cf","col":"username","type":"string"},
          |"register_time":{"cf":"cf","col":"registerTime","type":"string"},
@@ -45,11 +45,14 @@ object user_basic_info {
          |"money":{"cf":"cf","col":"money","type":"string"},
          |"money_pwd":{"cf":"cf","col":"moneyPwd","type":"string"},
          |"nick_name":{"cf":"cf","col":"nick_name","type":"string"},
-         |"is_blackList":{"cf":"cf","col":"is_blackList","type":"string"}
+         |"is_blackList":{"cf":"cf","col":"is_blackList","type":"string"},
+         |"gender_for_drop":{"cf":"cf","col":"gender","type":"string"},
+         |"zipcode":{"cf":"cf","col":"zipcode","type":"string"}
          |}
          |}
        """.stripMargin
     }
+
     //org.json4s.JsonAST$JString cannot be cast to org.json4s.JsonAST$JObject
     //这个错误一般对应的 catalog 内部的内容写错了
 
@@ -112,8 +115,8 @@ object user_basic_info {
         .otherwise("未知")
         .as("marriage"),
       //判断黑名单
-      when('is_blackList === "true", "黑名单")
-        .when('is_blackList === "false", value = "非黑名单")
+      when('is_blackList === "1", "黑名单")
+        .when('is_blackList === "0", value = "非黑名单")
         .as("is_in_blacklist"),
 
       when(month(to_timestamp('birthday)) === "1" and (dayofmonth(to_timestamp('birthday)) between(1, 20)), "摩羯座")
@@ -141,12 +144,35 @@ object user_basic_info {
         .when(month(to_timestamp('birthday)) === "12" and (dayofmonth(to_timestamp('birthday)) between(1, 21)), "射手座")
         .when(month(to_timestamp('birthday)) === "12" and (dayofmonth(to_timestamp('birthday)) between(22, 31)), "摩羯座")
         .otherwise("其他")
-        .as("constellation")
-    )
+        .as("constellation"),
+      when(col("zipcode") like "10%", "北京")
+        .when(col("zipcode") like "20%", "上海")
+        .when(col("zipcode") like "518%", "深圳")
+        .when(col("zipcode") like "51%", "广州")
+        .when(col("zipcode") like "31%", "杭州")
+        .when(col("zipcode") like "215%", "苏州")
+        .when(col("zipcode") like "1%", "东北地区")
+        .when(col("zipcode") like "2%", "华东地区")
+        .when(col("zipcode") like "3%", "东南地区")
+        .when(col("zipcode") like "4%", "华中地区")
+        .when(col("zipcode") like "5%", "华南地区")
+        .when(col("zipcode") like "6%", "西南地区")
+        .when(col("zipcode") like "7%", "西北地区")
+        .when(col("zipcode") like "8%", "西部地区")
+        .when(col("zipcode") like "9%", "港澳台地区")
+        .otherwise("其它地区")
+        .as("region")
 
-    println("开始展示schema和20行测试数据")
-    res.printSchema()
-    res.show(false)
+        ,when(col("gender_for_drop") === "1", "男")
+        .when(col("gender_for_drop") === "2", "女")
+        .otherwise("其它")
+        .as("gender")
+    ).drop(df.col("zipcode"))
+      .drop(df.col("gender_for_drop"))
+
+        println("开始展示schema和20行测试数据")
+        res.printSchema()
+        res.show(false)
 
     println("开始写入数据！！！")
 
@@ -155,9 +181,9 @@ object user_basic_info {
          |"table":{"namespace":"default","name":"user_basic_info"},
          |"rowkey":"id",
          |"columns":{
-         |"id":{"cf":"rowkey","col":"id","type":"long"},
-         |"e_mail":{"cf":"cf","col":"email","type":"string"},
-         |"user_name":{"cf":"cf","col":"username","type":"string"},
+         |"id":{"cf":"rowkey","col":"id","type":"string"},
+         |"e_mail":{"cf":"cf","col":"e_mail","type":"string"},
+         |"user_name":{"cf":"cf","col":"user_name","type":"string"},
          |"password":{"cf":"cf","col":"password","type":"string"},
          |"birthday":{"cf":"cf","col":"birthday","type":"string"},
          |"mobile":{"cf":"cf","col":"mobile","type":"string"},
@@ -173,10 +199,12 @@ object user_basic_info {
          |"nationality":{"cf":"cf","col":"nationality","type":"string"},
          |"marriage":{"cf":"cf","col":"marriage","type":"string"},
          |"is_in_blacklist":{"cf":"cf","col":"is_in_blacklist","type":"string"},
-         |"constellation":{"cf":"cf","col":"constellation","type":"string"}
+         |"constellation":{"cf":"cf","col":"constellation","type":"string"},
+         |"region":{"cf":"cf","col":"region","type":"string"},
+         |"gender":{"cf":"cf","col":"gender","type":"string"}
          |}
          |}
-       """.stripMargin
+           """.stripMargin
 
     res.write
       .option(HBaseTableCatalog.tableCatalog, user_basic_info_write_catalog)
