@@ -13,9 +13,9 @@ object user_merge_final {
          |"table":{"namespace":"default","name":"user_basic_info"},
          |"rowkey":"id",
          |"columns":{
-         |"id":{"cf":"rowkey","col":"id","type":"long"},
-         |"e_mail":{"cf":"cf","col":"email","type":"string"},
-         |"user_name":{"cf":"cf","col":"username","type":"string"},
+         |"id":{"cf":"rowkey","col":"id","type":"string"},
+         |"e_mail":{"cf":"cf","col":"e_mail","type":"string"},
+         |"user_name":{"cf":"cf","col":"user_name","type":"string"},
          |"password":{"cf":"cf","col":"password","type":"string"},
          |"birthday":{"cf":"cf","col":"birthday","type":"string"},
          |"mobile":{"cf":"cf","col":"mobile","type":"string"},
@@ -31,7 +31,9 @@ object user_merge_final {
          |"nationality":{"cf":"cf","col":"nationality","type":"string"},
          |"marriage":{"cf":"cf","col":"marriage","type":"string"},
          |"is_in_blacklist":{"cf":"cf","col":"is_in_blacklist","type":"string"},
-         |"constellation":{"cf":"cf","col":"constellation","type":"string"}
+         |"constellation":{"cf":"cf","col":"constellation","type":"string"},
+         |"region":{"cf":"cf","col":"region","type":"string"},
+         |"gender":{"cf":"cf","col":"gender","type":"string"}
          |}
          |}
        """.stripMargin
@@ -130,11 +132,11 @@ object user_merge_final {
 
    // orders_info_catalog_df.show(false)
    // behavior_record_df.show(false)
-   var res1 = user_basic_info_df.join(goods_catalog_df, user_basic_info_df.col("id").cast("string") === goods_catalog_df("member_id"))
+   var res1 = user_basic_info_df.join(goods_catalog_df, user_basic_info_df.col("id") === goods_catalog_df("member_id"))
      .drop(goods_catalog_df("member_id"))
 //    res1.show(false)
     var res2=orders_info_catalog_df.join(behavior_record_df,behavior_record_df.col("global_user_id")===orders_info_catalog_df.col("member_id"))
-      .drop(orders_info_catalog_df.col("member_id"))
+
 //    res2.show(false)
 
     var res3=res1.join(res2,res1.col("id")===res2.col("global_user_id"))
@@ -146,7 +148,8 @@ object user_merge_final {
          |"table":{"namespace":"default","name":"user_final"},
          |"rowkey":"id",
          |"columns":{
-         |"id":{"cf":"rowkey","col":"id","type":"long"},
+         |"id":{"cf":"rowkey","col":"id","type":"string"},
+         |"member_id":{"cf":"cf","col":"member_id","type":"string"},
          |"e_mail":{"cf":"cf","col":"email","type":"string"},
          |"user_name":{"cf":"cf","col":"username","type":"string"},
          |"password":{"cf":"cf","col":"password","type":"string"},
@@ -165,6 +168,8 @@ object user_merge_final {
          |"marriage":{"cf":"cf","col":"marriage","type":"string"},
          |"is_in_blacklist":{"cf":"cf","col":"is_in_blacklist","type":"string"},
          |"constellation":{"cf":"cf","col":"constellation","type":"string"},
+         |"region":{"cf":"cf","col":"region","type":"string"},
+         |"gender":{"cf":"cf","col":"gender","type":"string"},
 
          |"scanned_goods":{"cf":"cf", "col":"scanned_goods", "type":"string"},
          |"product_type":{"cf":"cf", "col":"product_type", "type":"string"},
