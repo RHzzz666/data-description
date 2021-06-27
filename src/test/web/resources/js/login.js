@@ -27,7 +27,7 @@ $(function() {
 
 function login() {
 	$.ajax({
-		url: 'http://192.168.101.160:8080/login',
+		url: 'http://192.168.101.173:8080/login',
 		type: 'POST',
 		dataType : 'json',
 		contentType : 'application/json',

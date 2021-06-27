@@ -276,7 +276,7 @@ function search() {
         //条件：window.localStorage.getItem("user_name") === "ADMIN"
 
         $.ajax({
-            url: 'http://192.168.101.160:8080/search',
+            url: 'http://192.168.101.173:8080/search',
             type: 'POST',
             dataType : 'json',
             contentType : 'application/json',
@@ -293,7 +293,7 @@ function search() {
             success: function(json){
                 console.log(json.user_name);
                 Tab.addTab('个人资料', 'profile_1.html');
-                window.localStorage.setItem("user_name", json.user_name);
+                window.localStorage.setItem("user_name_1", json.user_name);
                 window.localStorage.setItem("user_id", json.id);
                 window.localStorage.setItem("user_e_mail", json.e_mail);
                 window.localStorage.setItem("user_birthday", json.birthday);
