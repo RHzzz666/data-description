@@ -45,7 +45,7 @@ $(function() {
 	// 显示cookie菜单
 	var systemid = $.cookie('zheng-upms-systemid') || 1;
 	var systemname = $.cookie('zheng-upms-systemname') || 'zheng-upms-server';
-	var systemtitle = $.cookie('zheng-upms-systemtitle') || '权限管理系统';
+	var systemtitle = $.cookie('zheng-upms-systemtitle') || '大数据管理系统';
 	$('.system_menus').hide(0, function () {
 		$('.system_' + systemid).show();
 	});
@@ -259,4 +259,97 @@ function fullPage() {
 
 function jump_to_login(){
 	location.href = "login.html";
+}
+
+window.onload(user_name());
+
+function user_name() {
+	console.log("hello");
+	//console.log(window.localStorage.getItem("user_data"));
+	document.getElementById("username").innerHTML = window.localStorage.getItem("user_name") + "你好";
+
+}
+
+function search() {
+    if (window.localStorage.getItem("user_name") === "督咏") {
+
+        //条件：window.localStorage.getItem("user_name") === "ADMIN"
+
+        $.ajax({
+            url: 'http://192.168.101.173:8080/search',
+            type: 'POST',
+            dataType : 'json',
+            contentType : 'application/json',
+            data: JSON.stringify({
+                keyWords: $('#keywords').val(),
+                // passWord: $('#password').val(),
+                // rememberMe: $('#rememberMe').is(':checked'),
+                // backurl: 'index.html'
+            }),
+
+            beforeSend: function() {
+
+            },
+            success: function(json){
+                console.log(json.user_name);
+                Tab.addTab('个人资料', 'profile_1.html');
+                window.localStorage.setItem("user_name_1", json.user_name);
+                window.localStorage.setItem("user_id", json.id);
+                window.localStorage.setItem("user_e_mail", json.e_mail);
+                window.localStorage.setItem("user_birthday", json.birthday);
+                window.localStorage.setItem("user_mobile", json.mobile);
+                window.localStorage.setItem("user_money", json.money);
+                window.localStorage.setItem("user_money_pwd", json.money_pwd);
+                window.localStorage.setItem("user_last_login_time", json.last_login_time);
+                window.localStorage.setItem("user_register_time", json.register_time);
+                window.localStorage.setItem("user_qq", json.qq);
+                window.localStorage.setItem("user_job", json.job);
+                window.localStorage.setItem("user_political_face", json.political_face);
+                window.localStorage.setItem("user_age_class", json.age_class);
+                window.localStorage.setItem("user_nationality", json.nationality);
+                window.localStorage.setItem("user_marriage", json.marriage);
+                window.localStorage.setItem("user_is_in_blacklist", json.is_in_blacklist);
+                window.localStorage.setItem("user_constellation", json.constellation);
+                window.localStorage.setItem("user_payment_way", json.payment_way);
+                window.localStorage.setItem("user_ave_price", json.ave_price);
+                window.localStorage.setItem("user_ave_price_range", json.ave_price_range);
+                window.localStorage.setItem("user_order_count", json.order_count);
+                window.localStorage.setItem("user_frequency", json.frequency);
+                window.localStorage.setItem("user_register_time", json.register_time);
+                window.localStorage.setItem("user_good_bought", json.good_bought);
+
+                // window.localStorage.setItem("user_name", json.user_name);
+                // window.localStorage.setItem("user_name", json.user_name);
+                // window.localStorage.setItem("user_name", json.user_name);
+                // window.localStorage.setItem("user_name", json.user_name);
+                // window.localStorage.setItem("user_name", json.user_name);
+
+
+                //location.href = "index.html";
+
+                //
+                // if (json.code === 1) {
+                // 	location.href = "index.html";
+                // } else {
+                // 	alert(json.data);
+                // 	if (10101 === json.code) {
+                // 		$('#username').focus();
+                // 	}
+                // 	if (10102 === json.code) {
+                // 		$('#password').focus();
+                // 	}
+                // }
+            },
+            error: function(error){
+                alert("号码输入错误请重新输入");
+                $('#keywords').focus();
+            }
+        });
+
+
+
+    }
+    else {
+        alert("你不是管理员，无法使用该功能");
+    }
 }

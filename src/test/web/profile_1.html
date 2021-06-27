@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>控制台</title>
+		<link rel="stylesheet" type="text/css" href="resources/css/identify.css" />
+		<link rel="stylesheet" type="text/css" href="resources/css/layout.css" />
+		<link rel="stylesheet" type="text/css" href="resources/css/account.css" />
+		<link rel="stylesheet" type="text/css" href="resources/css/style.css" />
+		<link rel="stylesheet" type="text/css" href="resources/css/control_index.css" />
+		<script type="text/javascript" src="resources/js/jquery.min.js"></script>
+		<script type="text/javascript" src="Js/layer/layer.js"></script>
+		<script type="text/javascript" src="resources/js/haidao.offcial.general.js"></script>
+		<script type="text/javascript" src="resources/js/select.js"></script>
+		<script type="text/javascript" src="resources/js/haidao.validate.js"></script>
+	</head>
+
+	<body>
+		<div class="view-body">
+			<div>
+
+			</div>
+			<div class="view-product background-color">
+				<div class="padding-big background-color">
+					<div class="account-info clearfix">
+						<div class="text-box-main min-width-300 fl">
+							<dl>
+								<dt class="padding-big-left lists-border-list clearfix">
+									<div class="title fl padding-big-top padding-big-bottom">
+										<p id="name">HI,老冠璋</p>
+										<p class="margin-small-top clearfix">
+											<span class="fl">上次登录时间：<em class="text-blue-deep" id="last_login">2021.3.31</em></span>
+											<!--没有实名认证-->
+											<!-- <a class="button bg-blue-deep icon icon-button-blue fl margin-left" href="#">立即实名认证</a> -->
+											<!--通过实名认证-->
+											<a class="button bg-green-deep icon icon-bu	tton-green fl margin-left" href="#" style="padding: 0px">安全登录</a>
+										</p>
+									</div>
+									<span class="fr icon-head">
+										<img src="resources/images/avatar.jpg" alt="账户头像" >
+									</span>
+								</dt>
+								<dd class="padding-big clearfix">
+									<p class="w50 fl">
+										<i class="fl icon icon-mobile"></i>
+
+											<span class="fl margin-left" >手机：已绑定</span>
+									</p>
+									<p class="w50 fl">
+										<i class="fl icon icon-email"></i>
+
+										<span class="fl margin-left">邮箱：已绑定</span>
+									</p>
+									<p class="w50 f1">
+										<i class="fl icon icon-mobile"></i>
+
+										<span class="fl margin-left" id="phone">13672675497</span>
+									</p>
+									<p class="w65 fl">
+										<i class="fl icon icon-email"></i>
+
+										<span class="fl " style="margin-left: 80px" id="email">RHzzzzzz6@gmail.com</span>
+									</p>
+									<!-- <p class="w50 fl">
+										<i class="fl icon icon-wechat"></i>
+										<span class="fl margin-left">微信：<a class="text-underline" href="#">未绑定</a></span>
+									</p>
+									<p class="w50 fl">
+										<i class="fl icon icon-password"></i>
+																				<span class="fl margin-left">支付密码：<a class='text-underline' href="#"> 未设置</a></span>
+																			</p>  -->
+								</dd>
+							</dl>
+						</div>
+						<div class="text-box-main min-width-360 fl">
+							<dl>
+								<dt class="padding-big lists-border-list clearfix">
+									<div class="fl w50 title">
+										<p>账户余额</p>
+										<p class="margin-small-top clearfix">
+											<span class="fl"><em class="h3 text-red-deep" id="money">0.00 </em>元</span>
+											<a class="fl margin-left button btn-red text-white"  href="#">充值</a>
+										</p>
+									</div>
+									<div class="fl w50 padding-left title">
+										<p>平均消费</p>
+										<p class="margin-small-top clearfix">
+											<span class="fl"><em class="h3 text-blue-deep" id="ave_price_range">0 </em>元</span>
+<!--											<a class="fl margin-left button btn-red text-white" target="view_window" href="#">购买</a>-->
+										</p>
+									</div>
+								</dt>
+								<dd class="padding-big">
+									<div class="account-class text-hidden">
+										<a href="#">未支付订单</a>
+										<a href="#">已支付订单</a>
+										<a href="#">充值记录</a>
+										<a href="#">消费记录</a>
+										<a href="#">提交工单</a>
+									</div>
+								</dd>
+							</dl>
+						</div>
+						<div class="text-box-main min-width-300 fl margin-right-none">
+							<dl>
+								<dt class="clearfix" style="padding: 20px 20px 0px 20px">
+									<span class="fl title" >
+										<p>基本信息：</p>
+										<div class="padding-small">
+											<span class="margin-top-35 margin-right">
+											籍贯:
+											<em id="nationality" class="margin-small-left">
+												成都
+											</em>
+										</span>
+										<span class="margin-top-35 margin-right">
+											职业:
+											<em id="job" class="margin-small-left">
+												老板
+											</em>
+										</span>
+
+										<span class="margin-top-35 margin-right">
+											政治面貌:
+											<em id="political_face" class="margin-small-left">
+												党员
+											</em>
+										</span>
+										</div>
+										<div class="padding-small">
+											<span class="margin-top-35 margin-right">
+											年龄段:
+											<em id="age_class" class="margin-small-left">
+												00后
+											</em>
+										</span>
+										<span class="margin-top-35 margin-right">
+											生日:
+											<em id="birthday" class="margin-small-left text-blue-deep" >
+												2000.03.31
+											</em>
+										</span>
+											<span class="margin-top-35 margin-right">
+											星座:
+											<em id="constellation" class="margin-small-left" >
+												白羊
+											</em>
+										</span>
+										</div>
+
+
+									</span>
+									<div class="fr">
+										<a class="button btn-orange text-white" href="" target="_blank">点击修改</a>
+									</div>
+								</dt>
+								<dd class="padding-big">
+									<div class="account-class text-hidden">
+										<p>系统信息：</p>
+										<div class="padding-small">
+
+											<span class="margin-top-35 margin-right">
+											支付方式:
+											<em id="payment_way" class="margin-small-left text-blue-deep"">
+												支付宝
+											</em>
+										</span>
+											<span class="margin-top-35 margin-right">
+											注册时间:
+											<em id="register_time" class="margin-small-left text-blue-deep">
+												2020.01.1
+											</em>
+										</span>
+										</div>
+									</div>
+								</dd>
+							</dl>
+						</div>
+					</div>
+
+					<!--产品-->
+					<div class="account-product margin-big-top clearfix">
+						<div class="text-box-main padding-big fl mine-product">
+							<h2 class="h6 margin-big-bottom">我的产品</h2>
+							<div class="mine-product-content clearfix">
+								<ul class="w50 fl lists">
+									<!-- <li class="w70 lists-border-list">
+										<p class="border-list-text">云托管服务： <em class="orange">0</em>  台	
+											<a class="text-main fr" href="#">查看</a>
+										</p>
+									</li>  -->
+									<li class="w70 lists-border-list">
+										<p class="border-list-text">云市场应用： <em class="orange">0</em> 台
+											<a class="text-main fr" href="#">查看</a>
+										</p>
+									</li>
+									<li class="w70 lists-border-list">
+										<p class="border-list-text">云市场模块： <em class="orange">0</em> 台
+											<a class="text-main fr" href="#">查看</a>
+										</p>
+									</li>
+									<li class="w70 lists-border-list">
+										<p class="border-list-text">云市场模板： <em class="orange">0</em> 台
+											<a class="text-main fr" href="#">查看</a>
+										</p>
+									</li>
+
+								</ul>
+								<ul class="w50 fl lists">
+									<!-- <li class="w80 lists-border-list">
+										<p class="border-list-text">15天内到期的云托管服务： <em class="orange">0</em>  台	
+											<a class="text-main fr" href="#">查看</a>
+										</p>
+									</li>  -->
+									<li class="w80 lists-border-list">
+										<p class="border-list-text">15天内到期的云市场应用： <em class="orange">0</em> 台
+											<a class="text-main fr" href="#">查看</a>
+										</p>
+									</li>
+									<li class="w80 lists-border-list">
+										<p class="border-list-text">15天内到期的云市场模块： <em class="orange">0</em> 台
+											<a class="text-main fr" href="#">查看</a>
+										</p>
+									</li>
+									<li class="w80 lists-border-list">
+										<p class="border-list-text">15天内到期的云市场模板： <em class="orange">0</em> 台
+											<a class="text-main fr" href="#">查看</a>
+										</p>
+									</li>
+								</ul>
+							</div>
+						</div>
+						<div class="text-box-main padding-big fl w25">
+							<h2 class="h6 margin-big-bottom">最近好物</h2>
+							<ul class="lists">
+								<li class="lists-list"><a href="#" id="good_bought_0">无</a></li>
+								<li class="lists-list"><a href="#" id="good_bought_1">无</a></li>
+								<li class="lists-list"><a href="#" id="good_bought_2">无</a></li>
+								<li class="lists-list"><a href="#" id="good_bought_3">无</a></li>
+								<li class="lists-list"><a href="#" id="good_bought_4">无</a></li>
+								<li class="lists-list"><a href="#" id="good_bought_5">无</a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<script>
+			$(".sidebar-title").live('click', function() {
+				if ($(this).parent(".sidebar-nav").hasClass("sidebar-nav-fold")) {
+					$(this).next().slideDown(200);
+					$(this).parent(".sidebar-nav").removeClass("sidebar-nav-fold");
+				} else {
+					$(this).next().slideUp(200);
+					$(this).parent(".sidebar-nav").addClass("sidebar-nav-fold");
+				}
+			});
+		</script>
+
+		<script>
+			//更新用户信息
+			window.onload(update_profile())
+			function update_profile() {
+				document.getElementById("name").innerHTML=  window.localStorage.getItem("user_name_1");
+				document.getElementById("last_login").innerHTML=  window.localStorage.getItem("user_last_login_time");
+				document.getElementById("phone").innerHTML=  window.localStorage.getItem("user_mobile");
+				document.getElementById("email").innerHTML=  window.localStorage.getItem("user_e_mail");
+				document.getElementById("money").innerHTML=  window.localStorage.getItem("user_money");
+				document.getElementById("ave_price_range").innerHTML=  window.localStorage.getItem("user_ave_price_range");
+				document.getElementById("nationality").innerHTML=  window.localStorage.getItem("user_nationality");
+				document.getElementById("job").innerHTML=  window.localStorage.getItem("user_job");
+				document.getElementById("political_face").innerHTML=  window.localStorage.getItem("user_political_face");
+				document.getElementById("age_class").innerHTML=  window.localStorage.getItem("user_age_class");
+				document.getElementById("birthday").innerHTML=  window.localStorage.getItem("user_birthday");
+				// document.getElementById("is_in_blacklist").innerHTML=  window.localStorage.getItem("user_is_in_blacklist");
+				document.getElementById("payment_way").innerHTML=  window.localStorage.getItem("user_payment_way");
+				document.getElementById("register_time").innerHTML=  window.localStorage.getItem("user_register_time");
+				document.getElementById("constellation").innerHTML=  window.localStorage.getItem("user_constellation");
+
+				console.log(window.localStorage.getItem("user_good_bought"));
+				var str_arr = split_string(window.localStorage.getItem("user_good_bought"));
+				console.log(str_arr);
+				document.getElementById("good_bought_0").innerHTML=  str_arr[0];
+				document.getElementById("good_bought_1").innerHTML=  str_arr[1];
+				document.getElementById("good_bought_2").innerHTML=  str_arr[2];
+				document.getElementById("good_bought_3").innerHTML=  str_arr[3];
+				document.getElementById("good_bought_4").innerHTML=  str_arr[4];
+				document.getElementById("good_bought_5").innerHTML=  str_arr[5];
+
+			}
+			
+			function split_string(str) {
+				var str_without_f_l = str.substr(1, str.length - 1);
+				var str_arr = new Array();
+				str_arr=str_without_f_l.split(",");
+				return str_arr;
+			}
+		</script>
+	</body>
+
+</html>
