@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>brand_preference</title>
+    <title>political_face</title>
     <!-- 引入 echarts.js -->
     <script src="resources/js/echarts.min.js"></script>
     <script src="resources/js/walden.js"></script>
@@ -32,7 +32,7 @@
 
     function test(){
         var ajax=new XMLHttpRequest();
-        var url='http://localhost:8080/brand_preference';
+        var url='http://localhost:8080/political_face';
         ajax.open('get',url,true);
         ajax.send();
         ajax.onreadystatechange=function (){
@@ -80,10 +80,9 @@
                         borderRadius: 8
                     },
                     data: [
-                        {value: dat.海尔, name: '海尔'},
-                        {value: dat.统帅, name: '统帅'},
-                        {value: dat.小超人, name: '小超人'},
-                        {value: dat.摩卡, name: '摩卡'},
+                        {value: dat.群众, name: '群众'},
+                        {value: dat.无党派人士, name: '无党派人士'},
+                        {value: dat.党员, name: '党员'},
                     ]
                 }
             ]
