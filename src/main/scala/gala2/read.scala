@@ -16,23 +16,7 @@ object read {
   }
 
   def main(args: Array[String]): Unit = {
-    def read_top=
-      s"""{
-         |  "table":{"namespace":"default", "name":"person_recommand"},
-         |  "rowkey":"Id",
-         |  "columns":{
-         |    "Id":{"cf":"rowkey", "col":"Id", "type":"long"},
-         |    "消费优惠券依赖度":{"cf":"cf", "col":"消费优惠券依赖度", "type":"string"},
-         |    "消费能力":{"cf":"cf", "col":"消费能力", "type":"string"},
-         |    "top1":{"cf":"cf", "col":"top1", "type":"string"},
-         |    "top2":{"cf":"cf", "col":"top2", "type":"string"}
-         |  }
-         |}""".stripMargin
-    var df= spark.read
-      .option(HBaseTableCatalog.tableCatalog, read_top)
-      .format("org.apache.spark.sql.execution.datasources.hbase")
-      .load().toDF()
-    df.show(false)
+    read_top("1")
   }
 
   def test():String={
@@ -126,11 +110,11 @@ object read {
       .format("org.apache.spark.sql.execution.datasources.hbase")
       .load().toDF()
     df=df.where(col("Id")===id)
-    df.toJSON.collectAsList().toString
+    df.toJSON.collectAsList.toString
 
   }
 
-  def read_by_label(birth:String,  shopping_cycle:String, discount:String, cast:String): String =
+  def read_by_label(birth:String,  shopping_cycle:String, marriage:String,gender:String): String =
   {
     def user_final_2 =
       s"""{
@@ -141,6 +125,7 @@ object read {
          |"member_id":{"cf":"cf","col":"member_id","type":"string"},
          |"user_name":{"cf":"cf","col":"username","type":"string"},
          |"mobile":{"cf":"cf","col":"mobile","type":"string"},
+         |"marriage":{"cf":"cf","col":"marriage","type":"string"},
          |"political_face":{"cf":"cf","col":"political_face","type":"string"},
          |"age_class":{"cf":"cf","col":"age_class","type":"string"},
          |"constellation":{"cf":"cf","col":"constellation","type":"string"},
@@ -148,16 +133,16 @@ object read {
 
          |"payment_way":{"cf":"cf", "col":"payment_way", "type":"string"},
          |"shopping_cycle":{"cf":"cf", "col":"shopping_cycle", "type":"string"},
-         |"discount":{"cf":"CF", "col":"消费优惠券依赖度", "type":"string"},
          |"cast":{"cf":"cf", "col":"消费能力", "type":"string"}
          |}
          |}""".stripMargin
     val df= spark.read
       .option(HBaseTableCatalog.tableCatalog, user_final_2)
       .format("org.apache.spark.sql.execution.datasources.hbase")
-      .load().toDF()
-    val s4=df.where(col("shopping_cycle")===shopping_cycle).where(col("age_class")===birth)
-    s4.toJSON.collectAsList().toString
+      .load()
+    val s1=df.where(col("age_class")===birth and col("shopping_cycle")===shopping_cycle
+     )//and col("marriage")===marriage   and col("gender")===gender
+    s1.toJSON.collectAsList.toString
   }
 
   def read_user_weekly(id:String):String=

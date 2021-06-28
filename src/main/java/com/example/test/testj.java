@@ -32,15 +32,10 @@ public class testj {
     @RequestMapping(value = "/read_by_label", method = RequestMethod.POST)
     public String read_by_label(@RequestBody JSONObject jsonParam) {
         String birth=jsonParam.getString("birth");
-        System.out.print(birth);
+        String marriage=jsonParam.getString("marriage");
+        String gender=jsonParam.getString("gender");
         String shopping_cycle=jsonParam.getString("shopping_cycle");
-        System.out.print(shopping_cycle);
-        String discount=jsonParam.getString("discount");
-        System.out.print(discount);
-        String cast=jsonParam.getString("cast");
-        System.out.println(cast);
-        String res=read.read_by_label(birth,shopping_cycle,discount,cast);
-        System.out.println(res);
+        String res=read.read_by_label(birth,shopping_cycle,marriage,gender);
         return res;
     }
 
