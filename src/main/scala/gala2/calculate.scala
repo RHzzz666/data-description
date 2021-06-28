@@ -1,25 +1,740 @@
 package gala2
 
+import gala2.read.spark
 import org.apache.spark.sql.{DataFrame, SparkSession}
 import org.apache.spark.sql.catalyst.dsl.expressions.DslSymbol
 import org.apache.spark.sql.execution.datasources.hbase.HBaseTableCatalog
-import org.apache.spark.sql.functions.{col, count, to_timestamp, when, year}
+import org.apache.spark.sql.functions.{col, count, monotonically_increasing_id, to_timestamp, when, year}
 import org.apache.spark.sql.types.{IntegerType, StringType, StructField, StructType}
 object calculate {
 
   def main(args: Array[String]): Unit = {
-   // region_cal()
-  //  marriage_cal()
-   // nationality_cal()
-   // political_face_cal()
-  //  brand_preference_cal()
-  //  consumption_ablity_cal()
- //   shopping_cycle_cal()
-  //  ave_price_range_cal()
-  //  order_highest_range_cal()
- //   log_frequency_cal()
+   // job_brand_preference()
+   //   job_payment_way()
+    //   job_shopping_cycle()
+    //   job_ave_price_range()
+   //   job_order_highest_range()
+    //  job_frequency_range()
+     // job_exchange_item_rate()
+     //  job_return_item_rate()
+
+     //  birth_brand_preference()
+    //   birth_payment_way()
+     //  birth_shopping_cycle()
+     //  birth_ave_price_range()
+    //   birth_order_highest_range()
+    //   birth_frequency_range()
+        birth_exchange_item_rate()
+   //    birth_return_item_rate()
+  //  discount()
+   // cast()
+
+
   }
 
+  def cast():Unit=
+  {
+    def catalog =
+      s"""{
+         |"table":{"namespace":"default","name":"user_final_2nd"},
+         |"rowkey":"id",
+         |"columns":{
+         |"id":{"cf":"rowkey","col":"id","type":"string"},
+         |"cast":{"cf":"cf", "col":"消费能力", "type":"string"}
+         |}
+         |}""".stripMargin
+    val df= spark.read
+      .option(HBaseTableCatalog.tableCatalog, catalog)
+      .format("org.apache.spark.sql.execution.datasources.hbase")
+      .load().toDF()
+    val s4=df.groupBy("cast")
+      .agg(count("cast")as "cast_count").sort(col("cast_count"))
+      .withColumn("id",monotonically_increasing_id)
+    def catalogwrite =
+      s"""{
+         |"table":{"namespace":"default","name":"cast"},
+         |"rowkey":"id",
+         |"columns":{
+         |"id":{"cf":"rowkey","col":"id","type":"string"},
+         |"cast":{"cf":"cf", "col":"cast", "type":"string"},
+         |"cast_count":{"cf":"cf", "col":"cast_count", "type":"long"}
+         |}
+         |}""".stripMargin
+    s4.write
+      .option(HBaseTableCatalog.tableCatalog, catalogwrite)
+      .option(HBaseTableCatalog.newTable, "5")
+      .format("org.apache.spark.sql.execution.datasources.hbase")
+      .save()
+  }
+
+  def discount():Unit=
+  {
+    def catalog =
+      s"""{
+         |"table":{"namespace":"default","name":"user_final_2nd"},
+         |"rowkey":"id",
+         |"columns":{
+         |"id":{"cf":"rowkey","col":"id","type":"string"},
+         |"discount":{"cf":"cf", "col":"消费优惠券依赖度", "type":"string"}
+         |}
+         |}""".stripMargin
+    val df= spark.read
+      .option(HBaseTableCatalog.tableCatalog, catalog)
+      .format("org.apache.spark.sql.execution.datasources.hbase")
+      .load().toDF()
+    val s4=df.groupBy("discount")
+      .agg(count("discount")as "discount_count").sort(col("discount_count"))
+      .withColumn("id",monotonically_increasing_id)
+    def catalogwrite =
+      s"""{
+         |"table":{"namespace":"default","name":"discount"},
+         |"rowkey":"id",
+         |"columns":{
+         |"id":{"cf":"rowkey","col":"id","type":"string"},
+         |"discount":{"cf":"cf", "col":"discount", "type":"string"},
+         |"discount_count":{"cf":"cf", "col":"discount_count", "type":"long"}
+         |}
+         |}""".stripMargin
+    s4.write
+      .option(HBaseTableCatalog.tableCatalog, catalogwrite)
+      .option(HBaseTableCatalog.newTable, "5")
+      .format("org.apache.spark.sql.execution.datasources.hbase")
+      .save()
+  }
+  def job_brand_preference(): String =
+  {
+    def catalog =
+      s"""{
+         |"table":{"namespace":"default","name":"user_final_2nd"},
+         |"rowkey":"id",
+         |"columns":{
+         |"id":{"cf":"rowkey","col":"id","type":"string"},
+         |"job":{"cf":"cf","col":"job","type":"string"},
+         |"brand_preference":{"cf":"cf", "col":"brand_preference", "type":"string"}
+         |}
+         |}""".stripMargin
+    val df= spark.read
+      .option(HBaseTableCatalog.tableCatalog, catalog)
+      .format("org.apache.spark.sql.execution.datasources.hbase")
+      .load().toDF()
+    val jobs=df.select(col("job").as("job"),col("brand_preference"))
+      .where(col("brand_preference")=!="其他")
+    val s4=jobs.groupBy("job","brand_preference")
+      .agg(count("brand_preference")as "brand_preference_count").sort(col("brand_preference"),col("job"))
+      .withColumn("id",monotonically_increasing_id)
+    def catalogwrite =
+      s"""{
+         |"table":{"namespace":"default","name":"job_brand_preference"},
+         |"rowkey":"id",
+         |"columns":{
+         |"id":{"cf":"rowkey","col":"id","type":"string"},
+         |"job":{"cf":"cf","col":"job","type":"string"},
+         |"brand_preference":{"cf":"cf", "col":"brand_preference", "type":"string"},
+         |"brand_preference_count":{"cf":"cf", "col":"brand_preference_count", "type":"long"}
+         |}
+         |}""".stripMargin
+    s4.write
+      .option(HBaseTableCatalog.tableCatalog, catalogwrite)
+      .option(HBaseTableCatalog.newTable, "5")
+      .format("org.apache.spark.sql.execution.datasources.hbase")
+      .save()
+
+    s4.toJSON.collectAsList().toString
+  }
+
+  def job_payment_way(): String =
+  {
+    def catalog =
+      s"""{
+         |"table":{"namespace":"default","name":"user_final_2nd"},
+         |"rowkey":"id",
+         |"columns":{
+         |"id":{"cf":"rowkey","col":"id","type":"string"},
+         |"job":{"cf":"cf","col":"job","type":"string"},
+         |"payment_way":{"cf":"cf", "col":"payment_way", "type":"string"}
+         |}
+         |}""".stripMargin
+    val df= spark.read
+      .option(HBaseTableCatalog.tableCatalog, catalog)
+      .format("org.apache.spark.sql.execution.datasources.hbase")
+      .load().toDF()
+    val jobs=df.select(col("job").as("job"),col("payment_way"))
+    val s4=jobs.groupBy("job","payment_way")
+      .agg(count("payment_way")as "payment_way_count").sort(col("payment_way"),col("job"))
+      .withColumn("id",monotonically_increasing_id)
+    def catalogwrite =
+      s"""{
+         |"table":{"namespace":"default","name":"job_payment_way"},
+         |"rowkey":"id",
+         |"columns":{
+         |"id":{"cf":"rowkey","col":"id","type":"string"},
+         |"job":{"cf":"cf","col":"job","type":"string"},
+         |"payment_way":{"cf":"cf", "col":"payment_way", "type":"string"},
+         |"payment_way_count":{"cf":"cf", "col":"payment_way_count", "type":"long"}
+         |}
+         |}""".stripMargin
+    s4.write
+      .option(HBaseTableCatalog.tableCatalog, catalogwrite)
+      .option(HBaseTableCatalog.newTable, "5")
+      .format("org.apache.spark.sql.execution.datasources.hbase")
+      .save()
+
+    s4.toJSON.collectAsList().toString
+
+  }
+
+  def job_shopping_cycle(): String =
+  {
+    def catalog =
+      s"""{
+         |"table":{"namespace":"default","name":"user_final_2nd"},
+         |"rowkey":"id",
+         |"columns":{
+         |"id":{"cf":"rowkey","col":"id","type":"string"},
+         |"job":{"cf":"cf","col":"job","type":"string"},
+         |"shopping_cycle":{"cf":"cf", "col":"shopping_cycle", "type":"string"}
+         |}
+         |}""".stripMargin
+    val df= spark.read
+      .option(HBaseTableCatalog.tableCatalog, catalog)
+      .format("org.apache.spark.sql.execution.datasources.hbase")
+      .load().toDF()
+    val jobs=df.select(col("job").as("job"),col("shopping_cycle"))
+    val s4=jobs.groupBy("job","shopping_cycle")
+      .agg(count("shopping_cycle")as "shopping_cycle_count").sort(col("shopping_cycle"),col("job"))
+      .withColumn("id",monotonically_increasing_id)
+    def catalogwrite =
+      s"""{
+         |"table":{"namespace":"default","name":"job_shopping_cycle"},
+         |"rowkey":"id",
+         |"columns":{
+         |"id":{"cf":"rowkey","col":"id","type":"string"},
+         |"job":{"cf":"cf","col":"job","type":"string"},
+         |"shopping_cycle":{"cf":"cf", "col":"shopping_cycle", "type":"string"},
+         |"shopping_cycle_count":{"cf":"cf", "col":"shopping_cycle_count", "type":"long"}
+         |}
+         |}""".stripMargin
+    s4.write
+      .option(HBaseTableCatalog.tableCatalog, catalogwrite)
+      .option(HBaseTableCatalog.newTable, "5")
+      .format("org.apache.spark.sql.execution.datasources.hbase")
+      .save()
+    return s4.toJSON.collectAsList().toString
+  }
+
+  def job_ave_price_range(): String =
+  {
+    def catalog =
+      s"""{
+         |"table":{"namespace":"default","name":"user_final_2nd"},
+         |"rowkey":"id",
+         |"columns":{
+         |"id":{"cf":"rowkey","col":"id","type":"string"},
+         |"job":{"cf":"cf","col":"job","type":"string"},
+         |"ave_price_range":{"cf":"cf", "col":"ave_price_range", "type":"string"}
+         |}
+         |}""".stripMargin
+    val df= spark.read
+      .option(HBaseTableCatalog.tableCatalog, catalog)
+      .format("org.apache.spark.sql.execution.datasources.hbase")
+      .load().toDF()
+    val jobs=df.select(col("job").as("job"),col("ave_price_range"))
+    val s4=jobs.groupBy("job","ave_price_range")
+      .agg(count("ave_price_range")as "ave_price_range_count").sort(col("ave_price_range"),col("job"))
+      .withColumn("id",monotonically_increasing_id)
+    def catalogwrite =
+      s"""{
+         |"table":{"namespace":"default","name":"job_ave_price_range"},
+         |"rowkey":"id",
+         |"columns":{
+         |"id":{"cf":"rowkey","col":"id","type":"string"},
+         |"job":{"cf":"cf","col":"job","type":"string"},
+         |"ave_price_range":{"cf":"cf", "col":"ave_price_range", "type":"string"},
+         |"ave_price_range_count":{"cf":"cf", "col":"ave_price_range_count", "type":"long"}
+         |}
+         |}""".stripMargin
+    s4.write
+      .option(HBaseTableCatalog.tableCatalog, catalogwrite)
+      .option(HBaseTableCatalog.newTable, "5")
+      .format("org.apache.spark.sql.execution.datasources.hbase")
+      .save()
+    s4.toJSON.collectAsList().toString
+  }
+
+  def job_order_highest_range(): String =
+  {
+    def catalog =
+      s"""{
+         |"table":{"namespace":"default","name":"user_final_2nd"},
+         |"rowkey":"id",
+         |"columns":{
+         |"id":{"cf":"rowkey","col":"id","type":"string"},
+         |"job":{"cf":"cf","col":"job","type":"string"},
+         |"order_highest_range":{"cf":"cf", "col":"order_highest_range", "type":"string"}
+         |}
+         |}""".stripMargin
+    val df= spark.read
+      .option(HBaseTableCatalog.tableCatalog, catalog)
+      .format("org.apache.spark.sql.execution.datasources.hbase")
+      .load().toDF()
+    val jobs=df.select(col("job").as("job"),col("order_highest_range"))
+    val s4=jobs.groupBy("job","order_highest_range")
+      .agg(count("order_highest_range")as "order_highest_range_count").sort(col("order_highest_range"),col("job"))
+      .withColumn("id",monotonically_increasing_id)
+    def catalogwrite =
+      s"""{
+         |"table":{"namespace":"default","name":"job_order_highest_range"},
+         |"rowkey":"id",
+         |"columns":{
+         |"id":{"cf":"rowkey","col":"id","type":"string"},
+         |"job":{"cf":"cf","col":"job","type":"string"},
+         |"order_highest_range":{"cf":"cf", "col":"order_highest_range", "type":"string"},
+         |"order_highest_range_count":{"cf":"cf", "col":"order_highest_range_count", "type":"long"}
+         |}
+         |}""".stripMargin
+    s4.write
+      .option(HBaseTableCatalog.tableCatalog, catalogwrite)
+      .option(HBaseTableCatalog.newTable, "5")
+      .format("org.apache.spark.sql.execution.datasources.hbase")
+      .save()
+
+    s4.toJSON.collectAsList().toString
+  }
+
+  def job_frequency_range(): String =
+  {
+    def catalog =
+      s"""{
+         |"table":{"namespace":"default","name":"user_final_2nd"},
+         |"rowkey":"id",
+         |"columns":{
+         |"id":{"cf":"rowkey","col":"id","type":"string"},
+         |"job":{"cf":"cf","col":"job","type":"string"},
+         |"frequency_range":{"cf":"cf", "col":"frequency_range(高,中,低)", "type":"string"}
+         |}
+         |}""".stripMargin
+    val df= spark.read
+      .option(HBaseTableCatalog.tableCatalog, catalog)
+      .format("org.apache.spark.sql.execution.datasources.hbase")
+      .load().toDF()
+    val jobs=df.select(col("job").as("job"),col("frequency_range"))
+    val s4=jobs.groupBy("job","frequency_range")
+      .agg(count("frequency_range")as "frequency_range_count").sort(col("frequency_range"),col("job"))
+      .withColumn("id",monotonically_increasing_id)
+    def catalogwrite =
+      s"""{
+         |"table":{"namespace":"default","name":"job_frequency_range"},
+         |"rowkey":"id",
+         |"columns":{
+         |"id":{"cf":"rowkey","col":"id","type":"string"},
+         |"job":{"cf":"cf","col":"job","type":"string"},
+         |"frequency_range":{"cf":"cf", "col":"frequency_range", "type":"string"},
+         |"frequency_range_count":{"cf":"cf", "col":"frequency_range_count", "type":"long"}
+         |}
+         |}""".stripMargin
+    s4.write
+      .option(HBaseTableCatalog.tableCatalog, catalogwrite)
+      .option(HBaseTableCatalog.newTable, "5")
+      .format("org.apache.spark.sql.execution.datasources.hbase")
+      .save()
+
+    s4.toJSON.collectAsList().toString
+  }
+  def job_exchange_item_rate(): String =
+  {
+    def catalog =
+      s"""{
+         |"table":{"namespace":"default","name":"user_final_2nd"},
+         |"rowkey":"id",
+         |"columns":{
+         |"id":{"cf":"rowkey","col":"id","type":"string"},
+         |"job":{"cf":"cf","col":"job","type":"string"},
+         |"exchange_item_rate":{"cf":"cf", "col":"exchange_item_rate(高,中,低)", "type":"string"}
+         |}
+         |}""".stripMargin
+    val df= spark.read
+      .option(HBaseTableCatalog.tableCatalog, catalog)
+      .format("org.apache.spark.sql.execution.datasources.hbase")
+      .load().toDF()
+    val jobs=df.select(col("job").as("job"),col("exchange_item_rate"))
+    val s4=jobs.groupBy("job","exchange_item_rate")
+      .agg(count("exchange_item_rate")as "exchange_item_rate_count").sort(col("exchange_item_rate"),col("job"))
+      .withColumn("id",monotonically_increasing_id)
+    def catalogwrite =
+      s"""{
+         |"table":{"namespace":"default","name":"job_exchange_item_rate"},
+         |"rowkey":"id",
+         |"columns":{
+         |"id":{"cf":"rowkey","col":"id","type":"string"},
+         |"job":{"cf":"cf","col":"job","type":"string"},
+         |"exchange_item_rate":{"cf":"cf", "col":"exchange_item_rate", "type":"string"},
+         |"exchange_item_rate_count":{"cf":"cf", "col":"exchange_item_rate_count", "type":"long"}
+         |}
+         |}""".stripMargin
+    s4.write
+      .option(HBaseTableCatalog.tableCatalog, catalogwrite)
+      .option(HBaseTableCatalog.newTable, "5")
+      .format("org.apache.spark.sql.execution.datasources.hbase")
+      .save()
+    s4.toJSON.collectAsList().toString
+  }
+
+  def job_return_item_rate(): String =
+  {
+    def catalog =
+      s"""{
+         |"table":{"namespace":"default","name":"user_final_2nd"},
+         |"rowkey":"id",
+         |"columns":{
+         |"id":{"cf":"rowkey","col":"id","type":"string"},
+         |"job":{"cf":"cf","col":"job","type":"string"},
+         |"return_item_rate":{"cf":"cf", "col":"return_item_rate(高,中,低)", "type":"string"}
+         |}
+         |}""".stripMargin
+    val df= spark.read
+      .option(HBaseTableCatalog.tableCatalog, catalog)
+      .format("org.apache.spark.sql.execution.datasources.hbase")
+      .load().toDF()
+    val jobs=df.select(col("job").as("job"),col("return_item_rate"))
+    val s4=jobs.groupBy("job","return_item_rate")
+      .agg(count("return_item_rate")as "return_item_rate_count").sort(col("return_item_rate"),col("job"))
+      .withColumn("id",monotonically_increasing_id)
+    def catalogwrite =
+      s"""{
+         |"table":{"namespace":"default","name":"job_return_item_rate"},
+         |"rowkey":"id",
+         |"columns":{
+         |"id":{"cf":"rowkey","col":"id","type":"string"},
+         |"job":{"cf":"cf","col":"job","type":"string"},
+         |"return_item_rate":{"cf":"cf", "col":"return_item_rate", "type":"string"},
+         |"return_item_rate_count":{"cf":"cf", "col":"return_item_rate_count", "type":"long"}
+         |}
+         |}""".stripMargin
+    s4.write
+      .option(HBaseTableCatalog.tableCatalog, catalogwrite)
+      .option(HBaseTableCatalog.newTable, "5")
+      .format("org.apache.spark.sql.execution.datasources.hbase")
+      .save()
+    s4.toJSON.collectAsList().toString
+  }
+  def birth_brand_preference(): String =
+  {
+    def catalog =
+      s"""{
+         |"table":{"namespace":"default","name":"user_final_2nd"},
+         |"rowkey":"id",
+         |"columns":{
+         |"id":{"cf":"rowkey","col":"id","type":"string"},
+         |"age_class":{"cf":"cf","col":"age_class","type":"string"},
+         |"brand_preference":{"cf":"cf", "col":"brand_preference", "type":"string"}
+         |}
+         |}""".stripMargin
+    val df= spark.read
+      .option(HBaseTableCatalog.tableCatalog, catalog)
+      .format("org.apache.spark.sql.execution.datasources.hbase")
+      .load().toDF()
+    val births=df.select(col("age_class").as("birth"),col("brand_preference"))
+      .where(col("brand_preference")=!="其他")
+    val s4=births.groupBy("birth","brand_preference")
+      .agg(count("brand_preference")as "brand_preference_count").sort(col("brand_preference"),col("birth"))
+      .withColumn("id",monotonically_increasing_id)
+    def catalogwrite =
+      s"""{
+         |"table":{"namespace":"default","name":"birth_brand_preference"},
+         |"rowkey":"id",
+         |"columns":{
+         |"id":{"cf":"rowkey","col":"id","type":"string"},
+         |"birth":{"cf":"cf","col":"birth","type":"string"},
+         |"brand_preference":{"cf":"cf", "col":"brand_preference", "type":"string"},
+         |"brand_preference_count":{"cf":"cf", "col":"brand_preference_count", "type":"long"}
+         |}
+         |}""".stripMargin
+    s4.write
+      .option(HBaseTableCatalog.tableCatalog, catalogwrite)
+      .option(HBaseTableCatalog.newTable, "5")
+      .format("org.apache.spark.sql.execution.datasources.hbase")
+      .save()
+    s4.toJSON.collectAsList().toString
+  }
+
+  def birth_payment_way(): String =
+  {
+    def catalog =
+      s"""{
+         |"table":{"namespace":"default","name":"user_final_2nd"},
+         |"rowkey":"id",
+         |"columns":{
+         |"id":{"cf":"rowkey","col":"id","type":"string"},
+         |"age_class":{"cf":"cf","col":"age_class","type":"string"},
+         |"payment_way":{"cf":"cf", "col":"payment_way", "type":"string"}
+         |}
+         |}""".stripMargin
+    val df= spark.read
+      .option(HBaseTableCatalog.tableCatalog, catalog)
+      .format("org.apache.spark.sql.execution.datasources.hbase")
+      .load().toDF()
+    val births=df.select(col("age_class").as("birth"),col("payment_way"))
+    val s4=births.groupBy("birth","payment_way")
+      .agg(count("payment_way")as "payment_way_count").sort(col("payment_way"),col("birth"))
+      .withColumn("id",monotonically_increasing_id)
+    def catalogwrite =
+      s"""{
+         |"table":{"namespace":"default","name":"birth_payment_way"},
+         |"rowkey":"id",
+         |"columns":{
+         |"id":{"cf":"rowkey","col":"id","type":"string"},
+         |"birth":{"cf":"cf","col":"birth","type":"string"},
+         |"payment_way":{"cf":"cf", "col":"payment_way", "type":"string"},
+         |"payment_way_count":{"cf":"cf", "col":"payment_way_count", "type":"long"}
+         |}
+         |}""".stripMargin
+    s4.write
+      .option(HBaseTableCatalog.tableCatalog, catalogwrite)
+      .option(HBaseTableCatalog.newTable, "5")
+      .format("org.apache.spark.sql.execution.datasources.hbase")
+      .save()
+    s4.toJSON.collectAsList.toString
+
+  }
+
+  def birth_shopping_cycle(): String =
+  {
+    def catalog =
+      s"""{
+         |"table":{"namespace":"default","name":"user_final_2nd"},
+         |"rowkey":"id",
+         |"columns":{
+         |"id":{"cf":"rowkey","col":"id","type":"string"},
+         |"age_class":{"cf":"cf","col":"age_class","type":"string"},
+         |"shopping_cycle":{"cf":"cf", "col":"shopping_cycle", "type":"string"}
+         |}
+         |}""".stripMargin
+    val df= spark.read
+      .option(HBaseTableCatalog.tableCatalog, catalog)
+      .format("org.apache.spark.sql.execution.datasources.hbase")
+      .load().toDF()
+    val births=df.select(col("age_class").as("birth"),col("shopping_cycle"))
+    val s4=births.groupBy("birth","shopping_cycle")
+      .agg(count("shopping_cycle")as "shopping_cycle_count").sort(col("shopping_cycle"),col("birth"))
+      .withColumn("id",monotonically_increasing_id)
+    def catalogwrite =
+      s"""{
+         |"table":{"namespace":"default","name":"birth_shopping_cycle"},
+         |"rowkey":"id",
+         |"columns":{
+         |"id":{"cf":"rowkey","col":"id","type":"string"},
+         |"birth":{"cf":"cf","col":"birth","type":"string"},
+         |"shopping_cycle":{"cf":"cf", "col":"shopping_cycle", "type":"string"},
+         |"shopping_cycle_count":{"cf":"cf", "col":"shopping_cycle_count", "type":"long"}
+         |}
+         |}""".stripMargin
+    s4.write
+      .option(HBaseTableCatalog.tableCatalog, catalogwrite)
+      .option(HBaseTableCatalog.newTable, "5")
+      .format("org.apache.spark.sql.execution.datasources.hbase")
+      .save()
+    s4.toJSON.collectAsList.toString
+  }
+
+  def birth_ave_price_range(): String =
+  {
+    def catalog =
+      s"""{
+         |"table":{"namespace":"default","name":"user_final_2nd"},
+         |"rowkey":"id",
+         |"columns":{
+         |"id":{"cf":"rowkey","col":"id","type":"string"},
+         |"age_class":{"cf":"cf","col":"age_class","type":"string"},
+         |"ave_price_range":{"cf":"cf", "col":"ave_price_range", "type":"string"}
+         |}
+         |}""".stripMargin
+    val df= spark.read
+      .option(HBaseTableCatalog.tableCatalog, catalog)
+      .format("org.apache.spark.sql.execution.datasources.hbase")
+      .load().toDF()
+    val births=df.select(col("age_class").as("birth"),col("ave_price_range"))
+    val s4=births.groupBy("birth","ave_price_range")
+      .agg(count("ave_price_range")as "ave_price_range_count").sort(col("ave_price_range"),col("birth"))
+      .withColumn("id",monotonically_increasing_id)
+    def catalogwrite =
+      s"""{
+         |"table":{"namespace":"default","name":"birth_ave_price_range"},
+         |"rowkey":"id",
+         |"columns":{
+         |"id":{"cf":"rowkey","col":"id","type":"string"},
+         |"birth":{"cf":"cf","col":"birth","type":"string"},
+         |"ave_price_range":{"cf":"cf", "col":"ave_price_range", "type":"string"},
+         |"ave_price_range_count":{"cf":"cf", "col":"ave_price_range_count", "type":"long"}
+         |}
+         |}""".stripMargin
+    s4.write
+      .option(HBaseTableCatalog.tableCatalog, catalogwrite)
+      .option(HBaseTableCatalog.newTable, "5")
+      .format("org.apache.spark.sql.execution.datasources.hbase")
+      .save()
+
+    s4.toJSON.collectAsList().toString
+  }
+
+  def birth_order_highest_range(): String =
+  {
+    def catalog =
+      s"""{
+         |"table":{"namespace":"default","name":"user_final_2nd"},
+         |"rowkey":"id",
+         |"columns":{
+         |"id":{"cf":"rowkey","col":"id","type":"string"},
+         |"age_class":{"cf":"cf","col":"age_class","type":"string"},
+         |"order_highest_range":{"cf":"cf", "col":"order_highest_range", "type":"string"}
+         |}
+         |}""".stripMargin
+    val df= spark.read
+      .option(HBaseTableCatalog.tableCatalog, catalog)
+      .format("org.apache.spark.sql.execution.datasources.hbase")
+      .load().toDF()
+    val births=df.select(col("age_class").as("birth"),col("order_highest_range"))
+    val s4=births.groupBy("birth","order_highest_range")
+      .agg(count("order_highest_range")as "order_highest_range_count").sort(col("order_highest_range"),col("birth"))
+      .withColumn("id",monotonically_increasing_id)
+    def catalogwrite =
+      s"""{
+         |"table":{"namespace":"default","name":"birth_order_highest_range"},
+         |"rowkey":"id",
+         |"columns":{
+         |"id":{"cf":"rowkey","col":"id","type":"string"},
+         |"birth":{"cf":"cf","col":"birth","type":"string"},
+         |"order_highest_range":{"cf":"cf", "col":"order_highest_range", "type":"string"},
+         |"order_highest_range_count":{"cf":"cf", "col":"order_highest_range_count", "type":"long"}
+         |}
+         |}""".stripMargin
+    s4.write
+      .option(HBaseTableCatalog.tableCatalog, catalogwrite)
+      .option(HBaseTableCatalog.newTable, "5")
+      .format("org.apache.spark.sql.execution.datasources.hbase")
+      .save()
+    s4.toJSON.collectAsList().toString
+  }
+
+  def birth_frequency_range(): String =
+  {
+    def catalog =
+      s"""{
+         |"table":{"namespace":"default","name":"user_final_2nd"},
+         |"rowkey":"id",
+         |"columns":{
+         |"id":{"cf":"rowkey","col":"id","type":"string"},
+         |"age_class":{"cf":"cf","col":"age_class","type":"string"},
+         |"frequency_range":{"cf":"cf", "col":"frequency_range(高,中,低)", "type":"string"}
+         |}
+         |}""".stripMargin
+    val df= spark.read
+      .option(HBaseTableCatalog.tableCatalog, catalog)
+      .format("org.apache.spark.sql.execution.datasources.hbase")
+      .load().toDF()
+    val births=df.select(col("age_class").as("birth"),col("frequency_range"))
+
+    val s4=births.groupBy("birth","frequency_range")
+      .agg(count("frequency_range")as "frequency_range_count").sort(col("frequency_range"),col("birth"))
+      .withColumn("id",monotonically_increasing_id)
+
+    def catalogwrite =
+      s"""{
+         |"table":{"namespace":"default","name":"birth_frequency_range"},
+         |"rowkey":"id",
+         |"columns":{
+         |"id":{"cf":"rowkey","col":"id","type":"string"},
+         |"birth":{"cf":"cf","col":"birth","type":"string"},
+         |"frequency_range":{"cf":"cf", "col":"frequency_range", "type":"string"},
+         |"frequency_range_count":{"cf":"cf", "col":"frequency_range_count", "type":"long"}
+         |}
+         |}""".stripMargin
+    s4.write
+      .option(HBaseTableCatalog.tableCatalog, catalogwrite)
+      .option(HBaseTableCatalog.newTable, "5")
+      .format("org.apache.spark.sql.execution.datasources.hbase")
+      .save()
+
+
+    s4.toJSON.collectAsList().toString
+  }
+  def birth_exchange_item_rate(): String =
+  {
+    def catalog =
+      s"""{
+         |"table":{"namespace":"default","name":"user_final_2nd"},
+         |"rowkey":"id",
+         |"columns":{
+         |"id":{"cf":"rowkey","col":"id","type":"string"},
+         |"age_class":{"cf":"cf","col":"age_class","type":"string"},
+         |"exchange_item_rate":{"cf":"cf", "col":"exchange_item_rate(高,中,低)", "type":"string"}
+         |}
+         |}""".stripMargin
+    val df= spark.read
+      .option(HBaseTableCatalog.tableCatalog, catalog)
+      .format("org.apache.spark.sql.execution.datasources.hbase")
+      .load().toDF()
+    val births=df.select(col("age_class").as("birth"),col("exchange_item_rate"))
+
+    val s4=births.groupBy("birth","exchange_item_rate")
+      .agg(count("exchange_item_rate")as "exchange_item_rate_count").sort(col("exchange_item_rate"),col("birth"))
+      .withColumn("id",monotonically_increasing_id)
+    def catalogwrite =
+      s"""{
+         |"table":{"namespace":"default","name":"birth_exchange_item_rate"},
+         |"rowkey":"id",
+         |"columns":{
+         |"id":{"cf":"rowkey","col":"id","type":"string"},
+         |"birth":{"cf":"cf","col":"birth","type":"string"},
+         |"exchange_item_rate":{"cf":"cf", "col":"exchange_item_rate", "type":"string"},
+         |"exchange_item_rate_count":{"cf":"cf", "col":"exchange_item_rate_count", "type":"long"}
+         |}
+         |}""".stripMargin
+    s4.write
+      .option(HBaseTableCatalog.tableCatalog, catalogwrite)
+      .option(HBaseTableCatalog.newTable, "5")
+      .format("org.apache.spark.sql.execution.datasources.hbase")
+      .save()
+    s4.toJSON.collectAsList().toString
+  }
+
+  def birth_return_item_rate(): String =
+  {
+    def catalog =
+      s"""{
+         |"table":{"namespace":"default","name":"user_final_2nd"},
+         |"rowkey":"id",
+         |"columns":{
+         |"id":{"cf":"rowkey","col":"id","type":"string"},
+         |"age_class":{"cf":"cf","col":"age_class","type":"string"},
+         |"return_item_rate":{"cf":"cf", "col":"return_item_rate(高,中,低)", "type":"string"}
+         |}
+         |}""".stripMargin
+    val df= spark.read
+      .option(HBaseTableCatalog.tableCatalog, catalog)
+      .format("org.apache.spark.sql.execution.datasources.hbase")
+      .load().toDF()
+    val births=df.select(col("age_class").as("birth"),col("return_item_rate"))
+    val s4=births.groupBy("birth","return_item_rate")
+      .agg(count("return_item_rate")as "return_item_rate_count").sort(col("return_item_rate"),col("birth"))
+
+    def catalogwrite =
+      s"""{
+         |"table":{"namespace":"default","name":"birth_return_item_rate"},
+         |"rowkey":"id",
+         |"columns":{
+         |"id":{"cf":"rowkey","col":"id","type":"string"},
+         |"birth":{"cf":"cf","col":"birth","type":"string"},
+         |"return_item_rate":{"cf":"cf", "col":"return_item_rate", "type":"string"},
+         |"return_item_rate_count":{"cf":"cf", "col":"return_item_rate_count", "type":"long"}
+         |}
+         |}""".stripMargin
+    s4.write
+      .option(HBaseTableCatalog.tableCatalog, catalogwrite)
+      .option(HBaseTableCatalog.newTable, "5")
+      .format("org.apache.spark.sql.execution.datasources.hbase")
+      .save()
+    s4.toJSON.collectAsList().toString
+  }
 
   def brand_preference_cal(): Unit = {
     def catalog =
