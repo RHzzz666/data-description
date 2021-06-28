@@ -37,7 +37,7 @@
 										</p>
 									</div>
 									<span class="fr icon-head">
-										<img src="resources/images/avatar.jpg" alt="账户头像" >
+										<img src="resources/images/pfp.png" alt="账户头像" style="width: 50px; height: auto; margin: 20px">
 									</span>
 								</dt>
 								<dd class="padding-big clearfix">
@@ -151,7 +151,7 @@
 
 									</span>
 									<div class="fr">
-										<a class="button btn-orange text-white" href="" target="_blank">点击修改</a>
+										<a class="button btn-orange text-white" target="_blank">点击修改</a>
 									</div>
 								</dt>
 								<dd class="padding-big">
@@ -180,58 +180,11 @@
 
 					<!--产品-->
 					<div class="account-product margin-big-top clearfix">
-						<div class="text-box-main padding-big fl mine-product">
-							<h2 class="h6 margin-big-bottom">我的产品</h2>
-							<div class="mine-product-content clearfix">
-								<ul class="w50 fl lists">
-									<!-- <li class="w70 lists-border-list">
-										<p class="border-list-text">云托管服务： <em class="orange">0</em>  台	
-											<a class="text-main fr" href="#">查看</a>
-										</p>
-									</li>  -->
-									<li class="w70 lists-border-list">
-										<p class="border-list-text">云市场应用： <em class="orange">0</em> 台
-											<a class="text-main fr" href="#">查看</a>
-										</p>
-									</li>
-									<li class="w70 lists-border-list">
-										<p class="border-list-text">云市场模块： <em class="orange">0</em> 台
-											<a class="text-main fr" href="#">查看</a>
-										</p>
-									</li>
-									<li class="w70 lists-border-list">
-										<p class="border-list-text">云市场模板： <em class="orange">0</em> 台
-											<a class="text-main fr" href="#">查看</a>
-										</p>
-									</li>
-
-								</ul>
-								<ul class="w50 fl lists">
-									<!-- <li class="w80 lists-border-list">
-										<p class="border-list-text">15天内到期的云托管服务： <em class="orange">0</em>  台	
-											<a class="text-main fr" href="#">查看</a>
-										</p>
-									</li>  -->
-									<li class="w80 lists-border-list">
-										<p class="border-list-text">15天内到期的云市场应用： <em class="orange">0</em> 台
-											<a class="text-main fr" href="#">查看</a>
-										</p>
-									</li>
-									<li class="w80 lists-border-list">
-										<p class="border-list-text">15天内到期的云市场模块： <em class="orange">0</em> 台
-											<a class="text-main fr" href="#">查看</a>
-										</p>
-									</li>
-									<li class="w80 lists-border-list">
-										<p class="border-list-text">15天内到期的云市场模板： <em class="orange">0</em> 台
-											<a class="text-main fr" href="#">查看</a>
-										</p>
-									</li>
-								</ul>
-							</div>
+						<div class="text-box-main padding-big fl mine-product" style="height: 580px">
+							<iframe id = "crud" src='crud.html' width="900" height="550" style="float:left;" frameborder="0" scrolling="no" align="top" ></iframe>
 						</div>
 						<div class="text-box-main padding-big fl w25">
-							<h2 class="h6 margin-big-bottom">最近好物</h2>
+							<h2 class="h6 margin-big-bottom">最近购买</h2>
 							<ul class="lists">
 								<li class="lists-list"><a href="#" id="good_bought_0">无</a></li>
 								<li class="lists-list"><a href="#" id="good_bought_1">无</a></li>
@@ -241,7 +194,31 @@
 								<li class="lists-list"><a href="#" id="good_bought_5">无</a></li>
 							</ul>
 						</div>
+
+						<div class="text-box-main padding-big fl w25 margin-top-35">
+							<h2 class="h6 margin-big-bottom">用户分析</h2>
+							<div>
+								<span class="margin-top-35 margin-right">
+									消费能力:
+									<em id="ability" class="margin-small-left text-blue-deep">
+										低
+									</em>
+								</span>
+							</div>
+
+							<div class="margin-top-15">
+								<span class="margin-top-35 margin-right">
+									消费优惠券依赖度:
+									<em id="discount" class="margin-small-left text-blue-deep">
+										低
+									</em>
+								</span>
+							</div>
+
+						</div>
 					</div>
+
+
 				</div>
 			</div>
 		</div>
@@ -260,8 +237,9 @@
 
 		<script>
 			//更新用户信息
-			window.onload(update_profile())
+			window.onload(update_profile());
 			function update_profile() {
+				//console.log(window.localStorage.getItem("user_birthday"));
 				document.getElementById("name").innerHTML=  window.localStorage.getItem("user_name_1");
 				document.getElementById("last_login").innerHTML=  window.localStorage.getItem("user_last_login_time");
 				document.getElementById("phone").innerHTML=  window.localStorage.getItem("user_mobile");
@@ -278,9 +256,12 @@
 				document.getElementById("register_time").innerHTML=  window.localStorage.getItem("user_register_time");
 				document.getElementById("constellation").innerHTML=  window.localStorage.getItem("user_constellation");
 
-				console.log(window.localStorage.getItem("user_good_bought"));
+				document.getElementById("ability").innerHTML=  window.localStorage.getItem("user_ability");
+				document.getElementById("discount").innerHTML=  window.localStorage.getItem("user_discount");
+				//console.log(window.localStorage.getItem("user_constellation"));
+				// console.log(window.localStorage.getItem("user_good_bought"));
 				var str_arr = split_string(window.localStorage.getItem("user_good_bought"));
-				console.log(str_arr);
+				// console.log(str_arr);
 				document.getElementById("good_bought_0").innerHTML=  str_arr[0];
 				document.getElementById("good_bought_1").innerHTML=  str_arr[1];
 				document.getElementById("good_bought_2").innerHTML=  str_arr[2];
@@ -289,7 +270,7 @@
 				document.getElementById("good_bought_5").innerHTML=  str_arr[5];
 
 			}
-			
+
 			function split_string(str) {
 				var str_without_f_l = str.substr(1, str.length - 1);
 				var str_arr = new Array();

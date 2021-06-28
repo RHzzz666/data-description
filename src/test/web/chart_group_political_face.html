@@ -6,6 +6,9 @@
     <!-- 引入 echarts.js -->
     <script src="resources/js/echarts.min.js"></script>
     <script src="resources/js/walden.js"></script>
+    <script src="resources/js/roma.js"></script>
+    <script src="resources/js/macarons.js"></script>
+    <script src="resources/js/infographic.js"></script>
 </head>
 <body>
 <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
@@ -16,7 +19,7 @@
 
 
 </script>
-<div id="main" style="width: 1000px;height:800px;"></div>
+<div id="main" style="width: 600px;height:400px;"></div>
 <script type="text/javascript">
 
     window.onload(test())
@@ -32,7 +35,7 @@
 
     function test(){
         var ajax=new XMLHttpRequest();
-        var url='http://localhost:8080/political_face';
+        var url='http://192.168.101.184:8080/political_face';
         ajax.open('get',url,true);
         ajax.send();
         ajax.onreadystatechange=function (){
@@ -47,14 +50,14 @@
 
     function chart(dat) {
         // 基于准备好的dom，初始化echarts实例
-        var myChart = echarts.init(document.getElementById('main'), 'walden');
+        var myChart = echarts.init(document.getElementById('main'), 'roma');
 
 
 
 
         var option = {
             title : {
-                text: '品牌偏好',
+                text: '政治面貌',
                 x:'center'
             },
             legend: {
@@ -73,16 +76,16 @@
                 {
                     name: '面积模式',
                     type: 'pie',
-                    radius: [50, 250],
+                    radius: [10, 150],
                     center: ['50%', '50%'],
                     roseType: 'area',
                     itemStyle: {
                         borderRadius: 8
                     },
                     data: [
-                        {value: dat.群众, name: '群众'},
-                        {value: dat.无党派人士, name: '无党派人士'},
-                        {value: dat.党员, name: '党员'},
+                        {value: dat[2].count, name: '群众'},
+                        {value: dat[1].count, name: '无党派人士'},
+                        {value: dat[0].count, name: '党员'},
                     ]
                 }
             ]

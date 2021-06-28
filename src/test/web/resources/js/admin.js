@@ -263,6 +263,9 @@ function jump_to_login(){
 
 window.onload(user_name());
 
+
+//window.onload(Tab.addTab('个人资料', 'profile_1.html'));
+
 function user_name() {
 	console.log("hello");
 	//console.log(window.localStorage.getItem("user_data"));
@@ -276,7 +279,7 @@ function search() {
         //条件：window.localStorage.getItem("user_name") === "ADMIN"
 
         $.ajax({
-            url: 'http://192.168.101.173:8080/search',
+            url: 'http://192.168.101.184:8080/search',
             type: 'POST',
             dataType : 'json',
             contentType : 'application/json',
@@ -292,7 +295,13 @@ function search() {
             },
             success: function(json){
                 console.log(json.user_name);
+                console.log(window.localStorage.getItem("user_name"));
+
+				Tab.closeTab($('#tab_profile_1_html'));
+
                 Tab.addTab('个人资料', 'profile_1.html');
+
+				localStorage.removeItem("user_name_1");
                 window.localStorage.setItem("user_name_1", json.user_name);
                 window.localStorage.setItem("user_id", json.id);
                 window.localStorage.setItem("user_e_mail", json.e_mail);
@@ -317,7 +326,12 @@ function search() {
                 window.localStorage.setItem("user_frequency", json.frequency);
                 window.localStorage.setItem("user_register_time", json.register_time);
                 window.localStorage.setItem("user_good_bought", json.good_bought);
+                window.localStorage.setItem("user_region", json.region);
 
+				window.localStorage.setItem("user_ability", json.消费能力);
+				window.localStorage.setItem("user_discount", json.消费优惠券依赖度);
+
+                //location.reload();
                 // window.localStorage.setItem("user_name", json.user_name);
                 // window.localStorage.setItem("user_name", json.user_name);
                 // window.localStorage.setItem("user_name", json.user_name);
@@ -353,3 +367,4 @@ function search() {
         alert("你不是管理员，无法使用该功能");
     }
 }
+

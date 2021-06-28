@@ -22,11 +22,11 @@
 <div id="main" style="width: 600px;height:400px;"></div>
 <script type="text/javascript">
 
-    window.onload(test());
+    window.onload(test())
 
     function jsonx(data){
-        var temp = JSON.parse(data);
-        return temp;
+        var temp = JSON.parse(data)
+        return temp
     }
 
 
@@ -35,7 +35,7 @@
 
     function test(){
         var ajax=new XMLHttpRequest();
-        var url='http://192.168.101.184:8080/birth_payment_way';
+        var url='http://192.168.101.184:8080/birth_shopping_cycle';
         ajax.open('get',url,true);
         ajax.send();
         ajax.onreadystatechange=function (){
@@ -50,7 +50,7 @@
 
     function chart(dat) {
         // 基于准备好的dom，初始化echarts实例
-        var myChart = echarts.init(document.getElementById('main'), 'macarons');
+        var myChart = echarts.init(document.getElementById('main'), 'walden');
 
 
         var app = {};
@@ -144,7 +144,7 @@
                 }
             },
             legend: {
-                data: ['快捷通', '支付宝', '货到付款', '银联支付']
+                data: ['1月', '2周', '2月', '7日']
             },
             toolbox: {
                 show: true,
@@ -173,41 +173,41 @@
             ],
             series: [
                 {
-                    name: '快捷通',
+                    name: '1月',
                     type: 'bar',
                     barGap: 0,
                     label: labelOption,
                     emphasis: {
                         focus: 'series'
                     },
-                    data: [dat[1].payment_way_count, dat[2].payment_way_count, dat[3].payment_way_count, dat[0].payment_way_count]
+                    data: [dat[1].shopping_cycle_count, dat[2].shopping_cycle_count, dat[3].shopping_cycle_count, dat[0].shopping_cycle_count]
                 },
                 {
-                    name: '支付宝',
+                    name: '2周',
                     type: 'bar',
                     label: labelOption,
                     emphasis: {
                         focus: 'series'
                     },
-                    data: [dat[5].payment_way_count, dat[6].payment_way_count, dat[7].payment_way_count, dat[4].payment_way_count]
+                    data: [dat[5].shopping_cycle_count, dat[6].shopping_cycle_count, dat[7].shopping_cycle_count, dat[4].shopping_cycle_count]
                 },
                 {
-                    name: '货到付款',
+                    name: '2月',
                     type: 'bar',
                     label: labelOption,
                     emphasis: {
                         focus: 'series'
                     },
-                    data: [dat[9].payment_way_count, dat[10].payment_way_count, dat[11].payment_way_count, dat[8].payment_way_count]
+                    data: [dat[8].shopping_cycle_count, dat[9].shopping_cycle_count, dat[10].shopping_cycle_count, 0]
                 },
                 {
-                    name: '银联支付',
+                    name: '7日',
                     type: 'bar',
                     label: labelOption,
                     emphasis: {
                         focus: 'series'
                     },
-                    data: [dat[12].payment_way_count, 0, 0, 0]
+                    data: [dat[12].shopping_cycle_count, dat[13].shopping_cycle_count, dat[14].shopping_cycle_count, dat[11].shopping_cycle_count]
                 }
             ]
         };

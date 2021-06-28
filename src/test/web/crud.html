@@ -17,11 +17,11 @@
 </head>
 <body>
 <div id="main">
-	<div id="toolbar">
-		<a class="waves-effect waves-button" href="javascript:;" onclick="createAction()"><i class="zmdi zmdi-plus"></i> 新增用户</a>
-		<a class="waves-effect waves-button" href="javascript:;" onclick="updateAction()"><i class="zmdi zmdi-edit"></i> 编辑用户</a>
-		<a class="waves-effect waves-button" href="javascript:;" onclick="deleteAction()"><i class="zmdi zmdi-close"></i> 删除用户</a>
-	</div>
+<!--	<div id="toolbar">-->
+<!--		<a class="waves-effect waves-button" href="javascript:;" onclick="createAction()"><i class="zmdi zmdi-plus"></i> 新增用户</a>-->
+<!--		<a class="waves-effect waves-button" href="javascript:;" onclick="updateAction()"><i class="zmdi zmdi-edit"></i> 编辑用户</a>-->
+<!--		<a class="waves-effect waves-button" href="javascript:;" onclick="deleteAction()"><i class="zmdi zmdi-close"></i> 删除用户</a>-->
+<!--	</div>-->
 	<table id="table"></table>
 </div>
 <!-- 新增 -->
@@ -55,64 +55,136 @@
 
 <script src="resources/js/common.js"></script>
 <script>
-var $table = $('#table');
-$(function() {
-	$(document).on('focus', 'input[type="text"]', function() {
-		$(this).parent().find('label').addClass('active');
-	}).on('blur', 'input[type="text"]', function() {
-		if ($(this).val() == '') {
-			$(this).parent().find('label').removeClass('active');
+
+
+	$.ajax({
+		url: 'http://192.168.101.184:8080/read_orders_info',
+		type: 'POST',
+		dataType : 'json',
+		contentType : 'application/json',
+		data: JSON.stringify({
+			memberid: '1',
+			// passWord: $('#password').val(),
+			// rememberMe: $('#rememberMe').is(':checked'),
+			// backurl: 'index.html'
+		}),
+
+		beforeSend: function() {
+
+		},
+		success: function(json){
+			window.localStorage.setItem("user_purchase_data", json);
+			console.log(json);
+
+
+
+			var $table = $('#table');
+			$(function() {
+				$(document).on('focus', 'input[type="text"]', function() {
+					$(this).parent().find('label').addClass('active');
+				}).on('blur', 'input[type="text"]', function() {
+					if ($(this).val() == '') {
+						$(this).parent().find('label').removeClass('active');
+					}
+				});
+				// bootstrap table初始化
+				// http://bootstrap-table.wenzhixin.net.cn/zh-cn/documentation/
+				$table.bootstrapTable({
+					//url: window.localStorage.getItem("user_purchase_data"),
+					data: json,
+					height: getHeight(),
+					striped: true,
+					search: true,
+					searchOnEnterKey: true,
+					showRefresh: true,
+					showToggle: true,
+					showColumns: true,
+					minimumCountColumns: 2,
+					showPaginationSwitch: true,
+					clickToSelect: true,
+					detailView: true,
+					detailFormatter: 'detailFormatter',
+					pagination: true,
+					paginationLoop: false,
+					classes: 'table table-hover table-no-bordered',
+					//sidePagination: 'server',
+					//silentSort: false,
+					smartDisplay: false,
+					idField: 'id',
+					sortName: 'id',
+					sortOrder: 'desc',
+					escape: true,
+					searchOnEnterKey: true,
+					idField: 'systemId',
+					maintainSelected: true,
+					toolbar: '#toolbar',
+					columns: [
+						//{field: 'state', checkbox: true},
+						//{field: 'id', title: '编号', sortable: true, halign: 'center'},
+						//{field: 'username', title: '账号', sortable: true, halign: 'center'},
+						// {field: 'password', title: '密码', sortable: true, halign: 'center'},
+						// {field: 'name', title: '姓名', sortable: false, halign: 'center'},
+						// {field: 'sex', title: '性别', sortable: false, halign: 'center'},
+						// {field: 'age', title: '年龄', sortable: false, halign: 'center'},
+
+						// {field: 'pruchase_good', title: '购买商品', sortable: false, halign: 'center'},
+						{field: 'shopping_time', title: '消费时间', sortable: true, halign: 'center', align: 'center'},
+						{field: 'order_amount', title: '金额', sortable: true, halign: 'center', align: 'center'},
+
+						// {field: 'phone', title: '手机', sortable: true, halign: 'center'},
+						// {field: 'address', title: '地址', sortable: true, halign: 'center'},
+						//{field: 'remark', title: '备注', sortable: true, halign: 'center'},
+						//{field: 'action', title: '操作', halign: 'center', align: 'center', formatter: 'actionFormatter', events: 'actionEvents', clickToSelect: false}
+					]
+				}).on('all.bs.table', function (e, name, args) {
+					$('[data-toggle="tooltip"]').tooltip();
+					$('[data-toggle="popover"]').popover();
+				});
+			});
+			// Tab.addTab('个人资料', 'profile_1.html');
+			// window.localStorage.setItem("user_name_1", json.user_name);
+			// window.localStorage.setItem("user_id", json.id);
+			// window.localStorage.setItem("user_e_mail", json.e_mail);
+			// window.localStorage.setItem("user_birthday", json.birthday);
+			// window.localStorage.setItem("user_mobile", json.mobile);
+			// window.localStorage.setItem("user_money", json.money);
+			// window.localStorage.setItem("user_money_pwd", json.money_pwd);
+			// window.localStorage.setItem("user_last_login_time", json.last_login_time);
+			// window.localStorage.setItem("user_register_time", json.register_time);
+			// window.localStorage.setItem("user_qq", json.qq);
+			// window.localStorage.setItem("user_job", json.job);
+			// window.localStorage.setItem("user_political_face", json.political_face);
+			// window.localStorage.setItem("user_age_class", json.age_class);
+			// window.localStorage.setItem("user_nationality", json.nationality);
+			// window.localStorage.setItem("user_marriage", json.marriage);
+			// window.localStorage.setItem("user_is_in_blacklist", json.is_in_blacklist);
+			// window.localStorage.setItem("user_constellation", json.constellation);
+			// window.localStorage.setItem("user_payment_way", json.payment_way);
+			// window.localStorage.setItem("user_ave_price", json.ave_price);
+			// window.localStorage.setItem("user_ave_price_range", json.ave_price_range);
+			// window.localStorage.setItem("user_order_count", json.order_count);
+			// window.localStorage.setItem("user_frequency", json.frequency);
+			// window.localStorage.setItem("user_register_time", json.register_time);
+			// window.localStorage.setItem("user_good_bought", json.good_bought);
+		},
+		error: function(error){
+			alert("错误！");
 		}
 	});
-	// bootstrap table初始化
-	// http://bootstrap-table.wenzhixin.net.cn/zh-cn/documentation/
-	$table.bootstrapTable({
-		url: 'resources/data/data1.json',
-		height: getHeight(),
-		striped: true,
-		search: true,
-		searchOnEnterKey: true,
-		showRefresh: true,
-		showToggle: true,
-		showColumns: true,
-		minimumCountColumns: 2,
-		showPaginationSwitch: true,
-		clickToSelect: true,
-		detailView: true,
-		detailFormatter: 'detailFormatter',
-		pagination: true,
-		paginationLoop: false,
-		classes: 'table table-hover table-no-bordered',
-		//sidePagination: 'server',
-		//silentSort: false,
-		smartDisplay: false,
-		idField: 'id',
-		sortName: 'id',
-		sortOrder: 'desc',
-		escape: true,
-		searchOnEnterKey: true,
-		idField: 'systemId',
-		maintainSelected: true,
-		toolbar: '#toolbar',
-		columns: [
-			{field: 'state', checkbox: true},
-			{field: 'id', title: '编号', sortable: true, halign: 'center'},
-			{field: 'username', title: '账号', sortable: true, halign: 'center'},
-			{field: 'password', title: '密码', sortable: true, halign: 'center'},
-			{field: 'name', title: '姓名', sortable: true, halign: 'center'},
-			{field: 'sex', title: '性别', sortable: true, halign: 'center'},
-			{field: 'age', title: '年龄', sortable: true, halign: 'center'},
-			{field: 'phone', title: '手机', sortable: true, halign: 'center'},
-			{field: 'email', title: '邮箱', sortable: true, halign: 'center'},
-			{field: 'address', title: '地址', sortable: true, halign: 'center'},
-			{field: 'remark', title: '备注', sortable: true, halign: 'center'},
-			{field: 'action', title: '操作', halign: 'center', align: 'center', formatter: 'actionFormatter', events: 'actionEvents', clickToSelect: false}
-		]
-	}).on('all.bs.table', function (e, name, args) {
-		$('[data-toggle="tooltip"]').tooltip();
-		$('[data-toggle="popover"]').popover();  
-	});
-});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 function actionFormatter(value, row, index) {
     return [
         '<a class="like" href="javascript:void(0)" data-toggle="tooltip" title="Like"><i class="glyphicon glyphicon-heart"></i></a>　',

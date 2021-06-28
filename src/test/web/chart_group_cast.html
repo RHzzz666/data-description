@@ -2,10 +2,14 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>brand_preference</title>
+    <title>consumption_ablity</title>
     <!-- 引入 echarts.js -->
     <script src="resources/js/echarts.min.js"></script>
     <script src="resources/js/walden.js"></script>
+    <script src="resources/js/roma.js"></script>
+    <script src="resources/js/macarons.js"></script>
+    <script src="resources/js/infographic.js"></script>
+    <script src="resources/js/westeros.js"></script>
 </head>
 <body>
 <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
@@ -32,7 +36,7 @@
 
     function test(){
         var ajax=new XMLHttpRequest();
-        var url='http://192.168.101.184:8080/brand_preference';
+        var url='http://192.168.101.184:8080/cast';
         ajax.open('get',url,true);
         ajax.send();
         ajax.onreadystatechange=function (){
@@ -47,14 +51,14 @@
 
     function chart(dat) {
         // 基于准备好的dom，初始化echarts实例
-        var myChart = echarts.init(document.getElementById('main'), 'walden');
+        var myChart = echarts.init(document.getElementById('main'), 'westeros');
 
 
 
 
         var option = {
             title : {
-                text: '品牌偏好',
+                text: '用户等级',
                 x:'center'
             },
             legend: {
@@ -73,17 +77,17 @@
                 {
                     name: '面积模式',
                     type: 'pie',
-                    radius: [50, 250],
+                    radius: [10, 150],
                     center: ['50%', '50%'],
                     roseType: 'area',
                     itemStyle: {
                         borderRadius: 8
                     },
                     data: [
-                        {value: dat[2].count, name: '海尔'},
-                        {value: dat[3].count, name: '统帅'},
-                        {value: dat[0].count, name: '小超人'},
-                        {value: dat[1].count, name: '摩卡'},
+                        {value: dat[1].cast_count, name: '高'},
+                        {value: dat[0].cast_count, name: '中上'},
+                        {value: dat[2].cast_count, name: '中'},
+                        {value: dat[3].cast_count, name: '低'},
                     ]
                 }
             ]
