@@ -360,11 +360,85 @@ function search() {
             }
         });
 
+		$.ajax({
+			url: 'http://192.168.101.184:8080/read_top',
+			type: 'POST',
+			dataType : 'json',
+			contentType : 'application/json',
+			data: JSON.stringify({
+				id: window.localStorage.getItem("user_id"),
 
+				// passWord: $('#password').val(),
+				// rememberMe: $('#rememberMe').is(':checked'),
+				// backurl: 'index.html'
+			}),
+
+			beforeSend: function() {
+
+			},
+			success: function(json){
+				console.log(json);
+				// console.log(window.localStorage.getItem("user_name"));
+				//
+				// Tab.closeTab($('#tab_profile_1_html'));
+				//
+				// Tab.addTab('个人资料', 'profile_1.html');
+
+
+				window.localStorage.setItem("user_top_1", json[0].top1);
+				window.localStorage.setItem("user_top_2", json[0].top2);
+				// window.localStorage.setItem("user_name", json.user_name);
+				// window.localStorage.setItem("user_name", json.user_name);
+				// window.localStorage.setItem("user_name", json.user_name);
+				// window.localStorage.setItem("user_name", json.user_name);
+
+
+				//location.href = "index.html";
+
+				//
+				// if (json.code === 1) {
+				// 	location.href = "index.html";
+				// } else {
+				// 	alert(json.data);
+				// 	if (10101 === json.code) {
+				// 		$('#username').focus();
+				// 	}
+				// 	if (10102 === json.code) {
+				// 		$('#password').focus();
+				// 	}
+				// }
+			},
+			error: function(error){
+				alert("号码输入错误请重新输入");
+				$('#keywords').focus();
+			}
+		});
 
     }
+
+
+
     else {
         alert("你不是管理员，无法使用该功能");
     }
 }
+
+// function search_multi() {
+//
+// 	Tab.closeTab($('#tab_data_multi_search_html'));
+//
+// 	Tab.addTab('多值查询', 'data_multi_search.html');
+//
+// 	window.localStorage.setItem("birth", $("#pid_1").find("option:selected").text());
+//
+// 	window.localStorage.setItem("shopping_cycle", $("#pid_2").find("option:selected").text());
+//
+// 	window.localStorage.setItem("gender", $("#pid_3").find("option:selected").text());
+//
+// 	window.localStorage.setItem("marriage", $("#pid_4").find("option:selected").text());
+//
+// 	//console.log(window.localStorage.getItem("birth"));
+//
+//
+// }
 

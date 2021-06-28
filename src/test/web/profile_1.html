@@ -195,7 +195,7 @@
 							</ul>
 						</div>
 
-						<div class="text-box-main padding-big fl w25 margin-top-35">
+						<div class="text-box-main padding-big fl w25 margin-top-25", style="height: 280px">
 							<h2 class="h6 margin-big-bottom">用户分析</h2>
 							<div>
 								<span class="margin-top-35 margin-right">
@@ -211,6 +211,28 @@
 									消费优惠券依赖度:
 									<em id="discount" class="margin-small-left text-blue-deep">
 										低
+									</em>
+								</span>
+							</div>
+
+							<br>
+							<br>
+
+							<h2 class="h6 margin-big-bottom">推荐商品</h2>
+							<div>
+								<span class="margin-top-35 margin-right">
+									top1:
+									<em id="top_1" class="margin-small-left text-blue-deep">
+										top1
+									</em>
+								</span>
+							</div>
+
+							<div class="margin-top-15">
+								<span class="margin-top-35 margin-right">
+									top2:
+									<em id="top_2" class="margin-small-left text-blue-deep">
+										top2
 									</em>
 								</span>
 							</div>
@@ -268,6 +290,9 @@
 				document.getElementById("good_bought_3").innerHTML=  str_arr[3];
 				document.getElementById("good_bought_4").innerHTML=  str_arr[4];
 				document.getElementById("good_bought_5").innerHTML=  str_arr[5];
+
+				document.getElementById("top_1").innerHTML=  window.localStorage.getItem("user_top_1");
+				document.getElementById("top_2").innerHTML=  window.localStorage.getItem("user_top_2");
 
 			}
 

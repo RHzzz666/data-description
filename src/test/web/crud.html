@@ -63,7 +63,7 @@
 		dataType : 'json',
 		contentType : 'application/json',
 		data: JSON.stringify({
-			memberid: '1',
+			memberid: window.localStorage.getItem("user_id"),
 			// passWord: $('#password').val(),
 			// rememberMe: $('#rememberMe').is(':checked'),
 			// backurl: 'index.html'

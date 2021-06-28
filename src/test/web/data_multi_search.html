@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="resources/plugins/bootstrap-3.3.0/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="resources/plugins/material-design-iconic-font-2.2.0/css/material-design-iconic-font.min.css" rel="stylesheet"/>
+    <link href="resources/plugins/bootstrap-table-1.11.0/bootstrap-table.min.css" rel="stylesheet"/>
+    <link href="resources/plugins/waves-0.7.5/waves.min.css" rel="stylesheet"/>
+    <link href="resources/plugins/jquery-confirm/jquery-confirm.min.css" rel="stylesheet"/>
+    <link href="resources/plugins/select2/css/select2.min.css" rel="stylesheet"/>
+
+    <link href="resources/css/common.css" rel="stylesheet"/>
+    <script src="resources/plugins/jquery.1.12.4.min.js"></script>
+    <script src="resources/plugins/bootstrap-3.3.0/js/bootstrap.min.js"></script>
+    <script src="resources/plugins/bootstrap-table-1.11.0/bootstrap-table.min.js"></script>
+    <script src="resources/plugins/bootstrap-table-1.11.0/locale/bootstrap-table-zh-CN.min.js"></script>
+    <script src="resources/plugins/waves-0.7.5/waves.min.js"></script>
+    <script src="resources/plugins/jquery-confirm/jquery-confirm.min.js"></script>
+    <script src="resources/plugins/select2/js/select2.min.js"></script>
+
+    <script src="resources/js/common.js"></script>
+<!--    <script src="resources/js/admin.js"></script>-->
+</head>
+<body style="margin: 10px">
+<div id="toolbar">
+    <span  class="" style="margin: 0px">
+                <select id = "pid_1" class="shortselect">
+
+                    <option value="0" >年龄段</option>
+                    <option value="1" selected>70后</option>
+                    <option value="2">80后</option>
+                    <option value="3">90后</option>
+                    <option value="4">00后</option>
+
+
+                </select>
+            </span>
+    <span  class="" style="margin: 0px">
+                <select id = "pid_2" class="shortselect" >
+
+                    <option value="0" >消费周期</option>
+                    <option value="1" selected>7日</option>
+                    <option value="2">2周</option>
+                    <option value="3">1月</option>
+                    <option value="4">2月</option>
+
+
+
+                </select>
+            </span>
+<!--    <span class="" style="margin: 0px">-->
+<!--                <select id = "pid_3" class="shortselect" >-->
+
+<!--                    <option value="0" >性别</option>-->
+<!--                    <option value="1" selected>男</option>-->
+<!--                    <option value="2">女</option>-->
+
+<!--                </select>-->
+<!--            </span>-->
+<!--    <span class="" style="margin: 0px">-->
+<!--                <select id = "pid_4" class="shortselect" >-->
+
+<!--                    <option value="0" >婚姻状况</option>-->
+<!--                    <option value="1" selected>已婚</option>-->
+<!--                    <option value="2">离异</option>-->
+<!--                    <option value="3">未婚</option>-->
+
+<!--                </select>-->
+<!--            </span>-->
+    <span>
+               <button id="submit" type="button" class="btn btn-default" onclick="search_multi()" style="height: 30px; width: 30px; padding: 5px"><span class="glyphicon glyphicon-search"></span></button>
+            </span>
+</div>
+<table id="table"></table>
+<iframe id = "multi" src='data_multi.html' width="1000" height="650" style="float:left;" frameborder="0" scrolling="no" align="top" ></iframe>
+
+<script>
+function search_multi() {
+    window.localStorage.setItem("birth", $("#pid_1").find("option:selected").text());
+
+	window.localStorage.setItem("shopping_cycle", $("#pid_2").find("option:selected").text());
+
+	window.localStorage.setItem("gender", $("#pid_3").find("option:selected").text());
+
+	window.localStorage.setItem("marriage", $("#pid_4").find("option:selected").text());
+    document.getElementById('multi').contentWindow.location.reload();
+}
+</script>
+</body>
+</html>

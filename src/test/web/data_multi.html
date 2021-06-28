@@ -19,86 +19,9 @@
 <div id="main">
 
     	<div id="toolbar">
-            <form method="post" class="" style="margin: 0px">
-                <select id = "pid_1" class="shortselect" onchange="GetVal(this)">
 
-                    <option value="0" selected>请选择标签</option>
-                    <option value="1">生日</option>
-                    <option value="2">职业</option>
-                    <option value="3">性别</option>
-                    <option value="8">婚姻状况</option>
-                    <option value="9">政治面貌</option>
-                    <option value="4">购物周期</option>
-                    <option value="5">支付方式</option>
-                    <option value="6">消费能力</option>
-                    <option value="7">访问频率</option>
-
-                    <option value="10">购物周期</option>
-
-
-                </select>
-            </form>
-            <form method="post" class="" style="margin: 0px">
-                <select id = "pid_2" class="shortselect" onchange="GetVal(this)">
-
-                    <option value="0" selected>请选择标签</option>
-                    <option value="1">生日</option>
-                    <option value="2">职业</option>
-                    <option value="3">性别</option>
-                    <option value="8">婚姻状况</option>
-                    <option value="9">政治面貌</option>
-                    <option value="4">购物周期</option>
-                    <option value="5">支付方式</option>
-                    <option value="6">消费能力</option>
-                    <option value="7">访问频率</option>
-
-                    <option value="10">购物周期</option>
-
-
-                </select>
-            </form>
-            <form method="post" class="" style="margin: 0px">
-                <select id = "pid"_3 class="shortselect" onchange="GetVal(this)">
-
-                    <option value="0" selected>请选择标签</option>
-                    <option value="1">生日</option>
-                    <option value="2">职业</option>
-                    <option value="3">性别</option>
-                    <option value="8">婚姻状况</option>
-                    <option value="9">政治面貌</option>
-                    <option value="4">购物周期</option>
-                    <option value="5">支付方式</option>
-                    <option value="6">消费能力</option>
-                    <option value="7">访问频率</option>
-
-                    <option value="10">购物周期</option>
-
-
-                </select>
-            </form>
     	</div>
     <table id="table"></table>
-</div>
-<!-- 新增 -->
-<div id="createDialog" class="crudDialog" hidden>
-    <form>
-        <div class="form-group">
-            <label for="input1">标题</label>
-            <input id="input1" type="text" class="form-control">
-        </div>
-        <div class="form-group">
-            <label for="input2">名称</label>
-            <input id="input2" type="text" class="form-control">
-        </div>
-        <div class="form-group">
-            <label for="input3">根目录</label>
-            <input id="input3" type="text" class="form-control">
-        </div>
-        <div class="form-group">
-            <label for="input4">图标</label>
-            <input id="input4" type="text" class="form-control">
-        </div>
-    </form>
 </div>
 <script src="resources/plugins/jquery.1.12.4.min.js"></script>
 <script src="resources/plugins/bootstrap-3.3.0/js/bootstrap.min.js"></script>
@@ -112,26 +35,32 @@
 <script>
 
 
+
+
+
+
+
     $.ajax({
-        url: 'http://192.168.101.184:8080/read_orders_info',
+        url: 'http://192.168.101.184:8080/read_by_label',
         type: 'POST',
         dataType : 'json',
         contentType : 'application/json',
         data: JSON.stringify({
-            memberid: '1',
-            // passWord: $('#password').val(),
-            // rememberMe: $('#rememberMe').is(':checked'),
-            // backurl: 'index.html'
+            birth: window.localStorage.getItem("birth"),
+            shopping_cycle: window.localStorage.getItem("shopping_cycle"),
+            gender: window.localStorage.getItem("gender"),
+            marriage: window.localStorage.getItem("marriage"),
+
+            //rememberMe: $('#rememberMe').is(':checked'),
+            //backurl: 'index.html'
         }),
 
         beforeSend: function() {
 
         },
         success: function(json){
-            window.localStorage.setItem("user_purchase_data", json);
+
             console.log(json);
-
-
 
             var $table = $('#table');
             $(function() {
@@ -175,18 +104,15 @@
                     toolbar: '#toolbar',
                     columns: [
                         //{field: 'state', checkbox: true},
-                        //{field: 'id', title: '编号', sortable: true, halign: 'center'},
-                        //{field: 'username', title: '账号', sortable: true, halign: 'center'},
-                        // {field: 'password', title: '密码', sortable: true, halign: 'center'},
-                        // {field: 'name', title: '姓名', sortable: false, halign: 'center'},
-                        // {field: 'sex', title: '性别', sortable: false, halign: 'center'},
-                        // {field: 'age', title: '年龄', sortable: false, halign: 'center'},
+                        {field: 'id', title: '编号', sortable: true, halign: 'center', align: 'center'},
+                        {field: 'user_name', title: '用户名', sortable: false, halign: 'center', align: 'center'},
+                        {field: 'gender', title: '性别', sortable: false, halign: 'center', align: 'center'},
+                        {field: 'age_class', title: '年龄段', sortable: false, halign: 'center', align: 'center'},
+                        {field: 'mobile', title: '手机', sortable: false, halign: 'center', align: 'center'},
+                        {field: 'constellation', title: '星座', sortable: false, halign: 'center', align: 'center'},
+                        {field: 'political_face', title: '政治面貌', sortable: false, halign: 'center', align: 'center'},
+                        {field: 'payment_way', title: '支付方式', sortable: false, halign: 'center', align: 'center'}
 
-                        // {field: 'pruchase_good', title: '购买商品', sortable: false, halign: 'center'},
-                        {field: 'shopping_time', title: '购买时间', sortable: true, halign: 'center', align: 'center'},
-                        {field: 'order_amount', title: '金额', sortable: true, halign: 'center', align: 'center'},
-
-                        // {field: 'phone', title: '手机', sortable: true, halign: 'center'},
                         // {field: 'address', title: '地址', sortable: true, halign: 'center'},
                         //{field: 'remark', title: '备注', sortable: true, halign: 'center'},
                         //{field: 'action', title: '操作', halign: 'center', align: 'center', formatter: 'actionFormatter', events: 'actionEvents', clickToSelect: false}
@@ -196,50 +122,23 @@
                     $('[data-toggle="popover"]').popover();
                 });
             });
-            // Tab.addTab('个人资料', 'profile_1.html');
-            // window.localStorage.setItem("user_name_1", json.user_name);
-            // window.localStorage.setItem("user_id", json.id);
-            // window.localStorage.setItem("user_e_mail", json.e_mail);
-            // window.localStorage.setItem("user_birthday", json.birthday);
-            // window.localStorage.setItem("user_mobile", json.mobile);
-            // window.localStorage.setItem("user_money", json.money);
-            // window.localStorage.setItem("user_money_pwd", json.money_pwd);
-            // window.localStorage.setItem("user_last_login_time", json.last_login_time);
-            // window.localStorage.setItem("user_register_time", json.register_time);
-            // window.localStorage.setItem("user_qq", json.qq);
-            // window.localStorage.setItem("user_job", json.job);
-            // window.localStorage.setItem("user_political_face", json.political_face);
-            // window.localStorage.setItem("user_age_class", json.age_class);
-            // window.localStorage.setItem("user_nationality", json.nationality);
-            // window.localStorage.setItem("user_marriage", json.marriage);
-            // window.localStorage.setItem("user_is_in_blacklist", json.is_in_blacklist);
-            // window.localStorage.setItem("user_constellation", json.constellation);
-            // window.localStorage.setItem("user_payment_way", json.payment_way);
-            // window.localStorage.setItem("user_ave_price", json.ave_price);
-            // window.localStorage.setItem("user_ave_price_range", json.ave_price_range);
-            // window.localStorage.setItem("user_order_count", json.order_count);
-            // window.localStorage.setItem("user_frequency", json.frequency);
-            // window.localStorage.setItem("user_register_time", json.register_time);
-            // window.localStorage.setItem("user_good_bought", json.good_bought);
+
+
+
         },
         error: function(error){
-            alert("错误！");
+            alert("查询失败");
         }
     });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    
+    // function search_multi() {
+    //     // document.getElementById("pid_1").options[index].text;
+    //     // document.getElementById("pid_2").options[index].text;
+    //     // document.getElementById("pid_3").options[index].text;
+    //     // document.getElementById("pid_4").options[index].text;
+    //
+    //
+    // }
     function actionFormatter(value, row, index) {
         return [
             '<a class="like" href="javascript:void(0)" data-toggle="tooltip" title="Like"><i class="glyphicon glyphicon-heart"></i></a>　',

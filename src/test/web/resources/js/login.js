@@ -77,6 +77,8 @@ function login() {
 			// window.localStorage.setItem("user_name", json.user_name);
 
 
+
+
 			location.href = "index.html";
 
 			//
@@ -100,5 +102,63 @@ function login() {
 			$('#password').focus();
 		}
 	});
+
+
+	$.ajax({
+		url: 'http://192.168.101.184:8080/read_top',
+		type: 'POST',
+		dataType : 'json',
+		contentType : 'application/json',
+		data: JSON.stringify({
+			id: window.localStorage.getItem("user_id"),
+			// passWord: $('#password').val(),
+			// rememberMe: $('#rememberMe').is(':checked'),
+			// backurl: 'index.html'
+		}),
+
+		beforeSend: function() {
+
+		},
+		success: function(json){
+			// console.log(json.top1);
+			// console.log(window.localStorage.getItem("user_name"));
+			//
+			// Tab.closeTab($('#tab_profile_1_html'));
+			//
+			// Tab.addTab('个人资料', 'profile_1.html');
+
+
+			window.localStorage.setItem("user_top_1", json[0].top1);
+			window.localStorage.setItem("user_top_2", json[0].top2);
+			// window.localStorage.setItem("user_name", json.user_name);
+			// window.localStorage.setItem("user_name", json.user_name);
+			// window.localStorage.setItem("user_name", json.user_name);
+			// window.localStorage.setItem("user_name", json.user_name);
+
+
+			//location.href = "index.html";
+
+			//
+			// if (json.code === 1) {
+			// 	location.href = "index.html";
+			// } else {
+			// 	alert(json.data);
+			// 	if (10101 === json.code) {
+			// 		$('#username').focus();
+			// 	}
+			// 	if (10102 === json.code) {
+			// 		$('#password').focus();
+			// 	}
+			// }
+		},
+		error: function(error){
+			alert("号码输入错误请重新输入");
+			$('#keywords').focus();
+		}
+	});
+
+
 }
+
+
 
