@@ -19,7 +19,7 @@
 
 
 </script>
-<div id="main" style="width: 1000px;height:800px;"></div>
+<div id="main" style="width: 800px;height:700px;"></div>
 <script type="text/javascript">
 
     window.onload(test())
@@ -35,7 +35,7 @@
 
     function test(){
         var ajax=new XMLHttpRequest();
-        var url='http://localhost:8080/shopping_cycle';
+        var url='http://192.168.101.184:8080/shopping_cycle';
         ajax.open('get',url,true);
         ajax.send();
         ajax.onreadystatechange=function (){
@@ -44,7 +44,6 @@
             chart(dat)
         }
     }
-
 
 
 
@@ -83,9 +82,10 @@
                         borderRadius: 8
                     },
                     data: [
-                        {value: dat.get('2周'), name: '两周'},
-                        {value: dat.get('2月'), name: '两月'},
-                        {value: dat.党员, name: '党员'},
+                        {value: dat[2].count, name: '两月'},
+                        {value: dat[1].count, name: '两周'},
+                        {value: dat[0].count, name: '一月'},
+                        {value: dat[3].count, name: '七天'},
                     ]
                 }
             ]
