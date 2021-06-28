@@ -61,28 +61,28 @@ object user_orders_info {
     val pay_way_df = basic_df
       .where('order_status === "202")
       .groupBy('member_id, 'payment_way)
-      .agg(count('payment_way) as "count")
+      .agg(count('payment_way).cast("string").as("count"))
       .withColumn("row_num", row_number() over Window.partitionBy('member_id).orderBy('count.desc))
       .where('row_num === 1)
       .drop("row_num", "count")
       .select('member_id, 'payment_way)
-    //    //pay_way_df.show(false)
-    //    //show的结果：
-    //    //+---------+-----------+-----+
-    //    //|member_id|payment_way|count|
-    //    //+---------+-----------+-----+
-    //    //|467      |支付宝     |59   |
-    //    //|675      |支付宝     |39   |
-    //    //|691      |支付宝     |47   |
-    //    //|125      |支付宝     |37   |
-    //
-    //    // 2.
-    //    // 得到用户的消费周期，确定周期范围，保留周期
+    //pay_way_df.show(false)
+    //show的结果：
+    //+---------+-----------+-----+
+    //|member_id|payment_way|count|
+    //+---------+-----------+-----+
+    //|467      |支付宝     |59   |
+    //|675      |支付宝     |39   |
+    //|691      |支付宝     |47   |
+    //|125      |支付宝     |37   |
+
+    // 2.
+    // 得到用户的消费周期，确定周期范围，保留周期
     val cycle_result_df = basic_df.withColumn("modified", to_timestamp('modified))
       //订单状态 202 成功
       .where('order_status === "202")
       .groupBy('member_id)
-      .agg(min('modified) as "start_time_0", min('id) as "id", max('modified) as "end_time_0", count('member_id) as "order_count", countDistinct(dayofyear('modified)) as "day")
+      .agg(min('modified) as "start_time_0", min('id) as "id", max('modified) as "end_time_0", count('member_id).cast("string") as "order_count", countDistinct(dayofyear('modified)) as "day")
       .select('id, 'member_id, 'day, (datediff('end_time_0, 'start_time_0) + 1).as("consumption"))
       .withColumn("cycle", 'consumption / 'day)
       .select('id, 'cycle, 'member_id, when('cycle < "7", "7日")
@@ -95,23 +95,23 @@ object user_orders_info {
         .when('cycle between(150, 180), "6月")
         .otherwise("六月以上")
         .as("shopping_cycle")).drop("cycle")
-    //
-    //    //cycle_result_df.show(false)
-    //    //show
-    ////    +-----+---------+--------------+
-    ////    |id   |member_id|shopping_cycle|
-    ////    +-----+---------+--------------+
-    ////    |1635 |467      |7日           |
-    ////    |3990 |691      |2周           |
-    ////    |2355 |675      |1月           |
-    //
-    //
-    //    // 3
-    //    //按照用户计算出：每个用户平均单价
+
+    //cycle_result_df.show(false)
+    //show
+    //    +-----+---------+--------------+
+    //    |id   |member_id|shopping_cycle|
+    //    +-----+---------+--------------+
+    //    |1635 |467      |7日           |
+    //    |3990 |691      |2周           |
+    //    |2355 |675      |1月           |
+
+
+    // 3
+    //按照用户计算出：每个用户平均单价
     val user_ave_price_df = basic_df
       .where('order_status === "202")
       .groupBy('member_id)
-      .agg(avg('order_amount) as "ave_price")
+      .agg(avg('order_amount).cast("string").as("ave_price"))
       .select('ave_price, 'member_id, when('ave_price between(1, 499), "1-499")
         .when('ave_price between(500, 999), "500-999")
         .when('ave_price between(1000, 2999), "1000-2999")
@@ -119,13 +119,13 @@ object user_orders_info {
         .when('ave_price between(5000, 9999), "5000-9999")
         .as("ave_price_range")
       ).drop("order_amount")
-    //    user_ave_price_df.show(false)
-    //    //show
-    //    //+------------------+---------+---------------+
-    //    //|ave_price         |member_id|ave_price_range|
-    //    //+------------------+---------+--------------+
-    //    //|1782.9028767123289|467      |1000-2999     |
-    //    //|1797.3695652173913|675      |1000-2999     |
+    //user_ave_price_df.show(false)
+    //show
+    //+------------------+---------+---------------+
+    //|ave_price         |member_id|ave_price_range|
+    //+------------------+---------+--------------+
+    //|1782.9028767123289|467      |1000-2999     |
+    //|1797.3695652173913|675      |1000-2999     |
 
 
     // 4
@@ -133,7 +133,7 @@ object user_orders_info {
     val order_highest_df = basic_df
       .where('order_status === "202")
       .groupBy('member_id)
-      .agg(max('order_amount) as "order_highest")
+      .agg(max('order_amount).cast("string") as "order_highest")
       .select('order_highest, 'member_id,
         when('order_highest between(1, 499), "1-499")
           .when('order_highest between(500, 999), "500-999")
@@ -158,12 +158,13 @@ object user_orders_info {
       .where('order_status === "202")
       .groupBy('member_id)
       .agg(min('modified) as "start_time", max('modified) as "end_time", count('member_id) as "order_count")
-      .select('member_id, 'order_count, (datediff('end_time, 'start_time) + 1).as("consumption"))
-      .withColumn("frequency", 'order_count / 'consumption)
+      .select('member_id, 'order_count, (datediff('end_time, 'start_time) + 1).cast("string").as("consumption"))
+      .withColumn("frequency", ('order_count / 'consumption).cast("string"))
       .select('frequency, 'member_id, 'consumption, 'order_count, when('frequency > "1.0", "高")
         .when('frequency between(0.6, 1.0), "中")
         .when('frequency < "0.6", "低")
         .as("frequency_range(高,中,低)"))
+      .drop('order_count)
     //    frequency_df.show(false)
     //show的结果：
     //+-------------------+---------+-----------+-----------+---------------+
@@ -184,8 +185,8 @@ object user_orders_info {
         sum(when('order_status === "1", 1).otherwise(0)) as "exchange_item",
         sum(when('order_status === "0", 1).otherwise(0)) as "return_item")
       .select('member_id, 'order_count, 'exchange_item, 'return_item)
-      .withColumn("exchange_item_rate", 'exchange_item / 'order_count)
-      .withColumn("return_item_rate", 'return_item / 'order_count)
+      .withColumn("exchange_item_rate", ('exchange_item / 'order_count).cast("string"))
+      .withColumn("return_item_rate", ('return_item / 'order_count).cast("string"))
       .select('exchange_item_rate, 'return_item_rate, 'member_id, when('exchange_item_rate > "0.05", "高")
         .when('exchange_item_rate between(0.01, 0.05), "中")
         .when('exchange_item_rate < "0.01", "低")
@@ -194,7 +195,7 @@ object user_orders_info {
           .when('return_item_rate between(0.01, 0.03), "中")
           .when('return_item_rate < "0.03", "低")
           .as("return_item_rate(高,中,低)")
-      )
+      ).drop('order_count)
     //ret_or_exc_df.show(false)
     //.drop("换货率", "退货率")
     //show的结果：
@@ -229,9 +230,7 @@ object user_orders_info {
     //|支付宝     |2355 |675      |1月           |1797.3695652173913|1000-2999      |998.00       |1-999              |0.9387755102040817 |49         |46         |低                       |0.0               |0.004149377593360996|低                          |低                        |
     //|支付宝     |3990 |691      |2周           |1994.7226785714286|1000-2999      |99.00        |1-999              |0.8115942028985508 |69         |56         |低                       |0.0               |0.0                 |低                          |低                        |
 
-    //double数据类型
-    //ave_price , order_highest, frequency ,exchange_item_rate, return_item_rate
-    def orders_info_write_catalog=
+    def orders_info_write_catalog =
       s"""{
          |"table":{"namespace":"default", "name":"user_orders_info"},
          |"rowkey":"id",
@@ -240,15 +239,15 @@ object user_orders_info {
          |"member_id":{"cf":"cf", "col":"member_id", "type":"string"},
          |"payment_way":{"cf":"cf", "col":"payment_way", "type":"string"},
          |"shopping_cycle":{"cf":"cf", "col":"shopping_cycle", "type":"string"},
-         |"ave_price":{"cf":"cf", "col":"ave_price", "type":"double"},
+         |"ave_price":{"cf":"cf", "col":"ave_price", "type":"string"},
          |"ave_price_range":{"cf":"cf", "col":"ave_price_range", "type":"string"},
-         |"order_count":{"cf":"cf", "col":"order_count","type":"long"},
-         |"order_highest":{"cf":"cf", "col":"order_highest", "type":"double"},
+         |"order_count":{"cf":"cf", "col":"order_count","type":"string"},
+         |"order_highest":{"cf":"cf", "col":"order_highest", "type":"string"},
          |"order_highest_range":{"cf":"cf", "col":"order_highest_range", "type":"string"},
-         |"frequency":{"cf":"cf", "col":"frequency", "type":"double"},
+         |"frequency":{"cf":"cf", "col":"frequency", "type":"string"},
          |"frequency_range(高,中,低)":{"cf":"cf", "col":"frequency_range(高,中,低)", "type":"string"},
-         |"exchange_item_rate":{"cf":"cf", "col":"exchange_item_rate", "type":"double"},
-         |"return_item_rate":{"cf":"cf", "col":"return_item_rate", "type":"double"},
+         |"exchange_item_rate":{"cf":"cf", "col":"exchange_item_rate", "type":"string"},
+         |"return_item_rate":{"cf":"cf", "col":"return_item_rate", "type":"string"},
          |"exchange_item_rate(高,中,低)":{"cf":"cf", "col":"exchange_item_rate(高,中,低)", "type":"string"},
          |"return_item_rate(高,中,低)":{"cf":"cf", "col":"return_item_rate(高,中,低)", "type":"string"},
          |"consumption":{"cf":"cf", "col":"consumption", "type":"string"}
@@ -260,8 +259,6 @@ object user_orders_info {
       .option(HBaseTableCatalog.newTable, "5")
       .format("org.apache.spark.sql.execution.datasources.hbase")
       .save()
-
-
   }
 
 
