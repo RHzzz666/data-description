@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>consumption_ablity</title>
+    <!-- 引入 echarts.js -->
+    <script src="resources/js/echarts.min.js"></script>
+    <script src="resources/js/walden.js"></script>
+    <script src="resources/js/roma.js"></script>
+    <script src="resources/js/macarons.js"></script>
+    <script src="resources/js/infographic.js"></script>
+</head>
+<body>
+<!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+
+
+<script>
+
+
+
+</script>
+<div id="main" style="width: 1000px;height:800px;"></div>
+<script type="text/javascript">
+
+    window.onload(test())
+
+    function jsonx(data){
+        var temp = JSON.parse(data)
+        return temp
+    }
+
+
+
+
+
+    function test(){
+        var ajax=new XMLHttpRequest();
+        var url='http://localhost:8080/consumption_ablity';
+        ajax.open('get',url,true);
+        ajax.send();
+        ajax.onreadystatechange=function (){
+            console.log(ajax.responseText);
+            var dat = jsonx(ajax.responseText);
+            chart(dat)
+        }
+    }
+
+
+
+
+    function chart(dat) {
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('main'), 'westeros');
+
+
+
+
+        var option = {
+            title : {
+                text: '消费能力',
+                x:'center'
+            },
+            legend: {
+                top: 'bottom'
+            },
+            toolbox: {
+                show: true,
+                feature: {
+                    mark: {show: true},
+                    dataView: {show: true, readOnly: false},
+                    restore: {show: true},
+                    saveAsImage: {show: true}
+                }
+            },
+            series: [
+                {
+                    name: '面积模式',
+                    type: 'pie',
+                    radius: [50, 250],
+                    center: ['50%', '50%'],
+                    roseType: 'area',
+                    itemStyle: {
+                        borderRadius: 8
+                    },
+                    data: [
+                        {value: dat.很高, name: '很高'},
+                        {value: dat.高, name: '高'},
+                        {value: dat.中, name: '中'},
+                        {value: dat.中下, name: '中下'},
+                        {value: dat.低, name: '低'},
+                    ]
+                }
+            ]
+        };
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+
+    }
+
+</script>
+</body>
+</html>

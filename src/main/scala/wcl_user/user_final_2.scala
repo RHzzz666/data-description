@@ -68,7 +68,7 @@ object user_final_2 {
 
     def consumption_ablity_write=
       s"""{
-         |  "table":{"namespace":"default", "name":"user_class"},
+         |  "table":{"namespace":"default", "name":"user_class_1"},
          |  "rowkey":"id",
          |  "columns":{
          |    "id":{"cf":"rowkey", "col":"id", "type":"long"},
@@ -76,6 +76,17 @@ object user_final_2 {
          |    "consumption_ablity":{"cf":"cf", "col":"consumptionAblity", "type":"string"}
          |  }
          |}""".stripMargin
+
+    def discount_write=
+      s"""{
+         |  "table":{"namespace":"default", "name":"user_class"},
+         |  "rowkey":"id",
+         |  "columns":{
+         |    "id":{"cf":"rowkey", "col":"id", "type":"long"},
+         |    "predict":{"cf":"cf", "col":"predict", "type":"string"}
+         |  }
+         |}""".stripMargin
+
 
     val spark = SparkSession.builder()
       .appName("behavior_record")
@@ -91,13 +102,22 @@ object user_final_2 {
       .option(HBaseTableCatalog.tableCatalog, consumption_ablity_write)
       .format("org.apache.spark.sql.execution.datasources.hbase")
       .load()
+
+    val discount: DataFrame = spark.read
+      .option(HBaseTableCatalog.tableCatalog, discount_write)
+      .format("org.apache.spark.sql.execution.datasources.hbase")
+      .load()
+
     //consumption_ablity_df.show(false)
     //合并代码
     val res = user_final_df.join(consumption_ablity_df,user_final_df.col("id")===consumption_ablity_df.col("id").cast("string"))
       .drop(consumption_ablity_df.col("id"))
       .drop(consumption_ablity_df.col("user_name"))
 
-    res.show(false)
+    val res1 =res.join(discount,res.col("id")===discount.col("id"))
+      .drop(discount.col("id"))
+      res1.show(false)
+    /*
     def user_final_2 =
       s"""{
          |"table":{"namespace":"default","name":"user_final_2nd"},
@@ -155,15 +175,16 @@ object user_final_2 {
          |"count_log":{"cf":"cf", "col":"count_log", "type":"string"},
          |"log_time_arrange":{"cf":"cf", "col":"log_time_arrange", "type":"string"},
          |
-         |"consumption_ablity":{"cf":"cf", "col":"consumption_ablity", "type":"string"}
+         |"consumption_ablity":{"cf":"cf", "col":"consumption_ablity", "type":"string"},
+         |"discount":{"cf":"cf", "col":"predict", "type":"string"}
          |}
          |}""".stripMargin
 
-    res.write
+    res1.write
       .option(HBaseTableCatalog.tableCatalog, user_final_2)
       .option(HBaseTableCatalog.newTable, "5")
       .format("org.apache.spark.sql.execution.datasources.hbase")
       .save()
-
+*/
   }
 }

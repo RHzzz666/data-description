@@ -6,6 +6,9 @@
     <!-- 引入 echarts.js -->
     <script src="resources/js/echarts.min.js"></script>
     <script src="resources/js/walden.js"></script>
+    <script src="resources/js/roma.js"></script>
+    <script src="resources/js/macarons.js"></script>
+    <script src="resources/js/infographic.js"></script>
 </head>
 <body>
 <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
@@ -32,7 +35,7 @@
 
     function test(){
         var ajax=new XMLHttpRequest();
-        var url='http://192.168.101.173:8080/birth_payment_way';
+        var url='http://192.168.101.173:8080/birth_shopping_cycle';
         ajax.open('get',url,true);
         ajax.send();
         ajax.onreadystatechange=function (){
