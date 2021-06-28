@@ -6,6 +6,9 @@
     <!-- 引入 echarts.js -->
     <script src="resources/js/echarts.min.js"></script>
     <script src="resources/js/walden.js"></script>
+    <script src="resources/js/roma.js"></script>
+    <script src="resources/js/macarons.js"></script>
+    <script src="resources/js/infographic.js"></script>
 </head>
 <body>
 <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
@@ -16,14 +19,14 @@
 
 
 </script>
-<div id="main" style="width: 1000px;height:800px;"></div>
+<div id="main" style="width: 600px;height:400px;"></div>
 <script type="text/javascript">
 
-    window.onload(test())
+    window.onload(test());
 
     function jsonx(data){
-        var temp = JSON.parse(data)
-        return temp
+        var temp = JSON.parse(data);
+        return temp;
     }
 
 
@@ -32,7 +35,7 @@
 
     function test(){
         var ajax=new XMLHttpRequest();
-        var url='http://192.168.101.173:8080/birth_payment_way';
+        var url='http://192.168.101.184:8080/birth_payment_way';
         ajax.open('get',url,true);
         ajax.send();
         ajax.onreadystatechange=function (){
@@ -47,7 +50,7 @@
 
     function chart(dat) {
         // 基于准备好的dom，初始化echarts实例
-        var myChart = echarts.init(document.getElementById('main'), 'walden');
+        var myChart = echarts.init(document.getElementById('main'), 'macarons');
 
 
         var app = {};
@@ -141,7 +144,7 @@
                 }
             },
             legend: {
-                data: ['海尔', '统帅', '小超人', '摩卡']
+                data: ['快捷通', '支付宝', '货到付款', '银联支付']
             },
             toolbox: {
                 show: true,
@@ -170,41 +173,41 @@
             ],
             series: [
                 {
-                    name: '海尔',
+                    name: '快捷通',
                     type: 'bar',
                     barGap: 0,
                     label: labelOption,
                     emphasis: {
                         focus: 'series'
                     },
-                    data: [dat[5].brand_preference_count, dat[6].brand_preference_count, dat[7].brand_preference_count, 0]
+                    data: [dat[1].payment_way_count, dat[2].payment_way_count, dat[3].payment_way_count, dat[0].payment_way_count]
                 },
                 {
-                    name: '统帅',
+                    name: '支付宝',
                     type: 'bar',
                     label: labelOption,
                     emphasis: {
                         focus: 'series'
                     },
-                    data: [dat[9].brand_preference_count, dat[10].brand_preference_count, dat[11].brand_preference_count, dat[8].brand_preference_count]
+                    data: [dat[5].payment_way_count, dat[6].payment_way_count, dat[7].payment_way_count, dat[4].payment_way_count]
                 },
                 {
-                    name: '小超人',
+                    name: '货到付款',
                     type: 'bar',
                     label: labelOption,
                     emphasis: {
                         focus: 'series'
                     },
-                    data: [dat[0].brand_preference_count, dat[1].brand_preference_count, dat[2].brand_preference_count, 0]
+                    data: [dat[9].payment_way_count, dat[10].payment_way_count, dat[11].payment_way_count, dat[8].payment_way_count]
                 },
                 {
-                    name: '摩卡',
+                    name: '银联支付',
                     type: 'bar',
                     label: labelOption,
                     emphasis: {
                         focus: 'series'
                     },
-                    data: [0, dat[3].brand_preference_count, 0, 0, 0]
+                    data: [dat[12].payment_way_count, 0, 0, 0]
                 }
             ]
         };

@@ -31,7 +31,7 @@
 
     function test(){
         var ajax=new XMLHttpRequest();
-        var url='http://192.168.101.173:8080/gender';
+        var url='http://192.168.101.184:8080/gender';
         ajax.open('get',url,true);
         ajax.send();
         ajax.onreadystatechange=function (){
@@ -76,8 +76,8 @@
                     radius : '55%',
                     center: ['50%', '60%'],
                     data:[
-                        {value:dat.男, name:'男生',},
-                        {value:dat.女, name:'女生'},
+                        {value:dat[1].count, name:'男生',},
+                        {value:dat[0].count, name:'女生'},
                     ],
                     itemStyle: {
                         emphasis: {

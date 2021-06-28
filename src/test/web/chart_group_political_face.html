@@ -19,7 +19,7 @@
 
 
 </script>
-<div id="main" style="width: 1000px;height:800px;"></div>
+<div id="main" style="width: 600px;height:400px;"></div>
 <script type="text/javascript">
 
     window.onload(test())
@@ -35,7 +35,7 @@
 
     function test(){
         var ajax=new XMLHttpRequest();
-        var url='http://localhost:8080/political_face';
+        var url='http://192.168.101.184:8080/political_face';
         ajax.open('get',url,true);
         ajax.send();
         ajax.onreadystatechange=function (){
@@ -76,16 +76,16 @@
                 {
                     name: '面积模式',
                     type: 'pie',
-                    radius: [50, 250],
+                    radius: [10, 150],
                     center: ['50%', '50%'],
                     roseType: 'area',
                     itemStyle: {
                         borderRadius: 8
                     },
                     data: [
-                        {value: dat.群众, name: '群众'},
-                        {value: dat.无党派人士, name: '无党派人士'},
-                        {value: dat.党员, name: '党员'},
+                        {value: dat[2].count, name: '群众'},
+                        {value: dat[1].count, name: '无党派人士'},
+                        {value: dat[0].count, name: '党员'},
                     ]
                 }
             ]

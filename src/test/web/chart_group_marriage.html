@@ -19,7 +19,7 @@
 
 
 </script>
-<div id="main" style="width: 1000px;height:800px;"></div>
+<div id="main" style="width: 600px;height:400px;"></div>
 <script type="text/javascript">
 
     window.onload(test())
@@ -35,7 +35,7 @@
 
     function test(){
         var ajax=new XMLHttpRequest();
-        var url='http://localhost:8080/marriage';
+        var url='http://192.168.101.184:8080/marriage';
         ajax.open('get',url,true);
         ajax.send();
         ajax.onreadystatechange=function (){
@@ -76,16 +76,16 @@
                 {
                     name: '面积模式',
                     type: 'pie',
-                    radius: [50, 250],
+                    radius: [10, 150],
                     center: ['50%', '50%'],
                     roseType: 'area',
                     itemStyle: {
                         borderRadius: 8
                     },
                     data: [
-                        {value: dat.已婚, name: '已婚'},
-                        {value: dat.离异, name: '离异'},
-                        {value: dat.未婚, name: '未婚'},
+                        {value: dat[0].count, name: '已婚'},
+                        {value: dat[2].count, name: '离异'},
+                        {value: dat[1].count, name: '未婚'},
                     ]
                 }
             ]

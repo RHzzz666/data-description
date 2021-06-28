@@ -19,7 +19,7 @@
 
 
 </script>
-<div id="main" style="width: 1000px;height:800px;"></div>
+<div id="main" style="width: 600px;height:400px;"></div>
 <script type="text/javascript">
 
     window.onload(test())
@@ -35,7 +35,7 @@
 
     function test(){
         var ajax=new XMLHttpRequest();
-        var url='http://192.168.101.173:8080/birth_shopping_cycle';
+        var url='http://192.168.101.184:8080/birth_shopping_cycle';
         ajax.open('get',url,true);
         ajax.send();
         ajax.onreadystatechange=function (){
@@ -144,7 +144,7 @@
                 }
             },
             legend: {
-                data: ['海尔', '统帅', '小超人', '摩卡']
+                data: ['1月', '2周', '2月', '7日']
             },
             toolbox: {
                 show: true,
@@ -173,41 +173,41 @@
             ],
             series: [
                 {
-                    name: '海尔',
+                    name: '1月',
                     type: 'bar',
                     barGap: 0,
                     label: labelOption,
                     emphasis: {
                         focus: 'series'
                     },
-                    data: [dat[5].brand_preference_count, dat[6].brand_preference_count, dat[7].brand_preference_count, 0]
+                    data: [dat[1].shopping_cycle_count, dat[2].shopping_cycle_count, dat[3].shopping_cycle_count, dat[0].shopping_cycle_count]
                 },
                 {
-                    name: '统帅',
+                    name: '2周',
                     type: 'bar',
                     label: labelOption,
                     emphasis: {
                         focus: 'series'
                     },
-                    data: [dat[9].brand_preference_count, dat[10].brand_preference_count, dat[11].brand_preference_count, dat[8].brand_preference_count]
+                    data: [dat[5].shopping_cycle_count, dat[6].shopping_cycle_count, dat[7].shopping_cycle_count, dat[4].shopping_cycle_count]
                 },
                 {
-                    name: '小超人',
+                    name: '2月',
                     type: 'bar',
                     label: labelOption,
                     emphasis: {
                         focus: 'series'
                     },
-                    data: [dat[0].brand_preference_count, dat[1].brand_preference_count, dat[2].brand_preference_count, 0]
+                    data: [dat[8].shopping_cycle_count, dat[9].shopping_cycle_count, dat[10].shopping_cycle_count, 0]
                 },
                 {
-                    name: '摩卡',
+                    name: '7日',
                     type: 'bar',
                     label: labelOption,
                     emphasis: {
                         focus: 'series'
                     },
-                    data: [0, dat[3].brand_preference_count, 0, 0, 0]
+                    data: [dat[12].shopping_cycle_count, dat[13].shopping_cycle_count, dat[14].shopping_cycle_count, dat[11].shopping_cycle_count]
                 }
             ]
         };

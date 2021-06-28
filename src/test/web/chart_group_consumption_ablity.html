@@ -9,6 +9,7 @@
     <script src="resources/js/roma.js"></script>
     <script src="resources/js/macarons.js"></script>
     <script src="resources/js/infographic.js"></script>
+    <script src="resources/js/westeros.js"></script>
 </head>
 <body>
 <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
@@ -19,7 +20,7 @@
 
 
 </script>
-<div id="main" style="width: 1000px;height:800px;"></div>
+<div id="main" style="width: 600px;height:400px;"></div>
 <script type="text/javascript">
 
     window.onload(test())
@@ -35,7 +36,7 @@
 
     function test(){
         var ajax=new XMLHttpRequest();
-        var url='http://localhost:8080/consumption_ablity';
+        var url='http://192.168.101.184:8080/consumption_ablity';
         ajax.open('get',url,true);
         ajax.send();
         ajax.onreadystatechange=function (){
@@ -76,18 +77,18 @@
                 {
                     name: '面积模式',
                     type: 'pie',
-                    radius: [50, 250],
+                    radius: [10, 150],
                     center: ['50%', '50%'],
                     roseType: 'area',
                     itemStyle: {
                         borderRadius: 8
                     },
                     data: [
-                        {value: dat.很高, name: '很高'},
-                        {value: dat.高, name: '高'},
-                        {value: dat.中, name: '中'},
-                        {value: dat.中下, name: '中下'},
-                        {value: dat.低, name: '低'},
+                        {value: dat[3].count, name: '很高'},
+                        {value: dat[4].count, name: '高'},
+                        {value: dat[0].count, name: '中'},
+                        {value: dat[1].count, name: '中下'},
+                        {value: dat[2].count, name: '低'},
                     ]
                 }
             ]

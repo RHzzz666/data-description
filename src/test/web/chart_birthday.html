@@ -5,6 +5,7 @@
     <title>ECharts</title>
     <!-- 引入 echarts.js -->
     <script src="resources/js/echarts.min.js"></script>
+    <script src="resources/js/walden.js"></script>
 </head>
 <body>
 <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
@@ -31,7 +32,7 @@
 
     function test(){
         var ajax=new XMLHttpRequest();
-        var url='http://192.168.101.173:8080/birth';
+        var url='http://192.168.101.184:8080/birth';
         ajax.open('get',url,true);
         ajax.send();
         ajax.onreadystatechange=function (){
@@ -46,7 +47,7 @@
 
     function chart(dat) {
         // 基于准备好的dom，初始化echarts实例
-        var myChart = echarts.init(document.getElementById('main'));
+        var myChart = echarts.init(document.getElementById('main'), 'walden');
 
 
 
@@ -76,10 +77,10 @@
                     radius : '55%',
                     center: ['50%', '60%'],
                     data:[
-                        {value:dat.七零后, name:'70后',},
-                        {value:dat.八零后, name:'80后'},
-                        {value:dat.九零后, name:'90后'},
-                        {value:dat.零零后, name:'00后'},
+                        {value:dat[0].count, name:'70后',},
+                        {value:dat[2].count, name:'80后'},
+                        {value:dat[1].count, name:'90后'},
+                        {value:dat[3].count, name:'00后'},
 
                     ],
                     itemStyle: {

@@ -5,6 +5,10 @@
     <title>ECharts</title>
     <!-- 引入 echarts.js -->
     <script src="resources/js/echarts.min.js"></script>
+    <script src="resources/js/walden.js"></script>
+    <script src="resources/js/roma.js"></script>
+    <script src="resources/js/macarons.js"></script>
+    <script src="resources/js/infographic.js"></script>
 </head>
 <body>
 <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
@@ -15,7 +19,7 @@
 
 
 </script>
-<div id="main" style="width: 600px;height:400px;"></div>
+<div id="main" style="width: 800px;height:600px;"></div>
 <script type="text/javascript">
 
     window.onload(test())
@@ -31,7 +35,7 @@
 
     function test(){
         var ajax=new XMLHttpRequest();
-        var url='http://192.168.101.173:8080/job';
+        var url='http://192.168.101.184:8080/job';
         ajax.open('get',url,true);
         ajax.send();
         ajax.onreadystatechange=function (){
@@ -46,7 +50,7 @@
 
     function chart(dat) {
         // 基于准备好的dom，初始化echarts实例
-        var myChart = echarts.init(document.getElementById('main'));
+        var myChart = echarts.init(document.getElementById('main'), 'macarons');
 
 
 
@@ -76,12 +80,12 @@
                     radius : '55%',
                     center: ['50%', '60%'],
                     data:[
-                        {value:dat.学生, name:'学生',},
-                        {value:dat.教师, name:'教师'},
-                        {value:dat.军人, name:'军人'},
-                        {value:dat.白领, name:'白领'},
-                        {value:dat.公务员, name:'公务员'},
-                        {value:dat.警察, name:'警察'},
+                        {value:dat[2].count, name:'学生',},
+                        {value:dat[3].count, name:'教师'},
+                        {value:dat[4].count, name:'军人'},
+                        {value:dat[1].count, name:'白领'},
+                        {value:dat[0].count, name:'公务员'},
+                        {value:dat[5].count, name:'警察'},
                     ],
                     itemStyle: {
                         emphasis: {

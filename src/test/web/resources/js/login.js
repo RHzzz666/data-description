@@ -27,14 +27,14 @@ $(function() {
 
 function login() {
 	$.ajax({
-		url: 'http://192.168.101.173:8080/login',
+		url: 'http://192.168.101.184:8080/login',
 		type: 'POST',
 		dataType : 'json',
 		contentType : 'application/json',
 		data: JSON.stringify({
 			userName: $('#username').val(),
 			passWord: $('#password').val(),
-			rememberMe: $('#rememberMe').is(':checked'),
+			//rememberMe: $('#rememberMe').is(':checked'),
 			backurl: 'index.html'
 		}),
 
@@ -42,8 +42,9 @@ function login() {
 
 		},
 		success: function(json){
-			//console.log(json.user_name);
+
 			window.localStorage.setItem("user_name", json.user_name);
+			window.localStorage.setItem("user_name_1", json.user_name);
 			window.localStorage.setItem("user_id", json.id);
 			window.localStorage.setItem("user_e_mail", json.e_mail);
 			window.localStorage.setItem("user_birthday", json.birthday);
@@ -68,8 +69,8 @@ function login() {
 			window.localStorage.setItem("user_register_time", json.register_time);
             window.localStorage.setItem("user_good_bought", json.good_bought);
 
-			// window.localStorage.setItem("user_name", json.user_name);
-			// window.localStorage.setItem("user_name", json.user_name);
+			window.localStorage.setItem("user_ability", json.消费能力);
+			window.localStorage.setItem("user_discount", json.消费优惠券依赖度);
 			// window.localStorage.setItem("user_name", json.user_name);
 			// window.localStorage.setItem("user_name", json.user_name);
 			// window.localStorage.setItem("user_name", json.user_name);

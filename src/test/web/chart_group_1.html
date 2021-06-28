@@ -16,7 +16,7 @@
 
 
 </script>
-<div id="main" style="width: 1000px;height:800px;"></div>
+<div id="main" style="width: 600px;height:400px;"></div>
 <script type="text/javascript">
 
     window.onload(test())
@@ -32,7 +32,7 @@
 
     function test(){
         var ajax=new XMLHttpRequest();
-        var url='http://192.168.101.173:8080/birth_brand_preference';
+        var url='http://192.168.101.184:8080/birth_brand_preference';
         ajax.open('get',url,true);
         ajax.send();
         ajax.onreadystatechange=function (){
@@ -134,6 +134,7 @@
 
 
         var option = {
+
             tooltip: {
                 trigger: 'axis',
                 axisPointer: {

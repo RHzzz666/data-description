@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>可视化数据</title>
+    <title>多值查询</title>
     <script src="resources/plugins/jquery.1.12.4.min.js"></script>
     <script src="resources/plugins/bootstrap-3.3.0/js/bootstrap.min.js"></script>
     <script src="resources/plugins/waves-0.7.5/waves.min.js"></script>
@@ -48,42 +48,7 @@
         //代表的是选中项的text
         var txt = obj.options[index].text;
 
-        if(txt === '生日'){
-            var page = document.getElementById('diagram');
-            page.src = "chart_birthday.html";
-        }
-        if(txt === '职业'){
-            var page = document.getElementById('diagram');
-            page.src = "chart_job.html";
-        }
-        if(txt === '性别'){
-            var page = document.getElementById('diagram');
-            page.src = "chart.html";
-        }
-        if(txt === '购物周期'){
-            var page = document.getElementById('diagram');
-            page.src = "chart_group_birth_shopping_cycle.html";
-        }
-        if(txt === '支付方式'){
-            var page = document.getElementById('diagram');
-            page.src = "chart_group_birth_payment_way.html";
-        }
-        if(txt === '消费能力'){
-            var page = document.getElementById('diagram');
-            page.src = "chart_group_consumption_ablity.html";
-        }
-        if(txt === '访问频率'){
-            var page = document.getElementById('diagram');
-            page.src = "chart_group_log_frequency.html";
-        }
-        if(txt === '婚姻状况'){
-            var page = document.getElementById('diagram');
-            page.src = "chart_group_marriage.html";
-        }
-        if(txt === '政治面貌'){
-            var page = document.getElementById('diagram');
-            page.src = "chart_group_political_face.html";
-        }
+
     }
 </script>
 
@@ -93,21 +58,18 @@
 
 <form method="post" class="" style="margin: 20px">
     <select id = "pid" class="shortselect" onchange="GetVal(this)">
+        <optgroup label="用户自身信息">
+            <option value="0" selected>请选择标签</option>
+            <option value="1">生日</option>
+            <option value="2">职业</option>
+            <option value="3">性别</option>
 
-        <option value="0" selected>请选择标签</option>
-        <option value="1">生日</option>
-        <option value="2">职业</option>
-        <option value="3">性别</option>
-        <option value="8">婚姻状况</option>
-        <option value="9">政治面貌</option>
-        <option value="4">购物周期</option>
-        <option value="5">支付方式</option>
-        <option value="6">消费能力</option>
-        <option value="7">访问频率</option>
-
-        <option value="10">购物周期</option>
-
-
+        </optgroup>
+        <optgroup label="用户画像信息">
+            <option value="1">Judy</option>
+            <option value="2">Kate</option>
+            <option value="2">John</option>
+        </optgroup>
     </select>
 </form>
 
