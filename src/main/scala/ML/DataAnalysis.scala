@@ -208,7 +208,7 @@ object DataAnalysis {
 
 //    linkSource.show(false)
 
-    val userClassTable=linkSource.join(predicted,
+    val userClassTable1=linkSource.join(predicted,
       linkSource.col("id")===predicted.col("Id"))
       .drop(predicted.col("Id"))
       .drop('rencency)
@@ -216,7 +216,7 @@ object DataAnalysis {
       .drop('sumAmount)
       .drop('featureAmount)
       .withColumnRenamed("predict","class")
-    val userClassTableResult = userClassTable.select('id,'username,
+    val userClassTableResult1 = userClassTable1.select('id,'username,
       when('class === "0", "很低")
         .when('class === "1", "低")
         .when('class === "2", "中下")
@@ -239,7 +239,7 @@ object DataAnalysis {
          |    "consumptionAblity":{"cf":"cf", "col":"consumptionAblity", "type":"string"}
          |  }
          |}""".stripMargin
-    userClassTableResult.write
+    userClassTableResult1.write
       .option(HBaseTableCatalog.tableCatalog, consumptionAblityWrite)
       .option(HBaseTableCatalog.newTable, "5")
       .format("org.apache.spark.sql.execution.datasources.hbase")
@@ -336,10 +336,7 @@ object DataAnalysis {
 
     val resultDISCOUNT=pre3.groupBy('Id,'VeryHighRate,'HighRate,'MiddleHighRate,'MiddleRate,'LowRate)
       .agg(countVeryHigh,countHigh,countMiddleHigh,countMiddleAddict,countLowAddict)
-    //2.为RFM打分
-    //R: 1-3天=5分，4-6天=4分，7-9天=3分，10-15天=2分，大于16天=1分
-    //F: ≥200=5分，150-199=4分，100-149=3分，50-99=2分，1-49=1分
-    //M: ≥20w=5分，10-19w=4分，5-9w=3分，1-4w=2分，<1w=1分
+
     val veryHighScore: Column = functions.when((col(veryHigh) >= 0.004), 5)
       .when((col(veryHigh) >= 0.003) && (col(veryHigh) <0.004), 4)
       .when((col(veryHigh) >= 0.002) && (col(veryHigh) <0.003), 3)
@@ -509,7 +506,7 @@ object DataAnalysis {
       .option(HBaseTableCatalog.newTable, "5")
       .format("org.apache.spark.sql.execution.datasources.hbase")
       .save()
-
+//
     def peopleInfoRead=
       s"""{
          |  "table":{"namespace":"default", "name":"people_class"},
@@ -559,6 +556,7 @@ object DataAnalysis {
          |  "rowkey":"Id",
          |  "columns":{
          |    "Id":{"cf":"rowkey", "col":"Id", "type":"long"},
+         |    "predict":{"cf":"cf", "col":"predict", "type":"long"},
          |    "消费优惠券依赖度":{"cf":"cf", "col":"消费优惠券依赖度", "type":"string"}
          |  }
          |}""".stripMargin
@@ -568,26 +566,29 @@ object DataAnalysis {
       .format("org.apache.spark.sql.execution.datasources.hbase")
       .save()
 
-//
-//    val userClassTable=linkSource.join(predicted,
-//      linkSource.col("id")===predicted.col("Id"))
-//      .drop(predicted.col("Id"))
-//      .drop('rencency)
-//      .drop('frequency)
-//      .drop('sumAmount)
-//      .drop('featureAmount)
-//      .withColumnRenamed("predict","class")
-//    val userClassTableResult = userClassTable.select('id,'username,
-//      when('class === "0", "很低")
-//        .when('class === "1", "低")
-//        .when('class === "2", "中下")
-//        .when('class === "3", "中")
-//        .when('class === "4", "中上")
-//        .when('class === "5", "高")
-//        .when('class === "6", "很高")
-//        .otherwise("其他")
-//        .as("consumptionAblity")
-//    )
+
+    val userClassTable=linkSource.join(predicted,
+      linkSource.col("id")===predicted.col("Id"))
+      .drop(predicted.col("Id"))
+      .drop('rencency)
+      .drop('frequency)
+      .drop('sumAmount)
+      .drop('featureAmount)
+      .withColumnRenamed("predict","class")
+    val userClassTableResult = userClassTable.select('id,'username,
+      when('class === "0", "很低")
+        .when('class === "1", "低")
+        .when('class === "2", "中下")
+        .when('class === "3", "中")
+        .when('class === "4", "中上")
+        .when('class === "5", "高")
+        .when('class === "6", "很高")
+        .otherwise("其他")
+        .as("consumptionAblity")
+    )
+
+
+
     val discountPeople=peopleDiscountSource.groupBy('predict)
       .agg(count('Id)as "sumPeople")
       .withColumnRenamed("predict","class")
@@ -616,5 +617,214 @@ object DataAnalysis {
       .option(HBaseTableCatalog.newTable, "5")
       .format("org.apache.spark.sql.execution.datasources.hbase")
       .save()
+
+    def readClass1=
+          s"""{
+             |  "table":{"namespace":"default", "name":"user_discount_withChinese"},
+             |  "rowkey":"Id",
+             |  "columns":{
+             |    "Id":{"cf":"rowkey", "col":"Id", "type":"long"},
+             |    "predict":{"cf":"cf", "col":"predict", "type":"string"},
+             |    "消费优惠券依赖度":{"cf":"cf", "col":"消费优惠券依赖度", "type":"string"}
+             |  }
+             |}""".stripMargin
+    val class1Source=spark.read
+      .option(HBaseTableCatalog.tableCatalog, readClass1)
+      .format("org.apache.spark.sql.execution.datasources.hbase")
+      .load()
+
+    def readClass2=
+      s"""{
+         |  "table":{"namespace":"default", "name":"user_class_1"},
+         |  "rowkey":"id",
+         |  "columns":{
+         |    "id":{"cf":"rowkey", "col":"id", "type":"string"},
+         |    "consumptionAblity":{"cf":"cf", "col":"consumptionAblity", "type":"string"}
+         |  }
+         |}""".stripMargin
+    val class2Source=spark.read
+      .option(HBaseTableCatalog.tableCatalog, readClass2)
+      .format("org.apache.spark.sql.execution.datasources.hbase")
+      .load()
+    class2Source.show(false)
+    val subJoin=class1Source.join(class2Source,class2Source.col("id")===class1Source.col("Id"))
+        .drop(class2Source.col("id"))
+        .drop(class1Source.col("predict"))
+        .withColumnRenamed("consumptionAblity","消费能力")
+    subJoin.show(false)
+    def classFinal=
+      s"""{
+         |  "table":{"namespace":"default", "name":"user_final_withDAC"},
+         |  "rowkey":"Id",
+         |  "columns":{
+         |    "Id":{"cf":"rowkey", "col":"Id", "type":"string"},
+         |    "消费优惠券依赖度":{"cf":"CF", "col":"消费优惠券依赖度", "type":"string"},
+         |    "消费能力":{"cf":"cf", "col":"消费能力", "type":"string"}
+         |  }
+         |}""".stripMargin
+
+    subJoin.write
+          .option(HBaseTableCatalog.tableCatalog, classFinal)
+          .option(HBaseTableCatalog.newTable, "5")
+          .format("org.apache.spark.sql.execution.datasources.hbase")
+          .save()
+
+
+    def readDiscount=
+    s"""{
+       |  "table":{"namespace":"default", "name":"user_discount_withChinese"},
+       |  "rowkey":"Id",
+       |  "columns":{
+       |    "Id":{"cf":"rowkey", "col":"Id", "type":"long"},
+       |    "predict":{"cf":"cf", "col":"predict", "type":"string"},
+       |    "消费优惠券依赖度":{"cf":"cf", "col":"消费优惠券依赖度", "type":"string"}
+       |  }
+       |}""".stripMargin
+
+    val class1Source1=spark.read
+      .option(HBaseTableCatalog.tableCatalog, readDiscount)
+      .format("org.apache.spark.sql.execution.datasources.hbase")
+      .load()
+
+    val finalOne=class1Source1.groupBy('消费优惠券依赖度)
+      .agg(count('Id)as "sumOfAddiction")
+      finalOne.show(false)
+
+    def discountClass=
+      s"""{
+         |  "table":{"namespace":"default", "name":"people_discount_class"},
+         |  "rowkey":"消费优惠券依赖度",
+         |  "columns":{
+         |    "sumOfAddiction":{"cf":"cf", "col":"predict", "type":"string"},
+         |    "消费优惠券依赖度":{"cf":"rowkey", "col":"消费优惠券依赖度", "type":"string"}
+         |  }
+         |}""".stripMargin
+
+    finalOne.write
+      .option(HBaseTableCatalog.tableCatalog, discountClass)
+      .option(HBaseTableCatalog.newTable, "5")
+      .format("org.apache.spark.sql.execution.datasources.hbase")
+      .save()
+
+
+   def classFinal1=
+        s"""{
+           |  "table":{"namespace":"default", "name":"user_final_withDAC"},
+           |  "rowkey":"Id",
+           |  "columns":{
+           |    "Id":{"cf":"rowkey", "col":"Id", "type":"long"},
+           |    "消费优惠券依赖度":{"cf":"CF", "col":"消费优惠券依赖度", "type":"string"},
+           |    "消费能力":{"cf":"cf", "col":"消费能力", "type":"string"}
+           |  }
+           |}""".stripMargin
+
+
+    val source1=spark.read
+          .option(HBaseTableCatalog.tableCatalog, classFinal1)
+          .format("org.apache.spark.sql.execution.datasources.hbase")
+          .load()
+
+    def catalog=
+    s"""{
+           |  "table":{"namespace":"default", "name":"user_goods_and_order"},
+           |  "rowkey":"id",
+           |  "columns":{
+           |    "id":{"cf":"rowkey", "col":"id", "type":"string"},
+           |    "productName":{"cf":"cf", "col":"productName", "type":"string"}
+           |  }
+           |}""".stripMargin
+    val source2=spark.read
+      .option(HBaseTableCatalog.tableCatalog, catalog)
+      .format("org.apache.spark.sql.execution.datasources.hbase")
+      .load()
+
+    val link=source1.join(source2,source1.col("Id")===source2.col("id"))
+        .drop(source2.col("id"))
+
+    val result=link.groupBy('消费优惠券依赖度,'消费能力,'productName)
+      .agg(count('Id) as "count")
+      .withColumn("row_num",
+      row_number() over Window.partitionBy('消费优惠券依赖度,'消费能力).orderBy('count.desc))
+    val recommandTop1=result.withColumn("top1",
+      when('row_num===1,'productName).otherwise(""))
+      .where('top1=!="")
+      .drop('productName)
+      .drop('row_num)
+      .drop('count)
+
+    val recommandTop2=result.withColumn("top2",
+      when('row_num===2,'productName).otherwise(""))
+      .drop('productName)
+      .where('top2=!="")
+      .drop('row_num)
+      .drop('count)
+
+
+    def readDAC=
+      s"""{
+         |  "table":{"namespace":"default", "name":"user_final_withDAC"},
+         |  "rowkey":"Id",
+         |  "columns":{
+         |    "Id":{"cf":"rowkey", "col":"Id", "type":"long"},
+         |    "消费优惠券依赖度":{"cf":"CF", "col":"消费优惠券依赖度", "type":"string"},
+         |    "消费能力":{"cf":"cf", "col":"消费能力", "type":"string"}
+         |  }
+         |}""".stripMargin
+    val source3=spark.read
+      .option(HBaseTableCatalog.tableCatalog, readDAC)
+      .format("org.apache.spark.sql.execution.datasources.hbase")
+      .load()
+
+    val resultRecommand=source3.join(recommandTop1,
+      recommandTop1.col("消费优惠券依赖度")===source3.col("消费优惠券依赖度")
+        and (recommandTop1.col("消费能力")===source3.col("消费能力")))
+      .drop(recommandTop1.col("消费优惠券依赖度"))
+      .drop(recommandTop1.col("消费能力"))
+      .join(recommandTop2,
+        recommandTop2.col("消费优惠券依赖度")===source3.col("消费优惠券依赖度")
+          and (recommandTop2.col("消费能力")===source3.col("消费能力")))
+      .drop(recommandTop2.col("消费优惠券依赖度"))
+      .drop(recommandTop2.col("消费能力"))
+    //resultRecommand.show(false)
+
+    def user_final_2 =
+      s"""{
+         |"table":{"namespace":"default","name":"user_final_2nd"},
+         |"rowkey":"id",
+         |"columns":{
+         |"id":{"cf":"rowkey","col":"id","type":"string"},
+         |"product_name":{"cf":"cf", "col":"productName", "type":"string"}
+         |}
+         |}""".stripMargin
+    val final2= spark.read
+      .option(HBaseTableCatalog.tableCatalog, user_final_2)
+      .format("org.apache.spark.sql.execution.datasources.hbase")
+      .load()
+
+    val recommandTable=final2.join(resultRecommand,
+      resultRecommand.col("Id")===final2.col("id"))
+      .drop(final2.col("product_name"))
+        .drop(final2.col("id"))
+    recommandTable.show(false)
+
+
+    def recommandWrite=
+      s"""{
+         |  "table":{"namespace":"default", "name":"person_recommand"},
+         |  "rowkey":"Id",
+         |  "columns":{
+         |    "Id":{"cf":"rowkey", "col":"Id", "type":"string"},
+         |    "消费优惠券依赖度":{"cf":"cf", "col":"消费优惠券依赖度", "type":"string"},
+         |    "消费能力":{"cf":"cf", "col":"消费能力", "type":"string"},
+         |    "top1":{"cf":"cf", "col":"top1", "type":"string"},
+         |    "top2":{"cf":"cf", "col":"top2", "type":"string"}
+         |  }
+         |}""".stripMargin
+
+        recommandTable.write
+          .option(HBaseTableCatalog.tableCatalog, recommandWrite)
+          .option(HBaseTableCatalog.newTable, "5")
+          .format("org.apache.spark.sql.execution.datasources.hbase")
+          .save()
   }
 }
