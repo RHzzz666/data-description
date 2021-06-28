@@ -9,23 +9,6 @@ import org.apache.spark.sql.types.{IntegerType, StringType, StructField, StructT
 object calculate {
 
   def main(args: Array[String]): Unit = {
-   // job_brand_preference()
-   //   job_payment_way()
-    //   job_shopping_cycle()
-    //   job_ave_price_range()
-   //   job_order_highest_range()
-    //  job_frequency_range()
-     // job_exchange_item_rate()
-     //  job_return_item_rate()
-
-     //  birth_brand_preference()
-    //   birth_payment_way()
-     //  birth_shopping_cycle()
-     //  birth_ave_price_range()
-    //   birth_order_highest_range()
-    //   birth_frequency_range()
-        birth_exchange_item_rate()
-   //    birth_return_item_rate()
   //  discount()
    // cast()
 
