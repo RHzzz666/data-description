@@ -14,7 +14,7 @@
     function test() {
 
         var ajax=new XMLHttpRequest();
-        var url='http://192.168.101.173:8080/test';
+        var url='http://localhost:8080/test';
         ajax.open('get',url,true);
         ajax.send();
         ajax.onreadystatechange=function (){

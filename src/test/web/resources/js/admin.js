@@ -279,7 +279,7 @@ function search() {
         //条件：window.localStorage.getItem("user_name") === "ADMIN"
 
         $.ajax({
-            url: 'http://192.168.101.184:8080/search',
+            url: 'http://localhost:8080/search',
             type: 'POST',
             dataType : 'json',
             contentType : 'application/json',
@@ -361,7 +361,7 @@ function search() {
         });
 
 		$.ajax({
-			url: 'http://192.168.101.184:8080/read_top',
+			url: 'http://localhost:8080/read_top',
 			type: 'POST',
 			dataType : 'json',
 			contentType : 'application/json',

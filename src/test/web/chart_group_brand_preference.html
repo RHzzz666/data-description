@@ -32,7 +32,7 @@
 
     function test(){
         var ajax=new XMLHttpRequest();
-        var url='http://192.168.101.184:8080/brand_preference';
+        var url='http://localhost:8080/brand_preference';
         ajax.open('get',url,true);
         ajax.send();
         ajax.onreadystatechange=function (){

@@ -27,7 +27,7 @@ $(function() {
 
 function login() {
 	$.ajax({
-		url: 'http://192.168.101.184:8080/login',
+		url: 'http://localhost:8080/login',
 		type: 'POST',
 		dataType : 'json',
 		contentType : 'application/json',
@@ -67,7 +67,7 @@ function login() {
 			window.localStorage.setItem("user_order_count", json.order_count);
 			window.localStorage.setItem("user_frequency", json.frequency);
 			window.localStorage.setItem("user_register_time", json.register_time);
-            window.localStorage.setItem("user_good_bought", json.good_bought);
+			window.localStorage.setItem("user_good_bought", json.good_bought);
 
 			window.localStorage.setItem("user_ability", json.消费能力);
 			window.localStorage.setItem("user_discount", json.消费优惠券依赖度);
@@ -105,7 +105,7 @@ function login() {
 
 
 	$.ajax({
-		url: 'http://192.168.101.184:8080/read_top',
+		url: 'http://localhost:8080/read_top',
 		type: 'POST',
 		dataType : 'json',
 		contentType : 'application/json',
@@ -120,7 +120,7 @@ function login() {
 
 		},
 		success: function(json){
-			// console.log(json.top1);
+			console.log(json.top1);
 			// console.log(window.localStorage.getItem("user_name"));
 			//
 			// Tab.closeTab($('#tab_profile_1_html'));
